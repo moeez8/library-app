@@ -1,5 +1,17 @@
 const express = require("express");
 
+const Sequelize = require("sequelize");
+const db = new Sequelize("Library", "root", "root", {
+  host: "localhost",
+  dialect: "postgres",
+});
+
+//Test DB
+
+db.authenticate()
+  .then(() => console.log("Database Connected..."))
+  .catch((err) => console.log("Error:" + err));
+
 const app = express();
 
 app.get("/", (req, res) => {
