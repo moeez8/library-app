@@ -1,13 +1,9 @@
 const express = require("express");
 
-const Sequelize = require("sequelize");
-const db = new Sequelize("Library", "root", "root", {
-  host: "localhost",
-  dialect: "postgres",
-});
+// Database
+const db = require("./config/database");
 
-//Test DB
-
+// Test DB
 db.authenticate()
   .then(() => console.log("Database Connected..."))
   .catch((err) => console.log("Error:" + err));
@@ -17,6 +13,8 @@ const app = express();
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
+
+app.use("/book", require("./routes/book"));
 
 const PORT = process.env.PORT || 5000;
 
