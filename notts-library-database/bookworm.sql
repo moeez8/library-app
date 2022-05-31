@@ -17,13 +17,13 @@ CREATE TABLE books
 CREATE TABLE copies
 (
 	id serial NOT NULL PRIMARY KEY,
-	book_id serial,
+	book_id serial NOT NULL,
 	CONSTRAINT fk_book_id FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
 CREATE TABLE withdrawals
 (
 	id serial NOT NULL PRIMARY KEY,
-	copy_id serial,
+	copy_id serial NOT NULL,
 	CONSTRAINT fk_copy_id FOREIGN KEY (copy_id) REFERENCES copies(id)
 )
