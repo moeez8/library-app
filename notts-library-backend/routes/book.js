@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/database")
+const db = require("../config/database");
 const Book = require("../models/Book");
-const Sequelize = require("sequelize")
+const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 //Get All Books
@@ -19,27 +19,24 @@ router.get("/", (req, res) => {
 });
 
 //Search For Book
-router.get('/search', (req, res) => {
+router.get("/search", (req, res) => {
   const { term } = req.query;
 
   Book.findAll({
     where: {
       [Op.or]: [
-        { title: { [Op.like]: '%' + term + '%' } },
-        { author: { [Op.like]: '%' + term + '%' } },
-        { iban: { [Op.like]: '%' + term + '%' } },
-        { categroy: { [Op.like]: '%' + term + '%' } },
-        { type: { [Op.like]: '%' + term + '%' } }
-      ]
+        { title: { [Op.like]: "%" + term + "%" } },
+        { author: { [Op.like]: "%" + term + "%" } },
+        { iban: { [Op.like]: "%" + term + "%" } },
+        { categroy: { [Op.like]: "%" + term + "%" } },
+        { type: { [Op.like]: "%" + term + "%" } },
+      ],
     },
-
-
-  })
-    .then((books) => {
-      console.log(books);
-      res.send(books);
-    })
-})
+  }).then((books) => {
+    console.log(books);
+    res.send(books);
+  });
+});
 
 //Add New Book
 router.post("/add", (req, res) => {
@@ -60,25 +57,45 @@ router.post("/add", (req, res) => {
       console.log("Error: " + err);
       res.sendStatus(400);
     });
-})
+});
 
 //Update A Book
 router.put("/:id", (req, res) => {
-  if (req.params.id) {
-    console.log(req.params.id);
-    res.sendStatus(200);
-  }
-  res.sendStatus(405);
+  const { title, iban, author, type, category, cover_photo, desciption } =
+    req.body;
+
+  Book.findByPk(parseInt(req.params.id))
+    .then((row) => {
+      if (row) {
+        row.update({
+          title: title || row.title,
+          iban: iban || row.iban,
+          author: author || row.author,
+          type: type || row.type,
+          category: category || row.category,
+          cover_photo: cover_photo || row.cover_photo,
+          desciption: desciption || row.desciption,
+        });
+        res.send(row);
+      } else {
+        res.sendStatus(400);
+      }
+    })
+    .catch((err) => {
+      console.log("Error: " + err);
+      res.sendStatus(400);
+    });
 });
 
 //Get Book By Id
 router.get("/:id", (req, res) => {
-  Book.findAll()
-    .then((books) => {
-      const result = books.filter(
-        (book) => book.id === parseInt(req.params.id)
-      );
-      res.send(result);
+  Book.findByPk(parseInt(req.params.id))
+    .then((row) => {
+      if (row) {
+        res.send(row);
+      } else {
+        res.sendStatus(400);
+      }
     })
     .catch((err) => {
       console.log("Error: " + err);

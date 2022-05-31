@@ -18,6 +18,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/book", require("./routes/book"));
+app.use("/copy", require("./routes/copy"));
+app.use("/withdraw", require("./routes/widthdraw"));
 
 const PORT = process.env.PORT || 5000;
 
