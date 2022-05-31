@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 
 // Database
 const db = require("./config/database");
@@ -9,6 +10,8 @@ db.authenticate()
   .catch((err) => console.log("Error:" + err));
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   res.send("Hello World");

@@ -27,40 +27,51 @@ router.get('/search', (req, res) => {
       console.log(books);
       res.send(books);
     })
+})
+
+//Add New Book
+router.post("/add", (req, res) => {
+  const { title, iban, author, type, category, cover_photo, desciption } =
+    req.body;
+
+  Book.create({
+    title,
+    iban,
+    author,
+    type,
+    category,
+    cover_photo,
+    desciption,
+  })
+    .then(() => res.sendStatus(200))
     .catch((err) => {
       console.log("Error: " + err);
       res.sendStatus(400);
     });
+})
 
-  //Add New Book
-  router.post("/add", (req, res) => {
-    Book.create({
-      title: "bestbook",
+//Update A Book
+router.put("/:id", (req, res) => {
+  if (req.params.id) {
+    console.log(req.params.id);
+    res.sendStatus(200);
+  }
+  res.sendStatus(405);
+});
+
+//Get Book By Id
+router.get("/:id", (req, res) => {
+  Book.findAll()
+    .then((books) => {
+      const result = books.filter(
+        (book) => book.id === parseInt(req.params.id)
+      );
+      res.send(result);
     })
-      .then(() => res.sendStatus(200))
-      .catch((err) => {
-        console.log(err);
-        res.sendStatus(400);
-      });
-  });
+    .catch((err) => {
+      console.log("Error: " + err);
+      res.sendStatus(400);
+    });
+});
 
-  //Update A Book
-  router.put("/:id", (req, res) => {
-    if (req.params.id) {
-      console.log(req.params.id);
-      res.sendStatus(200);
-    }
-    res.sendStatus(405);
-  });
-
-  //Get Book By Id
-  router.get("/:id", (req, res) => {
-    if (req.params.id) {
-      console.log(req.params.id);
-      res.sendStatus(200);
-    }
-    res.sendStatus(405);
-  });
-
-
-  module.exports = router;
+module.exports = router;
