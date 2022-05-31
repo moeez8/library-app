@@ -22,7 +22,19 @@ router.get("/", (req, res) => {
 router.get('/search', (req, res) => {
   const { term } = req.query;
 
-  Book.findAll({ where: { title: { [Op.like]: '%' + term + '%' } } })
+  Book.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: '%' + term + '%' } },
+        { author: { [Op.like]: '%' + term + '%' } },
+        { iban: { [Op.like]: '%' + term + '%' } },
+        { categroy: { [Op.like]: '%' + term + '%' } },
+        { type: { [Op.like]: '%' + term + '%' } }
+      ]
+    },
+
+
+  })
     .then((books) => {
       console.log(books);
       res.send(books);
