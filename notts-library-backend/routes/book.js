@@ -15,15 +15,6 @@ router.get("/", (req, res) => {
     });
 });
 
-//Get Book By Id
-router.get("/:id", (req, res) => {
-  if (req.params.id) {
-    console.log(req.params.id);
-    res.sendStatus(200);
-  }
-  res.sendStatus(405);
-});
-
 //Search For Book
 router.get("/search", (req, res) => {
   const { term } = req.query;
@@ -33,8 +24,17 @@ router.get("/search", (req, res) => {
 
 //Add New Book
 router.post("/add", (req, res) => {
+  const { title, iban, author, type, category, cover_photo, desciption } =
+    req.body;
+
   Book.create({
-    title: "bestbook",
+    title,
+    iban,
+    author,
+    type,
+    category,
+    cover_photo,
+    desciption,
   })
     .then(() => res.sendStatus(200))
     .catch((err) => {
@@ -50,6 +50,21 @@ router.put("/:id", (req, res) => {
     res.sendStatus(200);
   }
   res.sendStatus(405);
+});
+
+//Get Book By Id
+router.get("/:id", (req, res) => {
+  Book.findAll()
+    .then((books) => {
+      const result = books.filter(
+        (book) => book.id === parseInt(req.params.id)
+      );
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log("Error: " + err);
+      res.sendStatus(400);
+    });
 });
 
 module.exports = router;
