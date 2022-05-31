@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-module.exports = new Sequelize("bookworm", "root", "root", {
+module.exports = new Sequelize("Bookworm", "root", "root", {
   host: "localhost",
   dialect: "postgres",
 

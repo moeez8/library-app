@@ -4,9 +4,9 @@ const Book = require("../models/Book");
 
 router.get("/", (req, res) => {
   Book.findAll()
-    .then((book) => {
-      console.log(book);
-      res.sendStatus(200);
+    .then((books) => {
+      console.log(books);
+      res.send(books);
     })
     .catch((err) => {
       console.log("Error: " + err);
