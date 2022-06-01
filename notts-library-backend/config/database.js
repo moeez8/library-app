@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const { associations } = require('./associations')
+const { associations } = require("./associations");
 
 const sequelize = new Sequelize("Bookworm", "root", "root", {
   host: "localhost",
@@ -14,9 +14,10 @@ const sequelize = new Sequelize("Bookworm", "root", "root", {
 });
 
 const modelDefiners = [
-  require('../models/Book'),
-  require('../models/Copy'),
-  require('../models/Withdraw'),
+  require("../models/Book"),
+  require("../models/Copy"),
+  require("../models/Withdraw"),
+  require("../models/Tag"),
 ];
 
 for (const modelDefiner of modelDefiners) {
@@ -26,4 +27,3 @@ for (const modelDefiner of modelDefiners) {
 associations(sequelize);
 
 module.exports = sequelize;
-

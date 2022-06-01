@@ -1,11 +1,17 @@
 const express = require("express");
 const router = express.Router();
 //const Copy = require("../models/Copy");
-const { models } = require('../config/database')
+const { models } = require("../config/database");
 
 //Get All Copies
 router.get("/", (req, res) => {
-  models.copy.findAll()
+  models.copy
+    .findAll({
+      include: [
+        { model: models.withdraw, as: "withdraws" },
+        { model: models.book, as: "book" },
+      ],
+    })
     .then((copies) => {
       console.log(copies);
       res.send(copies);
@@ -18,9 +24,10 @@ router.get("/", (req, res) => {
 
 //Get All Copies with withdraws
 router.get("/all", (req, res) => {
-  models.copy.findAll({
-    include: ["withdraws"]
-  })
+  models.copy
+    .findAll({
+      include: ["withdraws"],
+    })
     .then((copies) => {
       console.log(copies);
       res.send(copies);
@@ -33,11 +40,13 @@ router.get("/all", (req, res) => {
 
 //Add New Copy
 router.post("/add", (req, res) => {
-  let { book_id } = req.body;
+  let { book_id, owner } = req.body;
 
-  models.copy.create({
-    book_id,
-  })
+  models.copy
+    .create({
+      book_id,
+      owner,
+    })
     .then(() => res.sendStatus(200))
     .catch((err) => {
       console.log("Error: " + err);
@@ -47,7 +56,8 @@ router.post("/add", (req, res) => {
 
 //Get A Copy By ID
 router.get("/:id", (req, res) => {
-  models.copy.findByPk(parseInt(req.params.id))
+  models.copy
+    .findByPk(parseInt(req.params.id))
     .then((row) => {
       if (row) {
         res.send(row);

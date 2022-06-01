@@ -1,77 +1,85 @@
 const express = require("express");
 const router = express.Router();
-const { models } = require('../config/database')
-//const Book = require("../models/Book");
+const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-//Get All Books
-router.get("/", (req, res) => {
-  models.book.findAll()
-    .then((books) => {
-      console.log(books);
-      res.send(books);
-    })
-    .catch((err) => {
-      console.log("Error: " + err);
-      res.sendStatus(400);
-    });
-});
-
-//Get All Books that has copies 
-router.get("/all", (req, res) => {
-  models.book.findAll({
-    include: ["copies"]
-  })
-    .then((books) => {
-      console.log(books);
-      res.send(books);
-    })
-    .catch((err) => {
-      console.log("Error: " + err);
-      res.sendStatus(400);
-    });
-});
-
 //Search For Book
-router.get("/search", (req, res) => {
+router.get("/", (req, res) => {
   const { term } = req.query;
 
-  models.book.findAll({
-    where: {
-      [Op.or]: [
-        { title: { [Op.like]: "%" + term + "%" } },
-        { author: { [Op.like]: "%" + term + "%" } },
-        { iban: { [Op.like]: "%" + term + "%" } },
-        { category: { [Op.like]: "%" + term + "%" } },
-        { type: { [Op.like]: "%" + term + "%" } },
-      ],
-    },
-  }).then((books) => {
-    console.log(books);
-    res.send(books);
-  }).catch((err) => {
-    console.log("Error: " + err);
-    res.sendStatus(400);
-  });
-
+  if (term) {
+    models.book
+      .findAll({
+        where: {
+          [Op.or]: [
+            { title: { [Op.like]: "%" + term + "%" } },
+            { author: { [Op.like]: "%" + term + "%" } },
+            { iban: { [Op.like]: "%" + term + "%" } },
+            { category: { [Op.like]: "%" + term + "%" } },
+            { type: { [Op.like]: "%" + term + "%" } },
+          ],
+        },
+        include: [
+          { model: models.copy, as: "copies" },
+          {
+            model: models.tag,
+            as: "tags",
+            through: {
+              attributes: ["tag_id", "book_id"],
+            },
+          },
+        ],
+      })
+      .then((books) => {
+        console.log(books);
+        res.send(books);
+      })
+      .catch((err) => {
+        console.log("Error: " + err);
+        res.sendStatus(400);
+      });
+  } else {
+    models.book
+      .findAll({
+        include: [
+          { model: models.copy, as: "copies" },
+          {
+            model: models.tag,
+            as: "tags",
+            through: {
+              attributes: ["tag_id", "book_id"],
+            },
+          },
+        ],
+      })
+      .then((books) => {
+        console.log(books);
+        res.send(books);
+      })
+      .catch((err) => {
+        console.log("Error: " + err);
+        res.sendStatus(400);
+      });
+  }
 });
 
-//Add New Book
-router.post("/add", (req, res) => {
+//Create New Book
+router.post("/", (req, res) => {
   const { title, iban, author, type, category, cover_photo, desciption } =
     req.body;
 
-  models.book.create({
-    title,
-    iban,
-    author,
-    type,
-    category,
-    cover_photo,
-    desciption,
-  })
-    .then(() => res.sendStatus(200))
+  models.book
+    .create({
+      title,
+      iban,
+      author,
+      type,
+      category,
+      cover_photo,
+      desciption,
+    })
+    .then(() => res.send("OK"))
     .catch((err) => {
       console.log("Error: " + err);
       res.sendStatus(400);
@@ -83,7 +91,8 @@ router.put("/:id", (req, res) => {
   const { title, iban, author, type, category, cover_photo, desciption } =
     req.body;
 
-  models.book.findByPk(parseInt(req.params.id))
+  models.book
+    .findByPk(parseInt(req.params.id))
     .then((row) => {
       if (row) {
         row.update({
@@ -108,7 +117,8 @@ router.put("/:id", (req, res) => {
 
 //Get Book By Id
 router.get("/:id", (req, res) => {
-  models.book.findByPk(parseInt(req.params.id))
+  models.book
+    .findByPk(parseInt(req.params.id), { incude: ["copies"] })
     .then((row) => {
       if (row) {
         res.send(row);
