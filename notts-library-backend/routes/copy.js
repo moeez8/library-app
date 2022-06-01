@@ -16,6 +16,21 @@ router.get("/", (req, res) => {
     });
 });
 
+//Get All Copies with withdraws
+router.get("/all", (req, res) => {
+  models.copy.findAll({
+    include: ["withdraws"]
+  })
+    .then((copies) => {
+      console.log(copies);
+      res.send(copies);
+    })
+    .catch((err) => {
+      console.log("Error: " + err);
+      res.sendStatus(400);
+    });
+});
+
 //Add New Copy
 router.post("/add", (req, res) => {
   let { book_id } = req.body;
