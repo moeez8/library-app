@@ -9,6 +9,11 @@ db.authenticate()
   .then(() => console.log("Database Connected..."))
   .catch((err) => console.log("Error:" + err));
 
+// Create DB Tables
+db.sync({ force: true })
+  .then()
+  .catch((err) => console.log("Error:" + err));
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));

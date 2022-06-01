@@ -7,11 +7,16 @@ module.exports = (sequelize) => {
     {
       book_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      owner: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
     },
     {
       tableName: "copies",
       timestamps: false,
     }
-  )
+  );
 };
