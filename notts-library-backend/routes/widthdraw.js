@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const Withdraw = require("../models/Withdraw");
+// const Withdraw = require("../models/Withdraw");
+const { models } = require('../config/database')
 
 //Get All Withdraws
 router.get("/", (req, res) => {
-  Withdraw.findAll()
+  models.withdraw.findAll()
     .then((withdraws) => {
       console.log(withdraws);
       res.send(withdraws);
@@ -19,7 +20,7 @@ router.get("/", (req, res) => {
 router.post("/add", (req, res) => {
   let { copy_id, user_name } = req.body;
 
-  Withdraw.create({
+  models.withdraw.create({
     copy_id,
     date_out: new Date(),
     user_name,
@@ -33,7 +34,7 @@ router.post("/add", (req, res) => {
 
 //Get A Withdraw By ID
 router.get("/:id", (req, res) => {
-  Withdraw.findByPk(parseInt(req.params.id))
+  models.withdraw.findByPk(parseInt(req.params.id))
     .then((row) => {
       if (row) {
         res.send(row);
@@ -49,7 +50,7 @@ router.get("/:id", (req, res) => {
 
 //Update A Withdraw By ID
 router.put("/:id", (req, res) => {
-  Withdraw.findByPk(parseInt(req.params.id))
+  models.withdraw.findByPk(parseInt(req.params.id))
     .then((row) => {
       if (row) {
         row.update({ date_in: new Date() });

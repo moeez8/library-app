@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const Copy = require("../models/Copy");
+//const Copy = require("../models/Copy");
+const { models } = require('../config/database')
 
 //Get All Copies
 router.get("/", (req, res) => {
-  Copy.findAll()
+  models.copy.findAll()
     .then((copies) => {
       console.log(copies);
       res.send(copies);
@@ -17,9 +18,9 @@ router.get("/", (req, res) => {
 
 //Add New Copy
 router.post("/add", (req, res) => {
-  const { book_id } = req.body;
+  let { book_id } = req.body;
 
-  Copy.create({
+  models.copy.create({
     book_id,
   })
     .then(() => res.sendStatus(200))
@@ -31,7 +32,7 @@ router.post("/add", (req, res) => {
 
 //Get A Copy By ID
 router.get("/:id", (req, res) => {
-  Copy.findByPk(parseInt(req.params.id))
+  models.copy.findByPk(parseInt(req.params.id))
     .then((row) => {
       if (row) {
         res.send(row);

@@ -1,13 +1,28 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/database");
-const Book = require("../models/Book");
+const { models } = require('../config/database')
+//const Book = require("../models/Book");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 //Get All Books
 router.get("/", (req, res) => {
-  Book.findAll()
+  models.book.findAll()
+    .then((books) => {
+      console.log(books);
+      res.send(books);
+    })
+    .catch((err) => {
+      console.log("Error: " + err);
+      res.sendStatus(400);
+    });
+});
+
+//Get All Books that has copies 
+router.get("/all", (req, res) => {
+  models.book.findAll({
+    include: ["copies"]
+  })
     .then((books) => {
       console.log(books);
       res.send(books);
@@ -22,20 +37,24 @@ router.get("/", (req, res) => {
 router.get("/search", (req, res) => {
   const { term } = req.query;
 
-  Book.findAll({
+  models.book.findAll({
     where: {
       [Op.or]: [
         { title: { [Op.like]: "%" + term + "%" } },
         { author: { [Op.like]: "%" + term + "%" } },
         { iban: { [Op.like]: "%" + term + "%" } },
-        { categroy: { [Op.like]: "%" + term + "%" } },
+        { category: { [Op.like]: "%" + term + "%" } },
         { type: { [Op.like]: "%" + term + "%" } },
       ],
     },
   }).then((books) => {
     console.log(books);
     res.send(books);
+  }).catch((err) => {
+    console.log("Error: " + err);
+    res.sendStatus(400);
   });
+
 });
 
 //Add New Book
@@ -43,7 +62,7 @@ router.post("/add", (req, res) => {
   const { title, iban, author, type, category, cover_photo, desciption } =
     req.body;
 
-  Book.create({
+  models.book.create({
     title,
     iban,
     author,
@@ -64,7 +83,7 @@ router.put("/:id", (req, res) => {
   const { title, iban, author, type, category, cover_photo, desciption } =
     req.body;
 
-  Book.findByPk(parseInt(req.params.id))
+  models.book.findByPk(parseInt(req.params.id))
     .then((row) => {
       if (row) {
         row.update({
@@ -89,7 +108,7 @@ router.put("/:id", (req, res) => {
 
 //Get Book By Id
 router.get("/:id", (req, res) => {
-  Book.findByPk(parseInt(req.params.id))
+  models.book.findByPk(parseInt(req.params.id))
     .then((row) => {
       if (row) {
         res.send(row);

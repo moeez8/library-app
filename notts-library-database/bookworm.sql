@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS withdrawals;
+DROP TABLE IF EXISTS withdraws;
 DROP TABLE IF EXISTS copies;
 DROP TABLE IF EXISTS books;
 
@@ -21,12 +21,12 @@ CREATE TABLE copies
 	CONSTRAINT fk_book_id FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
-CREATE TABLE withdrawals
+CREATE TABLE withdraws
 (
 	id serial NOT NULL PRIMARY KEY,
 	copy_id serial NOT NULL,
-	CONSTRAINT fk_copy_id FOREIGN KEY (copy_id) REFERENCES copies(id)
+	CONSTRAINT fk_copy_id FOREIGN KEY (copy_id) REFERENCES copies(id),
 	date_out date NOT NULL,
     date_in date,
-   	user_name character varying,
-)
+   	user_name character varying
+);
