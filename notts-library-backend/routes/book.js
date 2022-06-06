@@ -66,7 +66,7 @@ router.get("/", (req, res) => {
 
 //Create New Book
 router.post("/", (req, res) => {
-  const { title, iban, author, type, category, cover_photo, desciption } =
+  const { title, iban, author, type, category, cover_photo, description } =
     req.body;
 
   models.book
@@ -77,7 +77,7 @@ router.post("/", (req, res) => {
       type,
       category,
       cover_photo,
-      desciption,
+      description,
     })
     .then(() => res.send("OK"))
     .catch((err) => {
