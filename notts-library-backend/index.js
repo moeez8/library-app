@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 
 // Database
@@ -17,6 +18,11 @@ db.sync({ force: false })
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World");
