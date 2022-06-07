@@ -12,13 +12,7 @@ router.get("/", (req, res) => {
     models.book
       .findAll({
         where: {
-          [Op.or]: [
-            { title: { [Op.like]: "%" + term + "%" } },
-            { author: { [Op.like]: "%" + term + "%" } },
-            { iban: { [Op.like]: "%" + term + "%" } },
-            { category: { [Op.like]: "%" + term + "%" } },
-            { type: { [Op.like]: "%" + term + "%" } },
-          ],
+          [Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
         },
         include: [
           { model: models.copy, as: "copies" },
@@ -108,8 +102,7 @@ router.post("/", (req, res) => {
 
 //Update A Book
 router.put("/:id", (req, res) => {
-  const { title, iban, author, type, category, cover_photo, desciption } =
-    req.body;
+  const { title, iban, author, type, category, cover_photo, desciption } = req.body;
 
   models.book
     .findByPk(parseInt(req.params.id))
@@ -138,7 +131,18 @@ router.put("/:id", (req, res) => {
 //Get Book By Id
 router.get("/:id", (req, res) => {
   models.book
-    .findByPk(parseInt(req.params.id), { incude: ["copies"] })
+    .findByPk(parseInt(req.params.id), {
+      include: [
+        { model: models.copy, as: "copies" },
+        {
+          model: models.tag,
+          as: "tags",
+          through: {
+            attributes: ["tag_id", "book_id"],
+          },
+        },
+      ],
+    })
     .then((row) => {
       if (row) {
         res.send(row);
