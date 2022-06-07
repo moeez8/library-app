@@ -26,7 +26,7 @@ const BookList = () => {
   });
 
   return (
-    <div className="bg-white rounded-md shadow-md p-4 m-2">
+    <div className="card">
       <h1 className="text-xl font-bold m-1">{`TotalBooks: ${renderedItems.length}`}</h1>
       {renderedItems}
     </div>

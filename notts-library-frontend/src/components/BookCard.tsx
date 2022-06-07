@@ -6,7 +6,7 @@ export interface IBook {
 
 export const BookCard = (book: IBook) => {
   return (
-    <div className="bg-white rounded-md shadow-md p-4 m-2">
+    <div className="card">
       <h1 className="text-lg font-bold">{book.title || "Undefined"}</h1>
       <h1 className="text-lg font-bold">{book.author || "Undefined"}</h1>
       <h1 className="text-lg font-bold">{book.description || "Undefined"}</h1>
