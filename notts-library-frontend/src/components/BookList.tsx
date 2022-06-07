@@ -1,8 +1,8 @@
-import BookCard from "./BookCard";
+import { BookCard, IBook } from "./BookCard";
 import { useState, useEffect } from "react";
 
 const BookList = () => {
-  const [books, setbooks] = useState([]);
+  const [books, setbooks] = useState<IBook[]>([]);
   useEffect(() => {
     getBooks();
   }, []);
@@ -15,14 +15,21 @@ const BookList = () => {
     setbooks(result);
   };
 
-  const renderedItems = [];
-
-  for (const book in books) {
-    renderedItems.push(<BookCard />);
-  }
+  const renderedItems = books.map((book) => {
+    return (
+      <BookCard
+        title={book.title}
+        author={book.author}
+        description={book.description}
+      />
+    );
+  });
 
   return (
-    <div className="bg-white rounded-md shadow-md p-4 m-2">{renderedItems}</div>
+    <div className="bg-white rounded-md shadow-md p-4 m-2">
+      <h1 className="text-xl font-bold m-1">{`TotalBooks: ${renderedItems.length}`}</h1>
+      {renderedItems}
+    </div>
   );
 };
 

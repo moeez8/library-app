@@ -17,7 +17,7 @@ db.sync({ force: false })
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ extended: false }));
 app.use(
   cors({
     origin: "*",
