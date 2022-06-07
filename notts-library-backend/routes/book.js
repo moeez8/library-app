@@ -60,7 +60,7 @@ router.get("/", (req, res) => {
 
 //Create New Book
 router.post("/", (req, res) => {
-  const { title, iban, author, type, category, cover_photo, description, tag_id } =
+  const { title, iban, author, type, category, cover_photo, description, tag_ids } =
     req.body;
 
   models.book
@@ -79,37 +79,23 @@ router.post("/", (req, res) => {
     })
     .then((book) => {
       var book_id = book.id;
-      models.books_tag.create({
-        book_id: 1,
-        tag_id: 1,
-      })
+
+      {
+        tag_ids.map((tagID) => {
+          return (
+            models.books_tag.create({
+              book_id: book_id,
+              tag_id: tagID.tag_id,
+            })
+          )
+        })
+      }
     })
     .then(() => res.send("OK"))
     .catch((err) => {
       console.log("Error: " + err);
       res.sendStatus(400);
     });
-
-
-
-
-
-  // models.book_tag
-  //   .create({
-  //     title,
-  //     iban,
-  //     author,
-  //     type,
-  //     category,
-  //     cover_photo,
-  //     description,
-  //   })
-  //   .then(() => res.send("OK"))
-  //   .catch((err) => {
-  //     console.log("Error: " + err);
-  //     res.sendStatus(400);
-  //   });
-
 });
 
 //Update A Book
