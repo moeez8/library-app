@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const { associations } = require("./associations");
 
-const sequelize = new Sequelize("Bookworm", "root", "root", {
+const sequelize = new Sequelize("postgres", "root", "root", {
   host: "localhost",
   dialect: "postgres",
 

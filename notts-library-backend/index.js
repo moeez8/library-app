@@ -7,25 +7,25 @@ const db = require("./config/database");
 
 // Test DB
 db.authenticate()
-  .then(() => console.log("Database Connected..."))
-  .catch((err) => console.log("Error:" + err));
+	.then(() => console.log("Database Connected..."))
+	.catch((err) => console.log("Error:" + err));
 
 // Create DB Tables
 db.sync({ force: false })
-  .then()
-  .catch((err) => console.log("Error:" + err));
+	.then()
+	.catch((err) => console.log("Error:" + err));
 
 const app = express();
 
 app.use(bodyParser.json({ extended: false }));
 app.use(
-  cors({
-    origin: "*",
-  })
+	cors({
+		origin: "*",
+	})
 );
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+	res.send("Hello World");
 });
 
 app.use("/book", require("./routes/book"));
