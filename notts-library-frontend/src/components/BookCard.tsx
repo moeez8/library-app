@@ -16,7 +16,10 @@ export interface ICopy {
 	owner?: string;
 }
 
-export interface ITag {}
+export interface ITag {
+	id?: string;
+	tag?: string;
+}
 
 export const BookCard = (book: IBook) => {
 	return (
@@ -29,7 +32,7 @@ export const BookCard = (book: IBook) => {
 			</div>
 			<div className="flex">
 				<Link className="button" to={`/book/${book.id}`}>
-					<h2>Home</h2>
+					<h2>Details</h2>
 				</Link>
 			</div>
 		</div>
