@@ -7,6 +7,7 @@ const AddBookForm = () => {
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
   const [iban, setIban] = useState("");
+  const [tags, setTags] = useState(["please", "do not"]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -22,6 +23,20 @@ const AddBookForm = () => {
 
   const handleIbanChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIban(event.target.value);
+  };
+
+  const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      if (event.currentTarget.value.length > 0) {
+        setTags([...tags, event.currentTarget.value]);
+        event.currentTarget.value = "";
+      }
+    }
+  };
+
+  const removeTag = (removedTag: any) => {
+    const newTags = tags.filter((tag) => tag !== removedTag);
+    setTags(newTags);
   };
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,6 +55,7 @@ const AddBookForm = () => {
         description: description,
         author: author,
         iban: iban,
+        tags: tags
       }),
     })
       .then((res) => res.json())
@@ -85,7 +101,26 @@ const AddBookForm = () => {
           onChange={handleIbanChange}
           required
         />
-        <button className="button" type="button" onClick={addBook}>
+
+        <div className="tag-container">
+          {tags.map((tag, index) => {
+            return (
+              <div key={index} className="tag">
+                <span>
+                  <span className="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer" > {tag}{' '}
+                    <span className=" w-5 h-5 border-red-100 bg-red-400 inline-flex items-center justify-center text-white rounded-full transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline" onClick={() => removeTag(tag)}> x  </span>
+                  </span>
+
+
+                </span>
+              </div>
+            );
+          })}
+
+          <input className="border border-2 rounded-md m-1" onKeyDown={addTag} placeholder="Add Tag" />
+        </div>
+
+        <button className="button" type="submit" onClick={addBook}>
           Add
         </button>
       </form>
