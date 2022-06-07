@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-	background: #eee;
+	@apply bg-slate-100;
 }
 
 @layer components {
@@ -13,7 +13,7 @@ body {
 	}
 
 	.card {
-		@apply bg-white rounded-md shadow-md p-4 m-2 border-2 border-gray-100;
+		@apply bg-white rounded-md shadow-md p-4 m-2 border-2 border-slate-100;
 	}
 
 	.button {
@@ -22,7 +22,12 @@ body {
 	}
 
 	.form-input {
-		@apply text-gray-700 bg-gray-200 appearance-none border-2 border-gray-300 rounded-md w-full py-2 px-4 m-1 block;
+		@apply text-slate-700 bg-slate-200 appearance-none border-2 border-slate-300 rounded-md w-full py-2 px-4 m-1 block;
 		@apply focus:outline-none focus:bg-white focus:border-blue-500;
+	}
+
+	.tag {
+		@apply bg-slate-100 rounded-full shadow-md py-2 px-4 m-1;
+		@apply hover:bg-slate-300;
 	}
 }
