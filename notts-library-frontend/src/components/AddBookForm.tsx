@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"
 
 const AddBookForm = () => {
+  let navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -14,12 +16,8 @@ const AddBookForm = () => {
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    navigate("../", { replace: true })
   };
-
-  //   const formInfo = {
-  //     title: "bookTitle",
-  //     description: "bookDescription",
-  //   };
 
   const addBook = (bookTitle: string, bookDescription: string) => {
     fetch("http://localhost:5000/book", {
@@ -32,7 +30,7 @@ const AddBookForm = () => {
       .then((res) => res.json())
       .catch((err) => {
         console.log(err);
-      });
+      })
   };
 
   return (
@@ -59,7 +57,6 @@ const AddBookForm = () => {
 
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-2"
-          type="button"
           onClick={() => addBook(title, description)}
         >
           Add
