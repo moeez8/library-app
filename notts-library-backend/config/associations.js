@@ -1,4 +1,4 @@
-function associations(sequelize) {
+const associations = (sequelize) => {
 	const { book, copy, withdraw, tag } = sequelize.models;
 
 	book.hasMany(copy, { foreignKey: "book_id", as: "copies" });
@@ -18,6 +18,6 @@ function associations(sequelize) {
 		as: "books",
 		foreignKey: "tag_id",
 	});
-}
+};
 
 module.exports = { associations };

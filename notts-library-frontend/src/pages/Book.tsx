@@ -1,12 +1,12 @@
-import Header from "../components/Header";
-import BookDetails from "../components/BookDetails";
-import BookTags from "../components/BookTags";
-import BookCopies from "../components/BookCopies";
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { IBook } from "../components/BookCard";
+import IBook from "../interfaces/IBook";
+
+import Header from "../components/Header";
+import BookDetails from "../components/bookDetails/BookDetails";
+import BookTagList from "../components/bookDetails/BookTagList";
+import BookCopyList from "../components/bookDetails/BookCopyList";
 
 const Book = () => {
 	const params = useParams();
@@ -26,8 +26,8 @@ const Book = () => {
 			{book ? (
 				<>
 					<BookDetails {...book} />
-					<BookTags {...book} />
-					<BookCopies {...book} />
+					<BookTagList {...book} />
+					<BookCopyList {...book} />
 				</>
 			) : (
 				<div className="card bg-red-200 border-2 border-red-400 ">
