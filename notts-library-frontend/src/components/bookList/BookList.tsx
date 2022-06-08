@@ -10,12 +10,11 @@ const BookList = () => {
 
 	const getBooks = async () => {
 		const result = await fetch(`http://localhost:5000/book`).then((response) => response.json());
-		console.log(result);
 		setbooks(result);
 	};
 
 	const renderedItems = books.map((book) => {
-		return <BookListCard {...book} />;
+		return <BookListCard key={book.id} book={book} />;
 	});
 
 	return (

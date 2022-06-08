@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import IBook from "../../interfaces/IBook";
 
-export const BookListCard = (book: IBook) => {
+export const BookListCard = ({ book }: { book: IBook }) => {
 	return (
 		<div className="card">
 			<div className="m-1">

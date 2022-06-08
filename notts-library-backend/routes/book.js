@@ -138,9 +138,44 @@ router.put("/:id", (req, res) => {
 //Get Book By Id
 router.get("/:id", (req, res) => {
   models.book
+    .findByPk(parseInt(req.params.id), {})
+    .then((row) => {
+      if (row) {
+        res.send(row);
+      } else {
+        res.sendStatus(400);
+      }
+    })
+    .catch((err) => {
+      console.log("Error: " + err);
+      res.sendStatus(400);
+    });
+});
+
+//Get Copies Of A Book By ID
+router.get("/:id/copies", (req, res) => {
+  models.book
+    .findByPk(parseInt(req.params.id), {
+      include: [{ model: models.copy, as: "copies" }],
+    })
+    .then((row) => {
+      if (row) {
+        res.send(row.copies);
+      } else {
+        res.sendStatus(400);
+      }
+    })
+    .catch((err) => {
+      console.log("Error: " + err);
+      res.sendStatus(400);
+    });
+});
+
+//Get Tags Of A Book By ID
+router.get("/:id/tags", (req, res) => {
+  models.book
     .findByPk(parseInt(req.params.id), {
       include: [
-        { model: models.copy, as: "copies" },
         {
           model: models.tag,
           as: "tags",
@@ -152,7 +187,7 @@ router.get("/:id", (req, res) => {
     })
     .then((row) => {
       if (row) {
-        res.send(row);
+        res.send(row.tags);
       } else {
         res.sendStatus(400);
       }
