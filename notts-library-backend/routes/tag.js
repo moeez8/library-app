@@ -20,12 +20,12 @@ router.get("/", (req, res) => {
 
 //Create New Tag
 router.post("/", (req, res) => {
-    const { tag } =
+    const { name } =
         req.body;
 
     models.tag
         .create({
-            tag
+            name
         })
         .then(() => res.send("OK"))
         .catch((err) => {

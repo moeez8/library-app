@@ -5,7 +5,7 @@ const BookTagsList = (book: IBook) => {
 	let renderedCopies;
 	if (book.tags) {
 		renderedCopies = book.tags.map((tag) => {
-			return <Tag key={tag.id} tag={tag.tag} />;
+			return <Tag key={tag.id} tag={tag.name} />;
 		});
 	}
 

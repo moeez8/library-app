@@ -7,7 +7,7 @@ const AddBookForm = () => {
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
   const [iban, setIban] = useState("");
-  const [tags, setTags] = useState([{ tag_id: "1" }, { tag_id: "2" }]);
+  const [tags, setTags] = useState<{ tag_name: string }[]>([]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -28,7 +28,8 @@ const AddBookForm = () => {
   const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       if (event.currentTarget.value.length > 0) {
-        setTags([...tags, { tag_id: event.currentTarget.value }]);
+        event.preventDefault();
+        setTags([...tags, { tag_name: event.currentTarget.value }]);
         event.currentTarget.value = "";
       }
     }
@@ -45,8 +46,6 @@ const AddBookForm = () => {
   };
 
   const addBook = () => {
-    console.log(tags)
-    console.log(JSON.stringify(tags))
     fetch("http://localhost:5000/book", {
       method: "POST",
       headers: {
@@ -57,7 +56,7 @@ const AddBookForm = () => {
         description: description,
         author: author,
         iban: iban,
-        tag_ids: [{ "tag_id": 1 }, { "tag_id": 2 }]
+        tags: tags
       }),
 
     })
@@ -91,7 +90,6 @@ const AddBookForm = () => {
           className="form-input"
           name="content"
           placeholder="Book Description"
-          //rows="3"
           onChange={handleDescChange}
           value={description}
           required
@@ -110,11 +108,10 @@ const AddBookForm = () => {
             return (
               <div key={index} className="tag">
                 <span>
-                  <span className="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer" > {tag.tag_id}{' '}
-                    <span className=" w-5 h-5 border-red-100 bg-red-400 inline-flex items-center justify-center text-white rounded-full transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline" onClick={() => removeTag(tag)}> x  </span>
+                  <span className="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer" > {tag.tag_name}{' '}
+                    <span className=" w-5 h-5 border-red-100 bg-red-400 inline-flex items-center justify-center text-white rounded-full transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
+                      onClick={() => removeTag(tag)}> x  </span>
                   </span>
-
-
                 </span>
               </div>
             );
