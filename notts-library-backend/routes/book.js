@@ -126,18 +126,7 @@ router.put("/:id", (req, res) => {
 //Get Book By Id
 router.get("/:id", (req, res) => {
 	models.book
-		.findByPk(parseInt(req.params.id), {
-			include: [
-				{ model: models.copy, as: "copies", include: [{ model: models.withdraw, as: "withdraws" }] },
-				{
-					model: models.tag,
-					as: "tags",
-					through: {
-						attributes: ["tag_id", "book_id"],
-					},
-				},
-			],
-		})
+		.findByPk(parseInt(req.params.id), {})
 		.then((row) => {
 			if (row) {
 				res.send(row);

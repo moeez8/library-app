@@ -25,9 +25,9 @@ const Book = () => {
 			<Header />
 			{book ? (
 				<>
-					<BookDetails {...book} />
-					<BookTagList {...book} />
-					<BookCopyList {...book} />
+					<BookDetails book={book} />
+					<BookTagList book={book} />
+					<BookCopyList book={book} />
 				</>
 			) : (
 				<div className="card bg-red-200 border-2 border-red-400 ">

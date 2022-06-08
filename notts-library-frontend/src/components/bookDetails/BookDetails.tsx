@@ -1,6 +1,6 @@
 import IBook from "../../interfaces/IBook";
 
-const BookDetails = (book: IBook) => {
+const BookDetails = ({ book }: { book: IBook }) => {
 	return (
 		<div className="card">
 			<h1 className="text-2xl font-bold">{book.title || "Undefined"}</h1>
