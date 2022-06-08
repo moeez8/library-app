@@ -71,4 +71,23 @@ router.get("/:id", (req, res) => {
 		});
 });
 
+//Get Withdraws Of A Copy By ID
+router.get("/:id/withdraws", (req, res) => {
+	models.copy
+		.findByPk(parseInt(req.params.id), {
+			include: [{ model: models.withdraw, as: "withdraws" }],
+		})
+		.then((row) => {
+			if (row) {
+				res.send(row.withdraws);
+			} else {
+				res.sendStatus(400);
+			}
+		})
+		.catch((err) => {
+			console.log("Error: " + err);
+			res.sendStatus(400);
+		});
+});
+
 module.exports = router;
