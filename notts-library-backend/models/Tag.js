@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
 	sequelize.define(
 		"tag",
 		{
-			tag: {
+			name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
