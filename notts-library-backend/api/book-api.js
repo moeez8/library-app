@@ -2,7 +2,7 @@ const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-const NewBookApi = () => {
+const bookApi = () => {
 	const searchForBook = (req, res) => {
 		const { term } = req.query;
 
@@ -193,4 +193,4 @@ const NewBookApi = () => {
 	};
 };
 
-module.exports = NewBookApi;
+module.exports = bookApi;
