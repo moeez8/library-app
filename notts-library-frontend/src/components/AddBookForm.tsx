@@ -9,6 +9,8 @@ const AddBookForm = () => {
   const [iban, setIban] = useState("");
   const [tags, setTags] = useState<{ tag_name: string }[]>([]);
 
+  const [option, setOption] = useState<String>()
+
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
@@ -40,30 +42,69 @@ const AddBookForm = () => {
     setTags(newTags);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOption(e.target.value);
+
+  };
+
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     navigate("../", { replace: true });
   };
 
   const addBook = () => {
-    fetch("http://localhost:5000/book", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        title: title,
-        description: description,
-        author: author,
-        iban: iban,
-        tags: tags
-      }),
 
-    })
-      .then((res) => res.json())
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log(option)
+
+    if (option === "addBook") {
+
+      fetch("http://localhost:5000/book", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          author: author,
+          iban: iban,
+          tags: tags
+        }),
+
+      })
+        .then((res) => res.json())
+        .catch((err) => {
+          console.log(err);
+        });
+
+    } else if (option === "requestBook") {
+
+      console.log("GOT HERE")
+
+      fetch("http://localhost:5000/request", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          author: author,
+          iban: iban,
+          tags: tags
+        }),
+
+      })
+        .then((res) => res.json())
+        .catch((err) => {
+          console.log(err);
+        });
+
+    } else {
+      alert("Must check an option");
+    }
+
+
   };
 
   return (
@@ -119,6 +160,16 @@ const AddBookForm = () => {
 
           <input className="border border-2 rounded-md m-1" onKeyDown={addTag} placeholder="Add Tag" />
         </div>
+
+        <label>
+          <input name="bookOption" type="radio" value="addBook" onChange={handleChange} />
+          Add Book
+        </label>
+
+        <label>
+          <input name="bookOption" type="radio" value="requestBook" onChange={handleChange} />
+          Request Book
+        </label>
 
         <button className="button" type="submit" onClick={addBook}>
           Add
