@@ -11,6 +11,9 @@ const Header = () => {
 					<Link className="nav-button" to={"/"}>
 						<h2>Home</h2>
 					</Link>
+					<Link to={"/Search"}>
+						<h2 className="nav-button">Search</h2>
+					</Link>
 					<Link to={"/AddBook"}>
 						<h2 className="nav-button">Add A Book</h2>
 					</Link>
