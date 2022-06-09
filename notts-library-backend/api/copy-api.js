@@ -1,6 +1,6 @@
 const { models } = require("../config/database");
 
-const NewCopyApi = () => {
+const copyApi = () => {
     const getAllCopies = (req, res) => {
         models.copy
             .findAll()
@@ -201,5 +201,5 @@ const NewCopyApi = () => {
 
 };
 
-module.exports = NewCopyApi;
+module.exports = copyApi;
 
