@@ -1,8 +1,8 @@
 const { models } = require("../config/database");
 
-const NewBookApi = () => {
-	const getAllTags = (req, res) => {
-		models.tag
+const NewBooksTagApi = () => {
+	const GetAllBooksTags = (req, res) => {
+		models.books_tag
 			.findAll()
 			.then((tags) => {
 				console.log(tags);
@@ -14,12 +14,13 @@ const NewBookApi = () => {
 			});
 	};
 
-	const createNewTag = (req, res) => {
-		const { name } = req.body;
+	const CreateNewBooksTag = (req, res) => {
+		const { book_id, tag_id } = req.body;
 
-		models.tag
+		models.books_tag
 			.create({
-				name,
+				book_id,
+				tag_id,
 			})
 			.then(() => res.send("OK"))
 			.catch((err) => {
@@ -28,7 +29,10 @@ const NewBookApi = () => {
 			});
 	};
 
-	return { getAllTags, createNewTag };
+	return {
+		GetAllBooksTags,
+		CreateNewBooksTag,
+	};
 };
 
-module.exports = NewBookApi;
+module.exports = NewBooksTagApi;
