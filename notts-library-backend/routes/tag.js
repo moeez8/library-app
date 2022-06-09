@@ -1,37 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { models } = require("../config/database");
-const Sequelize = require("sequelize");
+const tagApi = require("../api/tag-api");
 
-//Get All Tags
-router.get("/", (req, res) => {
-    models.tag
-        .findAll()
-        .then((tags) => {
-            console.log(tags);
-            res.send(tags);
-        })
-        .catch((err) => {
-            console.log("Error: " + err);
-            res.sendStatus(400);
-        });
-});
-
-
-//Create New Tag
-router.post("/", (req, res) => {
-    const { name } =
-        req.body;
-
-    models.tag
-        .create({
-            name
-        })
-        .then(() => res.send("OK"))
-        .catch((err) => {
-            console.log("Error: " + err);
-            res.sendStatus(400);
-        });
-});
+router.get("/", tagApi().getAllTags);
+router.post("/", tagApi().createNewTag);
 
 module.exports = router;
