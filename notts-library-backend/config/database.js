@@ -13,7 +13,7 @@ const sequelize = new Sequelize("postgres", "root", "root", {
 	},
 });
 
-const modelDefiners = [require("../models/Book"), require("../models/Copy"), require("../models/Withdraw"), require("../models/Tag")];
+const modelDefiners = [require("../models/Book"), require("../models/Copy"), require("../models/Withdraw"), require("../models/Tag"), require("../models/BookRequests")];
 
 for (const modelDefiner of modelDefiners) {
 	modelDefiner(sequelize);

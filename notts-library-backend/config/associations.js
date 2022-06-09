@@ -1,5 +1,5 @@
 const associations = (sequelize) => {
-	const { book, copy, withdraw, tag } = sequelize.models;
+	const { book, copy, withdraw, tag, request } = sequelize.models;
 
 	book.hasMany(copy, { foreignKey: "book_id", as: "copies" });
 	copy.belongsTo(book, { foreignKey: "book_id", as: "book" });
@@ -18,6 +18,10 @@ const associations = (sequelize) => {
 		as: "books",
 		foreignKey: "tag_id",
 	});
+
+	book.hasMany(request, { foreignKey: "book_id", as: "requests" });
+	request.belongsTo(book, { foreignKey: "book_id", as: "book" });
+
 };
 
 module.exports = { associations };
