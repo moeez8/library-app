@@ -79,8 +79,6 @@ const AddBookForm = () => {
 
     } else if (option === "requestBook") {
 
-      console.log("GOT HERE")
-
       fetch("http://localhost:5000/request", {
         method: "POST",
         headers: {
