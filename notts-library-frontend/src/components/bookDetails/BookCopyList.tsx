@@ -18,7 +18,7 @@ const BookCopyList = ({ book }: { book: IBook }) => {
 	let renderedCopies;
 	if (copies) {
 		renderedCopies = copies.map((copy) => {
-			return <BookCopy key={copy.id} {...copy} />;
+			return <BookCopy key={copy.id} copy={copy} />;
 		});
 	}
 

@@ -160,22 +160,22 @@ router.get("/:id/status", (req, res) => {
 			include: [{ model: models.withdraw, as: "withdraws" }],
 		})
 		.then((row) => {
-			if (row.withdraws == null) {
-				res.json({ "checked-in": false });
+			if (row.withdraws.length === 0) {
+				res.json({ status: true });
 				return;
-			}
-
-			const withdraws = [...row.withdraws];
-
-			withdraws.sort((a, b) => {
-				if (a.date_out < b.date_out) return 1;
-				return -1;
-			});
-
-			if (withdraws[0].date_in === null) {
-				res.json({ "checked-in": false });
 			} else {
-				res.json({ "checked-in": true });
+				const withdraws = [...row.withdraws];
+
+				withdraws.sort((a, b) => {
+					if (a.date_out < b.date_out) return 1;
+					return -1;
+				});
+
+				if (withdraws[0].date_in === null) {
+					res.json({ status: false });
+				} else {
+					res.json({ status: true });
+				}
 			}
 		})
 		.catch((err) => {
