@@ -7,7 +7,7 @@ import BookSearch from "./pages/BookSearch";
 
 function App() {
 	return (
-		<div className="max-w-4xl m-auto">
+		<div className="max-w-3xl m-auto">
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Home />} />
