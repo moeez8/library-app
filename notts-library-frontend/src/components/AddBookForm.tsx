@@ -77,7 +77,7 @@ const AddBookForm = () => {
           console.log(err);
         });
 
-    } else if (option === "requestBook") {
+    } else {
 
       fetch("http://localhost:5000/request", {
         method: "POST",
@@ -98,10 +98,7 @@ const AddBookForm = () => {
           console.log(err);
         });
 
-    } else {
-      alert("Must check an option");
     }
-
 
   };
 
@@ -141,36 +138,43 @@ const AddBookForm = () => {
           onChange={handleIbanChange}
           required
         />
+        <div className="card">
+          <h1 className="text-lg font-bold">Tags</h1>
 
-        <div>
-          {tags.map((tag, index) => {
-            return (
-              <div key={index} className="form-input">
-                <span>
-                  <span className="tag"> {tag.tag_name}{' '}
-                    <span className=" w-5 h-5 border-red-100 bg-red-400 inline-flex items-center justify-center text-white rounded-full transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
-                      onClick={() => removeTag(tag)}> x  </span>
-                  </span>
+          <div>
+            <input className="form-input" onKeyDown={addTag} placeholder="Press enter to submit" />
+          </div>
+
+          <div className="flex flex-wrap">
+            {tags.map((tag, index) => {
+              return (
+                <span key={index} className="tag"> {tag.tag_name}{' '}
+                  <span className=" w-5 h-5 border-red-100 bg-red-400 inline-flex items-center justify-center text-white rounded-full transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
+                    onClick={() => removeTag(tag)}> x  </span>
                 </span>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
 
-          <input className="border border-2 rounded-md m-1" onKeyDown={addTag} placeholder="Add Tag" />
+
+        </div>
+        <div className="card ">
+          <h1 className="text-lg font-bold"> Add or request a book?</h1>
+          <div className="flex gap-2">
+            <label>
+              <input className="m-1" required name="bookOption" type="radio" value="addBook" onChange={handleChange} />
+              Add Book
+            </label>
+
+            <label>
+              <input className="m-1" required name="bookOption" type="radio" value="requestBook" onChange={handleChange} />
+              Request Book
+            </label>
+          </div>
         </div>
 
-        <label>
-          <input name="bookOption" type="radio" value="addBook" onChange={handleChange} />
-          Add Book
-        </label>
-
-        <label>
-          <input name="bookOption" type="radio" value="requestBook" onChange={handleChange} />
-          Request Book
-        </label>
-
-        <button className="button" type="submit" onClick={addBook}>
-          Add
+        <button className="button-green" type="submit" onClick={addBook}>
+          Submit
         </button>
       </form>
     </div>

@@ -24,7 +24,7 @@ const BookTagsList = ({ book }: { book: IBook }) => {
 	return (
 		<div className="card">
 			<h1 className="text-lg font-bold">{tags ? `Tags: ${tags.length}` : "Tags: 0"}</h1>
-			<div className="flex">{renderedCopies}</div>
+			<div className="flex flex-wrap">{renderedCopies}</div>
 		</div>
 	);
 };

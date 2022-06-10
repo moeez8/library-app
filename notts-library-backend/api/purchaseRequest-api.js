@@ -62,7 +62,7 @@ const purchaseRequestApi = () => {
                 models.request
                     .create({
                         book_id: book.id,
-                        requestedBy: "Moeez (test)",
+                        requestedBy: "Moeez",
                         request_date: new Date()
                     })
                     .catch((err) => {

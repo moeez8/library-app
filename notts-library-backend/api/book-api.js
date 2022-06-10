@@ -113,7 +113,7 @@ const bookApi = () => {
 				models.copy
 					.create({
 						book_id: book.id,
-						owner: "Hardcoded",
+						owner: "BJSS",
 					})
 					.catch((err) => {
 						res.status(400).send("Could Not Add A Copy");
