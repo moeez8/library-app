@@ -87,6 +87,7 @@ const bookApi = () => {
 			.catch((err) => {
 				console.log("Error: " + err);
 				res.status(400).json({ error: "Failed To Send Request" });
+				return;
 			})
 			.then((book) => {
 				tags.map((tagObj) => {
@@ -105,6 +106,7 @@ const bookApi = () => {
 								.catch((err) => {
 									console.log("Error: " + err);
 									res.sendStatus(400);
+									return;
 								});
 						});
 				});
@@ -113,14 +115,18 @@ const bookApi = () => {
 						book_id: book.id,
 						owner: "Hardcoded",
 					})
-					.then((row) => res.send(row))
 					.catch((err) => {
 						res.status(400).send("Could Not Add A Copy");
+						return;
 					});
 			})
-			.then(() => res.send("OK"))
+			.then(() => {
+				res.send("OK");
+				return;
+			})
 			.catch((err) => {
 				res.status(400).json({ error: "Failed To Send Request" });
+				return;
 			});
 	};
 
