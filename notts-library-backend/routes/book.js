@@ -8,5 +8,6 @@ router.put("/:id", bookApi().updateBookById);
 router.get("/:id", bookApi().getBookById);
 router.get("/:id/copies", bookApi().getCopiesByBookId);
 router.get("/:id/tags", bookApi().getTagsByBookId);
+router.delete("/:id", bookApi().deleteBookById);
 
 module.exports = router;

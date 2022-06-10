@@ -198,6 +198,20 @@ const bookApi = () => {
 			});
 	};
 
+	const deleteBookById = async (req, res) => {
+		const Id = req.params.id;
+		const book = await models.book.findByPk(Id);
+
+		if (book !== null) {
+			book.destroy();
+			res.status(200).json({ msg: "Book Deleted" });
+			return;
+		} else {
+			res.status(400).json({ error: "Not Able To Find Book With ID" });
+			return;
+		}
+	};
+
 	return {
 		searchForBook,
 		getBookById,
@@ -205,6 +219,7 @@ const bookApi = () => {
 		updateBookById,
 		getCopiesByBookId,
 		getTagsByBookId,
+		deleteBookById,
 	};
 };
 
