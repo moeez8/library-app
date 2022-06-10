@@ -142,12 +142,12 @@ const AddBookForm = () => {
           required
         />
 
-        <div className="tag-container">
+        <div>
           {tags.map((tag, index) => {
             return (
-              <div key={index} className="tag">
+              <div key={index} className="form-input">
                 <span>
-                  <span className="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer" > {tag.tag_name}{' '}
+                  <span className="tag"> {tag.tag_name}{' '}
                     <span className=" w-5 h-5 border-red-100 bg-red-400 inline-flex items-center justify-center text-white rounded-full transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
                       onClick={() => removeTag(tag)}> x  </span>
                   </span>
