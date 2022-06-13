@@ -1,20 +1,20 @@
 const { models } = require("../config/database");
 
-const NewBookApi = () => {
-	const getAllTags = (req, res) => {
+const NewTagApi = () => {
+	const getAllTags = (req: any, res: any) => {
 		models.tag
 			.findAll()
-			.then((tags) => {
+			.then((tags: any) => {
 				console.log(tags);
 				res.send(tags);
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				console.log("Error: " + err);
 				res.sendStatus(400);
 			});
 	};
 
-	const createNewTag = (req, res) => {
+	const createNewTag = (req: any, res: any) => {
 		const { name } = req.body;
 
 		models.tag
@@ -22,7 +22,7 @@ const NewBookApi = () => {
 				name,
 			})
 			.then(() => res.send("OK"))
-			.catch((err) => {
+			.catch((err: any) => {
 				console.log("Error: " + err);
 				res.sendStatus(400);
 			});
@@ -31,4 +31,4 @@ const NewBookApi = () => {
 	return { getAllTags, createNewTag };
 };
 
-module.exports = NewBookApi;
+export = NewTagApi;

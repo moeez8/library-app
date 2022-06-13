@@ -8,12 +8,12 @@ const db = require("./config/database");
 // Test DB Connection
 db.authenticate()
 	.then(() => console.log("Database Connected..."))
-	.catch((err) => console.log("Error:" + err));
+	.catch((err: any) => console.log("Error:" + err));
 
 // Create DB Tables
 db.sync({ force: false })
 	.then()
-	.catch((err) => console.log("Error:" + err));
+	.catch((err: any) => console.log("Error:" + err));
 
 //Create Express App
 const app = express();

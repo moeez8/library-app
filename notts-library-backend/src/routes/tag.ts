@@ -5,4 +5,4 @@ const tagApi = require("../api/tag-api");
 router.get("/", tagApi().getAllTags);
 router.post("/", tagApi().createNewTag);
 
-module.exports = router;
+export = router;

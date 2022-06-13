@@ -6,4 +6,4 @@ router.get("/", purchaseRequestAPI().getAllRequests);
 router.post("/", purchaseRequestAPI().addRequest);
 router.put("/:id", purchaseRequestAPI().updateRequest);
 
-module.exports = router;
+export = router;

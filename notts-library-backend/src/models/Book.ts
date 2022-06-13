@@ -1,6 +1,6 @@
-const Sequelize = require("sequelize");
+const { Sequelize } = require("sequelize");
 
-module.exports = (sequelize) => {
+export = (sequelize: any) => {
 	sequelize.define(
 		"book",
 		{

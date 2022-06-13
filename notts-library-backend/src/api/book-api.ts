@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 const bookApi = () => {
-	const searchForBook = (req, res) => {
+	const searchForBook = (req: any, res: any) => {
 		const { term } = req.query;
 
 		if (term) {
@@ -23,11 +23,11 @@ const bookApi = () => {
 						},
 					],
 				})
-				.then((books) => {
+				.then((books: any) => {
 					console.log(books);
 					res.send(books);
 				})
-				.catch((err) => {
+				.catch((err: any) => {
 					console.log("Error: " + err);
 					res.status(400).json({ error: "Failed To Send Request" });
 				});
@@ -45,33 +45,33 @@ const bookApi = () => {
 						},
 					],
 				})
-				.then((books) => {
+				.then((books: any) => {
 					console.log(books);
 					res.send(books);
 				})
-				.catch((err) => {
+				.catch((err: any) => {
 					console.log("Error: " + err);
 					res.status(400).json({ error: "Failed To Send Request" });
 				});
 		}
 	};
 
-	const getBookById = (req, res) => {
+	const getBookById = (req: any, res: any) => {
 		models.book
 			.findByPk(parseInt(req.params.id), {})
-			.then((row) => {
+			.then((row: any) => {
 				if (row) {
 					res.send(row);
 				} else {
 					res.status(400).json({ error: "Not Able To Find Book" });
 				}
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				res.status(400).json({ error: "Failed To Send Request" });
 			});
 	};
 
-	const createNewBook = (req, res) => {
+	const createNewBook = (req: any, res: any) => {
 		const { title, iban, author, type, category, cover_photo, description, tags } = req.body;
 
 		models.book
@@ -84,26 +84,26 @@ const bookApi = () => {
 				cover_photo,
 				description,
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				console.log("Error: " + err);
 				res.status(400).json({ error: "Failed To Send Request" });
 				return;
 			})
-			.then((book) => {
-				tags.map((tagObj) => {
+			.then((book: any) => {
+				tags.map((tagObj: any) => {
 					return models.tag
 						.findOrCreate({
 							where: {
 								name: tagObj.tag_name,
 							},
 						})
-						.then((foundTag) => {
+						.then((foundTag: any) => {
 							models.books_tag
 								.create({
 									book_id: book.id,
 									tag_id: foundTag[0].id,
 								})
-								.catch((err) => {
+								.catch((err: any) => {
 									console.log("Error: " + err);
 									res.sendStatus(400);
 									return;
@@ -115,7 +115,7 @@ const bookApi = () => {
 						book_id: book.id,
 						owner: "BJSS",
 					})
-					.catch((err) => {
+					.catch((err: any) => {
 						res.status(400).send("Could Not Add A Copy");
 						return;
 					});
@@ -124,18 +124,18 @@ const bookApi = () => {
 				res.send("OK");
 				return;
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				res.status(400).json({ error: "Failed To Send Request" });
 				return;
 			});
 	};
 
-	const updateBookById = (req, res) => {
+	const updateBookById = (req: any, res: any) => {
 		const { title, iban, author, type, category, cover_photo, desciption } = req.body;
 
 		models.book
 			.findByPk(parseInt(req.params.id))
-			.then((row) => {
+			.then((row: any) => {
 				if (row) {
 					row.update({
 						title: title || row.title,
@@ -151,29 +151,29 @@ const bookApi = () => {
 					res.sendStatus(400);
 				}
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				res.status(400).json({ error: "Failed To Send Request" });
 			});
 	};
 
-	const getCopiesByBookId = (req, res) => {
+	const getCopiesByBookId = (req: any, res: any) => {
 		models.book
 			.findByPk(parseInt(req.params.id), {
 				include: [{ model: models.copy, as: "copies" }],
 			})
-			.then((row) => {
+			.then((row: any) => {
 				if (row) {
 					res.send(row.copies);
 				} else {
 					res.status(400).json({ error: "Not Able To Find Book" });
 				}
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				res.status(400).json({ error: "Failed To Send Request" });
 			});
 	};
 
-	const getTagsByBookId = (req, res) => {
+	const getTagsByBookId = (req: any, res: any) => {
 		models.book
 			.findByPk(parseInt(req.params.id), {
 				include: [
@@ -186,19 +186,19 @@ const bookApi = () => {
 					},
 				],
 			})
-			.then((row) => {
+			.then((row: any) => {
 				if (row) {
 					res.send(row.tags);
 				} else {
 					res.status(400).json({ error: "Not Able To Find Book" });
 				}
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				res.status(400).json({ error: "Failed To Send Request" });
 			});
 	};
 
-	const deleteBookById = async (req, res) => {
+	const deleteBookById = async (req: any, res: any) => {
 		const Id = req.params.id;
 		const book = await models.book.findByPk(Id);
 
@@ -223,4 +223,4 @@ const bookApi = () => {
 	};
 };
 
-module.exports = bookApi;
+export = bookApi;

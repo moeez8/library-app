@@ -10,4 +10,4 @@ router.get("/:id/check-in", copyAPI().checkinCopyByID);
 router.get("/:id/check-out", copyAPI().checkoutCopyByID);
 router.get("/:id/status", copyAPI().checkCopyStatus);
 
-module.exports = router;
+export = router;

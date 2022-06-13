@@ -1,5 +1,5 @@
-const Sequelize = require("sequelize");
-const { associations } = require("./associations");
+import { Sequelize } from "sequelize";
+import { associations } from "./associations";
 
 const sequelize = new Sequelize("postgres", "root", "root", {
 	host: "localhost",
@@ -21,4 +21,4 @@ for (const modelDefiner of modelDefiners) {
 
 associations(sequelize);
 
-module.exports = sequelize;
+export = sequelize;

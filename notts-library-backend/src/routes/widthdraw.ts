@@ -7,4 +7,4 @@ router.post("/add", NewWithdrawsApi().CreateNewWithdraw);
 router.get("/:id", NewWithdrawsApi().GetWithdrawById);
 router.put("/:id", NewWithdrawsApi().UpdateWithdrawById);
 
-module.exports = router;
+export = router;

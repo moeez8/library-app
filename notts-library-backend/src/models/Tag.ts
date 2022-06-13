@@ -1,20 +1,16 @@
 const Sequelize = require("sequelize");
 
-module.exports = (sequelize) => {
+export = (sequelize: any) => {
 	sequelize.define(
-		"copy",
+		"tag",
 		{
-			book_id: {
-				type: Sequelize.INTEGER,
-				allowNull: false,
-			},
-			owner: {
+			name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
 		},
 		{
-			tableName: "copies",
+			tableName: "tags",
 			timestamps: false,
 		}
 	);

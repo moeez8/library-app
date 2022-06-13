@@ -1,7 +1,7 @@
 const { models } = require("../config/database");
 
 const NewWithdrawsApi = () => {
-	const GetAllWithdraws = (req, res) => {
+	const GetAllWithdraws = (req: any, res: any) => {
 		models.withdraw
 			.findAll({
 				include: [
@@ -12,17 +12,17 @@ const NewWithdrawsApi = () => {
 					},
 				],
 			})
-			.then((withdraws) => {
+			.then((withdraws: any) => {
 				console.log(withdraws);
 				res.send(withdraws);
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				console.log("Error: " + err);
 				res.sendStatus(400);
 			});
 	};
 
-	const CreateNewWithdraw = (req, res) => {
+	const CreateNewWithdraw = (req: any, res: any) => {
 		let { copy_id, user_name } = req.body;
 
 		models.withdraw
@@ -32,32 +32,32 @@ const NewWithdrawsApi = () => {
 				user_name,
 			})
 			.then(() => res.sendStatus(200))
-			.catch((err) => {
+			.catch((err: any) => {
 				console.log("Error: " + err);
 				res.sendStatus(400);
 			});
 	};
 
-	const GetWithdrawById = (req, res) => {
+	const GetWithdrawById = (req: any, res: any) => {
 		models.withdraw
 			.findByPk(parseInt(req.params.id))
-			.then((row) => {
+			.then((row: any) => {
 				if (row) {
 					res.send(row);
 				} else {
 					res.sendStatus(400);
 				}
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				console.log("Error: " + err);
 				res.sendStatus(400);
 			});
 	};
 
-	const UpdateWithdrawById = (req, res) => {
+	const UpdateWithdrawById = (req: any, res: any) => {
 		models.withdraw
 			.findByPk(parseInt(req.params.id))
-			.then((row) => {
+			.then((row: any) => {
 				if (row) {
 					row.update({ date_in: new Date() });
 					res.send(row);
@@ -65,7 +65,7 @@ const NewWithdrawsApi = () => {
 					res.sendStatus(400);
 				}
 			})
-			.catch((err) => {
+			.catch((err: any) => {
 				console.log("Error: " + err);
 				res.sendStatus(400);
 			});
@@ -74,4 +74,4 @@ const NewWithdrawsApi = () => {
 	return { GetAllWithdraws, CreateNewWithdraw, GetWithdrawById, UpdateWithdrawById };
 };
 
-module.exports = NewWithdrawsApi;
+export = NewWithdrawsApi;
