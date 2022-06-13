@@ -1,6 +1,5 @@
 const { models } = require("../config/database");
 const Sequelize = require("sequelize");
-const Op = Sequelize.Op;
 
 import NewBookService from "../service/book-service";
 
@@ -11,10 +10,8 @@ const bookApi = () => {
 		const { term } = req.query;
 		if (term != null) {
 			res.json(await NewBookService().SearchBooks(term));
-			return;
 		} else {
 			res.json(await NewBookService().GetAllBooks());
-			return;
 		}
 	};
 
