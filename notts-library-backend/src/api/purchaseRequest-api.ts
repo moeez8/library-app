@@ -1,7 +1,8 @@
 const { models } = require("../config/database");
+import { Request, Response } from "express";
 
 const purchaseRequestApi = () => {
-	const getAllRequests = (req: any, res: any) => {
+	const getAllRequests = (req: Request, res: Response) => {
 		models.request
 			.findAll({
 				include: [{ model: models.book, as: "book" }],
@@ -16,7 +17,7 @@ const purchaseRequestApi = () => {
 			});
 	};
 
-	const addRequest = (req: any, res: any) => {
+	const addRequest = (req: Request, res: Response) => {
 		const { title, iban, author, type, category, cover_photo, description, tags, user } = req.body;
 
 		models.book
@@ -73,7 +74,7 @@ const purchaseRequestApi = () => {
 			});
 	};
 
-	const updateRequest = (req: any, res: any) => {
+	const updateRequest = (req: Request, res: Response) => {
 		models.request
 			.findByPk(parseInt(req.params.id))
 			.then((request: any) => {

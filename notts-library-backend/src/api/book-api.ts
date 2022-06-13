@@ -2,61 +2,23 @@ const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-const bookApi = () => {
-	const searchForBook = (req: any, res: any) => {
-		const { term } = req.query;
+import NewBookService from "../service/book-service";
 
-		if (term) {
-			models.book
-				.findAll({
-					where: {
-						[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
-					},
-					include: [
-						{ model: models.copy, as: "copies" },
-						{
-							model: models.tag,
-							as: "tags",
-							through: {
-								attributes: ["tag_id", "book_id"],
-							},
-						},
-					],
-				})
-				.then((books: any) => {
-					console.log(books);
-					res.send(books);
-				})
-				.catch((err: any) => {
-					console.log("Error: " + err);
-					res.status(400).json({ error: "Failed To Send Request" });
-				});
+import { Request, Response } from "express";
+
+const bookApi = () => {
+	const searchForBook = async (req: Request, res: Response) => {
+		const { term } = req.query;
+		if (term != null) {
+			res.json(await NewBookService().SearchBooks(term));
+			return;
 		} else {
-			models.book
-				.findAll({
-					include: [
-						{ model: models.copy, as: "copies" },
-						{
-							model: models.tag,
-							as: "tags",
-							through: {
-								attributes: ["tag_id", "book_id"],
-							},
-						},
-					],
-				})
-				.then((books: any) => {
-					console.log(books);
-					res.send(books);
-				})
-				.catch((err: any) => {
-					console.log("Error: " + err);
-					res.status(400).json({ error: "Failed To Send Request" });
-				});
+			res.json(await NewBookService().GetAllBooks());
+			return;
 		}
 	};
 
-	const getBookById = (req: any, res: any) => {
+	const getBookById = (req: Request, res: Response) => {
 		models.book
 			.findByPk(parseInt(req.params.id), {})
 			.then((row: any) => {
@@ -71,7 +33,7 @@ const bookApi = () => {
 			});
 	};
 
-	const createNewBook = (req: any, res: any) => {
+	const createNewBook = (req: Request, res: Response) => {
 		const { title, iban, author, type, category, cover_photo, description, tags } = req.body;
 
 		models.book
@@ -130,7 +92,7 @@ const bookApi = () => {
 			});
 	};
 
-	const updateBookById = (req: any, res: any) => {
+	const updateBookById = (req: Request, res: Response) => {
 		const { title, iban, author, type, category, cover_photo, desciption } = req.body;
 
 		models.book
@@ -156,7 +118,7 @@ const bookApi = () => {
 			});
 	};
 
-	const getCopiesByBookId = (req: any, res: any) => {
+	const getCopiesByBookId = (req: Request, res: Response) => {
 		models.book
 			.findByPk(parseInt(req.params.id), {
 				include: [{ model: models.copy, as: "copies" }],
@@ -173,7 +135,7 @@ const bookApi = () => {
 			});
 	};
 
-	const getTagsByBookId = (req: any, res: any) => {
+	const getTagsByBookId = (req: Request, res: Response) => {
 		models.book
 			.findByPk(parseInt(req.params.id), {
 				include: [
@@ -198,7 +160,7 @@ const bookApi = () => {
 			});
 	};
 
-	const deleteBookById = async (req: any, res: any) => {
+	const deleteBookById = async (req: Request, res: Response) => {
 		const Id = req.params.id;
 		const book = await models.book.findByPk(Id);
 

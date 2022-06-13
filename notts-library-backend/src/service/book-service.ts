@@ -3,55 +3,42 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 const NewBookService = () => {
-	const SearchBooks = (term) => {
-		if (term != null) {
-			models.book
-				.findAll({
-					where: {
-						[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
+	const SearchBooks = async (term: any): Promise<any> => {
+		const result = await models.book.findAll({
+			where: {
+				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
+			},
+			include: [
+				{ model: models.copy, as: "copies" },
+				{
+					model: models.tag,
+					as: "tags",
+					through: {
+						attributes: ["tag_id", "book_id"],
 					},
-					include: [
-						{ model: models.copy, as: "copies" },
-						{
-							model: models.tag,
-							as: "tags",
-							through: {
-								attributes: ["tag_id", "book_id"],
-							},
-						},
-					],
-				})
-				.then((books) => {
-					return "books";
-				})
-				.catch(() => {
-					return "[]";
-				});
-		} else {
-			models.book
-				.findAll({
-					include: [
-						{ model: models.copy, as: "copies" },
-						{
-							model: models.tag,
-							as: "tags",
-							through: {
-								attributes: ["tag_id", "book_id"],
-							},
-						},
-					],
-				})
-				.then((books) => {
-					console.log(books);
-					return "books";
-				})
-				.catch((err) => {
-					return "[]";
-				});
-		}
+				},
+			],
+		});
+		return result;
 	};
 
-	return { SearchBooks };
+	const GetAllBooks = async (): Promise<any> => {
+		const result = await models.book.findAll({
+			include: [
+				{ model: models.copy, as: "copies" },
+				{
+					model: models.tag,
+					as: "tags",
+					through: {
+						attributes: ["tag_id", "book_id"],
+					},
+				},
+			],
+		});
+		return result;
+	};
+
+	return { GetAllBooks, SearchBooks };
 };
 
-module.exports = NewBookService;
+export default NewBookService;

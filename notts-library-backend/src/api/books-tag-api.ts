@@ -1,7 +1,8 @@
 const { models } = require("../config/database");
+import { Request, Response } from "express";
 
 const NewBooksTagApi = () => {
-	const GetAllBooksTags = (req: any, res: any) => {
+	const GetAllBooksTags = (req: Request, res: Response) => {
 		models.books_tag
 			.findAll()
 			.then((tags: any) => {
@@ -14,7 +15,7 @@ const NewBooksTagApi = () => {
 			});
 	};
 
-	const CreateNewBooksTag = (req: any, res: any) => {
+	const CreateNewBooksTag = (req: Request, res: Response) => {
 		const { book_id, tag_id } = req.body;
 
 		models.books_tag

@@ -1,7 +1,8 @@
 const { models } = require("../config/database");
+import { Request, Response } from "express";
 
 const NewWithdrawsApi = () => {
-	const GetAllWithdraws = (req: any, res: any) => {
+	const GetAllWithdraws = (req: Request, res: Response) => {
 		models.withdraw
 			.findAll({
 				include: [
@@ -22,7 +23,7 @@ const NewWithdrawsApi = () => {
 			});
 	};
 
-	const CreateNewWithdraw = (req: any, res: any) => {
+	const CreateNewWithdraw = (req: Request, res: Response) => {
 		let { copy_id, user_name } = req.body;
 
 		models.withdraw
@@ -38,7 +39,7 @@ const NewWithdrawsApi = () => {
 			});
 	};
 
-	const GetWithdrawById = (req: any, res: any) => {
+	const GetWithdrawById = (req: Request, res: Response) => {
 		models.withdraw
 			.findByPk(parseInt(req.params.id))
 			.then((row: any) => {
@@ -54,7 +55,7 @@ const NewWithdrawsApi = () => {
 			});
 	};
 
-	const UpdateWithdrawById = (req: any, res: any) => {
+	const UpdateWithdrawById = (req: Request, res: Response) => {
 		models.withdraw
 			.findByPk(parseInt(req.params.id))
 			.then((row: any) => {

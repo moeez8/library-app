@@ -1,7 +1,8 @@
 const { models } = require("../config/database");
+import { Request, Response } from "express";
 
 const copyApi = () => {
-	const getAllCopies = (req: any, res: any) => {
+	const getAllCopies = (req: Request, res: Response) => {
 		models.copy
 			.findAll()
 			.then((copies: any) => {
@@ -12,7 +13,7 @@ const copyApi = () => {
 			});
 	};
 
-	const addNewCopy = (req: any, res: any) => {
+	const addNewCopy = (req: Request, res: Response) => {
 		const { book_id, owner } = req.body;
 
 		if (book_id == null) {
@@ -35,7 +36,7 @@ const copyApi = () => {
 			});
 	};
 
-	const getCopyByID = (req: any, res: any) => {
+	const getCopyByID = (req: Request, res: Response) => {
 		models.copy
 			.findByPk(parseInt(req.params.id))
 			.then((row: any) => {
@@ -50,7 +51,7 @@ const copyApi = () => {
 			});
 	};
 
-	const getCopyWithdrawsByID = (req: any, res: any) => {
+	const getCopyWithdrawsByID = (req: Request, res: Response) => {
 		models.copy
 			.findByPk(parseInt(req.params.id), {
 				include: [{ model: models.withdraw, as: "withdraws" }],
@@ -63,7 +64,7 @@ const copyApi = () => {
 			});
 	};
 
-	const checkinCopyByID = (req: any, res: any) => {
+	const checkinCopyByID = (req: Request, res: Response) => {
 		models.copy
 			.findByPk(parseInt(req.params.id), {
 				include: [{ model: models.withdraw, as: "withdraws" }],
@@ -96,7 +97,7 @@ const copyApi = () => {
 			});
 	};
 
-	const checkoutCopyByID = (req: any, res: any) => {
+	const checkoutCopyByID = (req: Request, res: Response) => {
 		models.copy
 			.findByPk(parseInt(req.params.id), {
 				include: [{ model: models.withdraw, as: "withdraws" }],
@@ -150,7 +151,7 @@ const copyApi = () => {
 			});
 	};
 
-	const checkCopyStatus = (req: any, res: any) => {
+	const checkCopyStatus = (req: Request, res: Response) => {
 		models.copy
 			.findByPk(parseInt(req.params.id), {
 				include: [{ model: models.withdraw, as: "withdraws" }],
