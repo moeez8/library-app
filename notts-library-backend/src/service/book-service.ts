@@ -2,6 +2,7 @@ const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
+
 const NewBookService = () => {
 	const SearchBooks = async (term: any): Promise<any> => {
 		const result = await models.book.findAll({
@@ -38,7 +39,123 @@ const NewBookService = () => {
 		return result;
 	};
 
-	return { GetAllBooks, SearchBooks };
+	const GetBookByID = async (id: any): Promise<any> => {
+		const result = await models.book
+			.findByPk(id, {})
+		return result;
+	}
+
+	const createNewBook = async (title: any, iban: any, author: any, type: any, category: any, cover_photo: any, description: any, tags: any): Promise<any> => {
+		models.book
+			.create({
+				title,
+				iban,
+				author,
+				type,
+				category,
+				cover_photo,
+				description,
+			}).then((book: any) => {
+				tags.map((tagObj: any) => {
+					return models.tag
+						.findOrCreate({
+							where: {
+								name: tagObj.tag_name,
+							},
+						})
+						.then((foundTag: any) => {
+							models.books_tag
+								.create({
+									book_id: book.id,
+									tag_id: foundTag[0].id,
+								})
+
+						})
+				})
+
+				models.copy
+					.create({
+						book_id: book.id,
+						owner: "BJSS",
+					})
+			})
+
+
+	}
+
+	const updateBookByID = async (id: any, title: any, iban: any, author: any, type: any, category: any, cover_photo: any, description: any, tags: any) => {
+
+		models.book
+			.findByPk(id)
+			.then((row: any) => {
+				if (row) {
+					row.update({
+						title: title || row.title,
+						iban: iban || row.iban,
+						author: author || row.author,
+						type: type || row.type,
+						category: category || row.category,
+						cover_photo: cover_photo || row.cover_photo,
+						description: description || row.description,
+					});
+
+				}
+			})
+
+		//CURRENTLY DOES NOT DELETE ALREADY EXISTING TAGS 
+		tags.map((tagObj: any) => {
+			return models.tag
+				.findOrCreate({
+					where: {
+						name: tagObj.tag_name,
+					},
+				})
+				.then((foundTag: any) => {
+					models.books_tag
+						.create({
+							book_id: id,
+							tag_id: foundTag[0].id,
+						})
+
+				})
+		})
+
+	}
+
+	const getCopiesByBookID = async (id: any) => {
+		models.book
+			.findByPk(parseInt(id), {
+				include: [{ model: models.copy, as: "copies" }],
+			})
+	}
+
+	const getTagsByBookID = async (id: any) => {
+		models.book
+			.findByPk(parseInt(id), {
+				include: [
+					{
+						model: models.tag,
+						as: "tags",
+						through: {
+							attributes: ["tag_id", "book_id"],
+						},
+					},
+				],
+			})
+	}
+	const deleteBookByID = async (book: any) => {
+		if (book !== null) {
+			book.destroy();
+			// res.status(200).json({ msg: "Book Deleted" });
+			return;
+		} else {
+			// res.status(400).json({ error: "Not Able To Find Book With ID" });
+			return;
+		}
+
+	}
+
+	return { GetAllBooks, SearchBooks, GetBookByID, createNewBook, updateBookByID, getCopiesByBookID, getTagsByBookID, deleteBookByID };
 };
 
 export default NewBookService;
