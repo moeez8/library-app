@@ -1,18 +1,18 @@
 class ApiError {
-	constructor(code: number, message: string) {
+	constructor(code: number, message: any) {
 		this.code = code;
 		this.message = message;
 	}
 
 	code: number;
-	message: string;
+	message: any;
 
-	static BadRequest(msg: string) {
-		return new ApiError(400, msg);
+	static BadRequest(message: any) {
+		return new ApiError(400, message);
 	}
 
-	static Internal(msg: string) {
-		return new ApiError(500, msg);
+	static Internal(message: any) {
+		return new ApiError(500, message);
 	}
 }
 
