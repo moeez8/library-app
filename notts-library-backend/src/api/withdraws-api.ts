@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import ApiError from "../middleware/api-error";
+
 import NewWithdrawService from "../service/withdraw-service";
+import ApiError from "../middleware/api-error";
 
 const NewWithdrawsApi = () => {
 	const GetAllWithdraws = async (req: Request, res: Response) => {

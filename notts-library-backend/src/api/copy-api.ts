@@ -1,46 +1,54 @@
 const { models } = require("../config/database");
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import ApiError from "../middleware/api-error";
 import CopyService from "../service/copy-service";
 
 const copyApi = () => {
-	const addNewCopy = async (req: Request, res: Response) => {
+	const addNewCopy = async (req: Request, res: Response, next: NextFunction) => {
 		const { book_id, owner } = req.body;
 
 		if (book_id == null) {
 			res.status(400).json({ error: "Missing Property book_id" });
 			return;
-		}
-		else if (owner == null) {
+		} else if (owner == null) {
 			res.status(400).json({ error: "Missing Property owner" });
 			return;
-		}
-
-		else {
+		} else {
 			res.json(await CopyService().AddNewCopy(book_id, owner));
 		}
 	};
 
-	const getAllCopies = async (req: Request, res: Response) => {
+	const getAllCopies = async (req: Request, res: Response, next: NextFunction) => {
 		res.json(await CopyService().GetAllCopies());
 	};
 
-	const getCopyByID = async (req: Request, res: Response) => {
+	const getCopyByID = async (req: Request, res: Response, next: NextFunction) => {
 		let id = parseInt(req.params.id);
 		res.json(await CopyService().GetCopyByID(id));
 		return;
 	};
 
-	const getCopyWithdrawsByID = async (req: Request, res: Response) => {
+	const getCopyWithdrawsByID = async (req: Request, res: Response, next: NextFunction) => {
 		let id = parseInt(req.params.id);
 		res.json(await CopyService().GetCopyWithdrawsByID(id));
 		return;
 	};
 
-	const checkinCopyByID = async (req: Request, res: Response) => {
+	const checkinCopyByID = async (req: Request, res: Response, next: NextFunction) => {
+		const id: number = parseInt(req.params.id);
 
-		let id = parseInt(req.params.id);
-		res.json(await CopyService().CheckinCopyByID(id));
-		return;
+		if (id == null) {
+			next(ApiError.BadRequest("Please Fill URL Param id"));
+			return;
+		}
+
+		try {
+			res.json(await CopyService().CheckinCopyByID(id));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
 
 		// models.copy
 		// 	.findByPk(parseInt(req.params.id), {
@@ -74,11 +82,21 @@ const copyApi = () => {
 		// 	});
 	};
 
-	const checkoutCopyByID = async (req: Request, res: Response) => {
+	const checkoutCopyByID = async (req: Request, res: Response, next: NextFunction) => {
+		const id: number = parseInt(req.params.id);
 
-		let id = parseInt(req.params.id);
-		res.json(await CopyService().CheckoutCopyByID(id));
-		return;
+		if (id == null) {
+			next(ApiError.BadRequest("Please Fill URL Param id"));
+			return;
+		}
+
+		try {
+			res.json(await CopyService().CheckoutCopyByID(id));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
 
 		// models.copy
 		// 	.findByPk(parseInt(req.params.id), {
@@ -133,12 +151,21 @@ const copyApi = () => {
 		// 	});
 	};
 
-	const checkCopyStatus = async (req: Request, res: Response) => {
+	const checkCopyStatus = async (req: Request, res: Response, next: NextFunction) => {
+		const id: number = parseInt(req.params.id);
 
-		let id = parseInt(req.params.id);
-		res.json(await CopyService().CheckCopyStatus(id));
-		return;
+		if (id == null) {
+			next(ApiError.BadRequest("Please Fill URL Param id"));
+			return;
+		}
 
+		try {
+			res.json(await CopyService().CheckCopyStatus(id));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
 
 		// models.copy
 		// 	.findByPk(parseInt(req.params.id), {

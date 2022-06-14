@@ -1,10 +1,7 @@
-const { models } = require("../config/database");
+import { NextFunction, Request, Response } from "express";
 
 import IBook from "../interfaces/IBook";
-
 import NewBookService from "../service/book-service";
-
-import { NextFunction, Request, Response } from "express";
 import ApiError from "../middleware/api-error";
 
 const bookApi = () => {
@@ -55,8 +52,8 @@ const bookApi = () => {
 		if (book.title == null) errors.push("Please Provide Body Param title");
 		if (book.iban == null) errors.push("Please Provide Body Param iban");
 		if (book.author == null) errors.push("Please Provide Body Param author");
-		if (book.type == null) errors.push("Please Provide Body Param type");
-		if (book.category == null) errors.push("Please Provide Body Param category");
+		// if (book.type == null) errors.push("Please Provide Body Param type");
+		// if (book.category == null) errors.push("Please Provide Body Param category");
 		if (book.description == null) errors.push("Please Provide Body Param description");
 
 		if (errors.length > 0) {

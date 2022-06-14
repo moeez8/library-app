@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import ApiError from "../middleware/api-error";
+
 import NewTagService from "../service/tag-service";
+import ApiError from "../middleware/api-error";
 
 const NewTagApi = () => {
 	const getAllTags = async (req: Request, res: Response, next: NextFunction) => {

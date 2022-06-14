@@ -3,128 +3,140 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 const CopyService = () => {
+	const AddNewCopy = async (id: any, owner: string): Promise<any> => {
+		const copy = await models.copy.create({
+			book_id: id,
+			owner: owner,
+		});
+		return copy;
+	};
 
-    const AddNewCopy = async (id: any, owner: string): Promise<any> => {
-        const copy = await models.copy
-            .create({
-                book_id: id,
-                owner: owner,
-            })
-        return copy
-    }
+	const GetAllCopies = async (): Promise<any> => {
+		const copies = await models.copy.findAll();
+		return copies;
+	};
 
-    const GetAllCopies = async (): Promise<any> => {
-        const copies = await models.copy
-            .findAll();
-        return copies
-    }
+	const GetCopyByID = async (id: any): Promise<any> => {
+		const copy = models.copy.findByPk(id);
+		return copy;
+	};
 
-    const GetCopyByID = async (id: any): Promise<any> => {
-        const copy = models.copy
-            .findByPk(id)
-        return copy
-    }
+	const GetCopyWithdrawsByID = async (id: any): Promise<any> => {
+		const withdraws = models.copy.findByPk(id, {
+			include: [{ model: models.withdraw, as: "withdraws" }],
+		});
+		return withdraws;
+	};
 
-    const GetCopyWithdrawsByID = async (id: any): Promise<any> => {
-        const withdraws = models.copy
-            .findByPk(id, {
-                include: [{ model: models.withdraw, as: "withdraws" }],
-            })
-        return withdraws
-    }
+	const CheckinCopyByID = async (id: any): Promise<any> => {
+		const copy = await models.copy.findByPk(id, {
+			include: [{ model: models.withdraw, as: "withdraws" }],
+		});
 
-    const CheckinCopyByID = async (id: any): Promise<any> => {
+		//Does Copy Exist?
+		if (copy != null) {
+			//Does Copy Currently Have A Withdraws Array And At Least One Item In That Array
+			if (copy.withdraws != null && copy.withdraws.length > 0) {
+				//Can Copy Be Checked In?
+				const array = [...copy.withdraws];
 
-        const copy = await models.copy
-            .findByPk((id), {
-                include: [{ model: models.withdraw, as: "withdraws" }],
-            })
+				//Sort The Array Newwest -> Oldest
+				array.sort((a, b) => {
+					if (a.date_out < b.date_out) return 1;
+					return -1;
+				});
 
-        if (copy) {
-            //Can Copy Be Checked In?
-            const array = [...copy.withdraws];
+				const lastWithdraw = array[0];
 
-            array.sort((a, b) => {
-                if (a.date_out < b.date_out) return 1;
-                return -1;
-            });
+				//If date_in Is Null Then Book Has Not Been Checked In
+				if (lastWithdraw.date_in == null) {
+					//Find The Withdraw By ID
+					const result = models.withdraw.findByPk(lastWithdraw.id);
 
-            if (array[0] && !array[0].date_in) {
-                models.withdraw.findByPk(array[0].id).then((rowb: any) => {
-                    rowb.update({ date_in: new Date() });
-                });
-            }
-        }
-    }
+					//Set The Date Param To Now
+					result.update({ date_in: new Date() });
 
-    const CheckoutCopyByID = async (id: any): Promise<any> => {
-        const copy = await models.copy
-            .findByPk(id, {
-                include: [{ model: models.withdraw, as: "withdraws" }],
-            })
+					return result;
+				} else {
+					throw new Error("Copy Was Not Checked Out");
+				}
+			} else {
+				throw new Error("Copy Was Not Checked Out");
+			}
+		} else {
+			throw new Error("Unable To Find Copy With ID");
+		}
+	};
 
+	const CheckoutCopyByID = async (id: any): Promise<any> => {
+		const copy = await models.copy.findByPk(id, {
+			include: [{ model: models.withdraw, as: "withdraws" }],
+		});
 
-        if (copy) {
-            //Can Copy Be Checked Out?
+		//Does Copy Exist?
+		if (copy != null) {
+			//Does Copy Currently Have A Withdraws Array And At Least One Item In That Array
+			if (copy.withdraws != null && copy.withdraws.length > 0) {
+				//Can Copy Be Checked Out?
+				const array = [...copy.withdraws];
 
-            const array = [...copy.withdraws];
+				//Sort The Array Newwest -> Oldest
+				array.sort((a, b) => {
+					if (a.date_out < b.date_out) return 1;
+					return -1;
+				});
 
-            array.sort((a, b) => {
-                if (a.date_out < b.date_out) return 1;
-                return -1;
-            });
+				//If date_in Is Not Null Then Book Is Checked Out
+				if (array[0].date_in != null) {
+					const result = await models.withdraw.create({
+						copy_id: id,
+						date_out: new Date(),
+						user_name: "Dave",
+					});
+					return result;
+				} else {
+					throw new Error("Copy Was Not Checked In");
+				}
+			} else {
+				const result = models.withdraw.create({
+					copy_id: id,
+					date_out: new Date(),
+					user_name: "Dave",
+				});
+				return result;
+			}
+		} else {
+			throw new Error("Unable To Find Copy With ID");
+		}
+	};
 
-            if (array[0]) {
-                if (array[0].date_in != null) {
-                    const withdraw = await models.withdraw
-                        .create({
-                            copy_id: id,
-                            date_out: new Date(),
-                            user_name: "Dave",
-                        })
-                }
-            } else {
-                models.withdraw
-                    .create({
-                        copy_id: id,
-                        date_out: new Date(),
-                        user_name: "Dave",
-                    })
-            }
-        }
+	const CheckCopyStatus = async (id: any): Promise<any> => {
+		const copy = await models.copy.findByPk(id, {
+			include: [{ model: models.withdraw, as: "withdraws" }],
+		});
 
-    }
+		if (copy) {
+			if (copy.withdraws.length === 0) {
+				return { status: true };
+			} else {
+				const withdraws = [...copy.withdraws];
 
-    const CheckCopyStatus = async (id: any): Promise<any> => {
+				withdraws.sort((a, b) => {
+					if (a.date_out < b.date_out) return 1;
+					return -1;
+				});
 
-        const copy = await models.copy
-            .findByPk(id, {
-                include: [{ model: models.withdraw, as: "withdraws" }],
-            })
+				if (withdraws[0].date_in === null) {
+					return { status: false };
+				} else {
+					return { status: true };
+				}
+			}
+		}
+		return copy;
+	};
 
-        if (copy) {
-            if (copy.withdraws.length === 0) {
-                return { status: true };
-            } else {
-                const withdraws = [...copy.withdraws];
+	return { AddNewCopy, GetAllCopies, GetCopyByID, GetCopyWithdrawsByID, CheckinCopyByID, CheckoutCopyByID, CheckCopyStatus };
+};
 
-                withdraws.sort((a, b) => {
-                    if (a.date_out < b.date_out) return 1;
-                    return -1;
-                });
-
-                if (withdraws[0].date_in === null) {
-                    return { status: false };
-                } else {
-                    return { status: true };
-                }
-            }
-        }
-        return copy;
-    }
-
-    return { AddNewCopy, GetAllCopies, GetCopyByID, GetCopyWithdrawsByID, CheckinCopyByID, CheckoutCopyByID, CheckCopyStatus }
-
-}
-
-export default CopyService
+export default CopyService;
