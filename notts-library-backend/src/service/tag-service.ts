@@ -1,4 +1,5 @@
 const { models } = require("../config/database");
+import sequelize from "../config/database";
 const Sequelize = require("sequelize");
 
 const NewTagService = () => {
@@ -8,10 +9,13 @@ const NewTagService = () => {
 	};
 
 	const CreateNewTag = async (name: any): Promise<any> => {
-		const newTag = models.tag.create({
-			name,
+		let result: any;
+		await sequelize.transaction(async () => {
+			result = models.tag.create({
+				name,
+			});
 		});
-		return newTag;
+		return result;
 	};
 
 	return { GetAllTags, CreateNewTag };

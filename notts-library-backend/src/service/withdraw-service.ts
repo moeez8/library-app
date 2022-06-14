@@ -1,7 +1,6 @@
 import sequelize from "../config/database";
 
 const { models } = require("../config/database");
-const Sequelize = require("sequelize");
 
 const NewWithdrawService = () => {
 	const GetAllWithdraws = async (): Promise<any> => {
