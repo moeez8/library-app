@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
+import ApiErrorHandler from "./middleware/api-error-handler";
+
 // Database
 const db = require("./config/database");
 
@@ -35,6 +37,9 @@ app.use("/withdraw", require("./routes/widthdraw"));
 app.use("/tag", require("./routes/tag"));
 app.use("/books_tag", require("./routes/books_tag"));
 app.use("/request", require("./routes/purchaseRequest"));
+
+//Error Handle Middleware
+app.use(ApiErrorHandler);
 
 const PORT = process.env.PORT || 5000;
 
