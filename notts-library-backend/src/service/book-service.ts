@@ -63,19 +63,33 @@ const NewBookService = () => {
 				description: book.description,
 			})
 
+		let tags;
 		if (book.tags) {
-			const tags = await createTags(bk.id, book.tags);
+			tags = await createTags(bk.id, book.tags);
 		}
+		console.log("HIIIIIIIIIIIII")
+		console.log(tags)
 
-		models.copy
+		const copy = await createCopy(bk.id);
+
+		return { book, copy, tags };
+	}
+
+	// Pulled out from create new book function 
+	const createCopy = async (id: any): Promise<any> => {
+		const copy = await models.copy
 			.create({
-				book_id: bk.id,
+				book_id: id,
 				owner: "BJSSTest",
 			})
+		return copy
 	}
 
 	// Pulled out from create new book function
 	const createTags = async (id: any, tags: ITag[]): Promise<any> => {
+
+		const createdTags: any[] = [];
+		const associations: any[] = []
 
 		tags.forEach(async (tagObj: any) => {
 			const createdTag = await models.tag
@@ -85,16 +99,24 @@ const NewBookService = () => {
 					},
 				})
 
-			models.books_tag
+			const association = await models.books_tag
 				.create({
 					book_id: id,
 					tag_id: createdTag[0].id,
 				})
 
+			// console.log("HELLLOOOO")
+			// console.log(createdTag[0])
+			// console.log(association)
+
+			createdTags.push(createdTag[0])
+			associations.push(association)
+			//console.log(associations)
 		})
+		console.log(associations)
 
-		return;
 
+		return { createdTags, associations };
 	}
 
 	const updateBookByID = async (id: any, title: any, iban: any, author: any, type: any, category: any, cover_photo: any, description: any, tags: any) => {

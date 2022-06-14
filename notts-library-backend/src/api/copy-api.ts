@@ -1,67 +1,43 @@
 const { models } = require("../config/database");
 import { Request, Response } from "express";
+import CopyService from "../service/copy-service";
 
 const copyApi = () => {
-	const getAllCopies = (req: Request, res: Response) => {
-		models.copy
-			.findAll()
-			.then((copies: any) => {
-				res.send(copies);
-			})
-			.catch((err: any) => {
-				res.status(400).send("Could Not Find Any Copies");
-			});
-	};
-
-	const addNewCopy = (req: Request, res: Response) => {
+	const addNewCopy = async (req: Request, res: Response) => {
 		const { book_id, owner } = req.body;
 
 		if (book_id == null) {
 			res.status(400).json({ error: "Missing Property book_id" });
 			return;
 		}
-		if (owner == null) {
+		else if (owner == null) {
 			res.status(400).json({ error: "Missing Property owner" });
 			return;
 		}
 
-		models.copy
-			.create({
-				book_id,
-				owner,
-			})
-			.then((row: any) => res.send(row))
-			.catch((err: any) => {
-				res.status(400).send("Could Not Add A Copy");
-			});
+		else {
+			res.json(await CopyService().AddNewCopy(book_id, owner));
+		}
 	};
 
-	const getCopyByID = (req: Request, res: Response) => {
-		models.copy
-			.findByPk(parseInt(req.params.id))
-			.then((row: any) => {
-				if (row) {
-					res.send(row);
-				} else {
-					res.status(400).json({ error: "Could Not Find A Copy" });
-				}
-			})
-			.catch((err: any) => {
-				res.status(400).send("Could Not Find A Copy");
-			});
+	const getAllCopies = async (req: Request, res: Response) => {
+		res.json(await CopyService().GetAllCopies());
 	};
 
-	const getCopyWithdrawsByID = (req: Request, res: Response) => {
-		models.copy
-			.findByPk(parseInt(req.params.id), {
-				include: [{ model: models.withdraw, as: "withdraws" }],
-			})
-			.then((row: any) => {
-				res.send(row.withdraws);
-			})
-			.catch((err: any) => {
-				res.status(400).send("Could Not Find Copy");
-			});
+	const getCopyByID = async (req: Request, res: Response) => {
+		if (req.params && req.params.id && typeof req.params.id === "string") {
+			let id = parseInt(req.params.id);
+			res.json(await CopyService().GetCopyByID(id));
+			return;
+		}
+	};
+
+	const getCopyWithdrawsByID = async (req: Request, res: Response) => {
+		if (req.params && req.params.id && typeof req.params.id === "string") {
+			let id = parseInt(req.params.id);
+			res.json(await CopyService().GetCopyWithdrawsByID(id));
+			return;
+		}
 	};
 
 	const checkinCopyByID = (req: Request, res: Response) => {
