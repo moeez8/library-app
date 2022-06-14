@@ -1,18 +1,29 @@
-const { models } = require("../config/database");
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import ApiError from "../middleware/api-error";
 import NewTagService from "../service/tag-service";
 
 const NewTagApi = () => {
-	const getAllTags = async (req: Request, res: Response) => {
-		res.json(await NewTagService().GetAllTags());
+	const getAllTags = async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			res.json(await NewTagService().GetAllTags());
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+		}
 	};
 
-	const createNewTag = async (req: Request, res: Response) => {
+	const createNewTag = async (req: Request, res: Response, next: NextFunction) => {
 		const { tag } = req.body;
-		if (tag != null) {
+
+		if (tag == null) {
+			next(ApiError.BadRequest("Please Fill Body Param tag"));
+		}
+
+		try {
 			res.json(await NewTagService().CreateNewTag(tag));
-		} else {
-			res.status(400).json({ error: "Missing Body Param 'tag'" });
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
 		}
 	};
 
