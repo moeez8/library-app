@@ -1,24 +1,34 @@
-const { models } = require("../config/database");
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import ApiError from "../middleware/api-error";
 import NewBooksTagService from "../service/books-tag-service";
 
 const NewBooksTagApi = () => {
-	const GetAllBooksTags = async (req: Request, res: Response) => {
-		res.json(await NewBooksTagService().GetAllBookTags());
+	const GetAllBooksTags = async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			res.json(await NewBooksTagService().GetAllBookTags());
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+		}
 	};
 
-	const CreateNewBooksTag = async (req: Request, res: Response) => {
+	const CreateNewBooksTag = async (req: Request, res: Response, next: NextFunction) => {
 		const { book_id, tag_id } = req.body;
 
 		if (book_id == null) {
-			res.status(400).json({ error: "Missing Body Param 'book_id'" });
+			next(ApiError.BadRequest("Please Fill Body Param book_id"));
 		}
 		if (tag_id == null) {
-			res.status(400).json({ error: "Missing Body Param 'tag_id'" });
+			next(ApiError.BadRequest("Please Fill Body Param tag_id"));
 		}
 
-		res.json(await NewBooksTagService().CreateNewBooksTag(book_id, tag_id));
-		return;
+		try {
+			res.json(await NewBooksTagService().CreateNewBooksTag(book_id, tag_id));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
 	};
 
 	return {

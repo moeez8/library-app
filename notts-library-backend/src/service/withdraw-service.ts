@@ -32,7 +32,13 @@ const NewWithdrawService = () => {
 	};
 
 	const GetWithdrawByID = async (id: any): Promise<any> => {
-		return await models.withdraw.findByPk(parseInt(id));
+		const result = await models.withdraw.findByPk(parseInt(id));
+
+		if (result == null) {
+			throw new Error("Unable To Find Withdraw With ID");
+		}
+
+		return result;
 	};
 
 	return { GetAllWithdraws, CreateNewWithdraw, GetWithdrawByID };
