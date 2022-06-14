@@ -1,20 +1,10 @@
 const { models } = require("../config/database");
 import { Request, Response } from "express";
+import NewPurchaseRequestService from "../service/purchase-request-service";
 
 const purchaseRequestApi = () => {
-	const getAllRequests = (req: Request, res: Response) => {
-		models.request
-			.findAll({
-				include: [{ model: models.book, as: "book" }],
-			})
-			.then((requests: any) => {
-				console.log(requests);
-				res.send(requests);
-			})
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.status(400).send("Could Not Find Any Copies");
-			});
+	const getAllRequests = async (req: Request, res: Response) => {
+		res.json(await NewPurchaseRequestService().GetAllPurchaseRequests());
 	};
 
 	const addRequest = (req: Request, res: Response) => {

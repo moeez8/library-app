@@ -1,78 +1,42 @@
 const { models } = require("../config/database");
 import { Request, Response } from "express";
+import NewWithdrawService from "../service/withdraw-service";
 
 const NewWithdrawsApi = () => {
-	const GetAllWithdraws = (req: Request, res: Response) => {
-		models.withdraw
-			.findAll({
-				include: [
-					{
-						model: models.copy,
-						as: "copy",
-						include: [{ model: models.book, as: "book" }],
-					},
-				],
-			})
-			.then((withdraws: any) => {
-				console.log(withdraws);
-				res.send(withdraws);
-			})
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.sendStatus(400);
-			});
+	const GetAllWithdraws = async (req: Request, res: Response) => {
+		res.json(await NewWithdrawService().GetAllWithdraws());
 	};
 
-	const CreateNewWithdraw = (req: Request, res: Response) => {
+	const CreateNewWithdraw = async (req: Request, res: Response) => {
 		let { copy_id, user_name } = req.body;
 
-		models.withdraw
-			.create({
-				copy_id,
-				date_out: new Date(),
-				user_name,
-			})
-			.then(() => res.sendStatus(200))
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.sendStatus(400);
-			});
+		if (copy_id == null) {
+			res.status(400).json({ error: "Please Provide Body Param 'copy_id'" });
+			return;
+		}
+
+		if (user_name == null) {
+			res.status(400).json({ error: "Please Provide Body Param 'user_name'" });
+			return;
+		}
+
+		res.json(await NewWithdrawService().CreateNewWithdraw(copy_id, user_name));
+		return;
 	};
 
-	const GetWithdrawById = (req: Request, res: Response) => {
-		models.withdraw
-			.findByPk(parseInt(req.params.id))
-			.then((row: any) => {
-				if (row) {
-					res.send(row);
-				} else {
-					res.sendStatus(400);
-				}
-			})
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.sendStatus(400);
-			});
+	const GetWithdrawById = async (req: Request, res: Response) => {
+		const id = req.params.id;
+
+		if (id != null) {
+			res.json(await NewWithdrawService().GetWithdrawByID(id));
+			return;
+		} else {
+			res.status(400).json({ error: "Invalid Param 'user_name'" });
+			return;
+		}
 	};
 
-	const UpdateWithdrawById = (req: Request, res: Response) => {
-		models.withdraw
-			.findByPk(parseInt(req.params.id))
-			.then((row: any) => {
-				if (row) {
-					row.update({ date_in: new Date() });
-					res.send(row);
-				} else {
-					res.sendStatus(400);
-				}
-			})
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.sendStatus(400);
-			});
-	};
-
-	return { GetAllWithdraws, CreateNewWithdraw, GetWithdrawById, UpdateWithdrawById };
+	return { GetAllWithdraws, CreateNewWithdraw, GetWithdrawById };
 };
 
 export = NewWithdrawsApi;
