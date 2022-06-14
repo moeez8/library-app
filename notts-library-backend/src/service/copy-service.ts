@@ -17,15 +17,25 @@ const CopyService = () => {
 	};
 
 	const GetCopyByID = async (id: any): Promise<any> => {
-		const copy = models.copy.findByPk(id);
-		return copy;
+		const result = models.copy.findByPk(id);
+
+		if (result == null) {
+			throw new Error("Unable To Find Withdraw With ID");
+		}
+
+		return result;
 	};
 
 	const GetCopyWithdrawsByID = async (id: any): Promise<any> => {
-		const withdraws = models.copy.findByPk(id, {
+		const result = models.copy.findByPk(id, {
 			include: [{ model: models.withdraw, as: "withdraws" }],
 		});
-		return withdraws;
+
+		if (result == null) {
+			throw new Error("Unable To Find Withdraw With ID");
+		}
+
+		return result;
 	};
 
 	const CheckinCopyByID = async (id: any): Promise<any> => {
