@@ -2,12 +2,18 @@ const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
+import IBook from "../interfaces/IBook"
+import ITag from "../interfaces/ITag";
 
 const NewBookService = () => {
 	const SearchBooks = async (term: any): Promise<any> => {
 		const result = await models.book.findAll({
 			where: {
-				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
+				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } },
+				{ author: { [Op.like]: "%" + term + "%" } },
+				{ iban: { [Op.like]: "%" + term + "%" } },
+				{ category: { [Op.like]: "%" + term + "%" } },
+				{ type: { [Op.like]: "%" + term + "%" } }],
 			},
 			include: [
 				{ model: models.copy, as: "copies" },
@@ -41,45 +47,53 @@ const NewBookService = () => {
 
 	const GetBookByID = async (id: any): Promise<any> => {
 		const result = await models.book
-			.findByPk(id, {})
+			.findByPk(id)
 		return result;
 	}
 
-	const createNewBook = async (title: any, iban: any, author: any, type: any, category: any, cover_photo: any, description: any, tags: any): Promise<any> => {
-		models.book
+	const createNewBook = async (book: IBook): Promise<any> => {
+		const bk = await models.book
 			.create({
-				title,
-				iban,
-				author,
-				type,
-				category,
-				cover_photo,
-				description,
-			}).then((book: any) => {
-				tags.map((tagObj: any) => {
-					return models.tag
-						.findOrCreate({
-							where: {
-								name: tagObj.tag_name,
-							},
-						})
-						.then((foundTag: any) => {
-							models.books_tag
-								.create({
-									book_id: book.id,
-									tag_id: foundTag[0].id,
-								})
-
-						})
-				})
-
-				models.copy
-					.create({
-						book_id: book.id,
-						owner: "BJSS",
-					})
+				title: book.title,
+				iban: book.iban,
+				author: book.author,
+				type: book.type,
+				category: book.category,
+				cover_photo: book.cover_photo,
+				description: book.description,
 			})
 
+		if (book.tags) {
+			const tags = await createTags(bk.id, book.tags);
+		}
+
+		models.copy
+			.create({
+				book_id: bk.id,
+				owner: "BJSSTest",
+			})
+	}
+
+	// Pulled out from create new book function
+	const createTags = async (id: any, tags: ITag[]): Promise<any> => {
+
+		tags.forEach(async (tagObj: any) => {
+			const createdTag = await models.tag
+				.findOrCreate({
+					where: {
+						name: tagObj.tag_name,
+					},
+				})
+
+			models.books_tag
+				.create({
+					book_id: id,
+					tag_id: createdTag[0].id,
+				})
+
+		})
+
+		return;
 
 	}
 
@@ -123,14 +137,16 @@ const NewBookService = () => {
 	}
 
 	const getCopiesByBookID = async (id: any) => {
-		models.book
+		const result = models.book
 			.findByPk(parseInt(id), {
 				include: [{ model: models.copy, as: "copies" }],
 			})
+
+		return result
 	}
 
 	const getTagsByBookID = async (id: any) => {
-		models.book
+		const result = models.book
 			.findByPk(parseInt(id), {
 				include: [
 					{
@@ -142,7 +158,10 @@ const NewBookService = () => {
 					},
 				],
 			})
+
+		return result
 	}
+
 	const deleteBookByID = async (book: any) => {
 		if (book !== null) {
 			book.destroy();

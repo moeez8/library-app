@@ -11,7 +11,7 @@ const BookTagsList = ({ book }: { book: IBook }) => {
 
 	const getBook = async () => {
 		const result = await fetch(`http://localhost:5000/book/${book.id}/tags`).then((response) => response.json());
-		setTags(result);
+		setTags(result.tags);
 	};
 
 	let renderedCopies;

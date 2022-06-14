@@ -12,11 +12,12 @@ const BookCopyList = ({ book }: { book: IBook }) => {
 
 	const getBook = async () => {
 		const result = await fetch(`http://localhost:5000/book/${book.id}/copies`).then((response) => response.json());
-		setCopies(result);
+		setCopies(result.copies);
 	};
 
 	let renderedCopies;
 	if (copies) {
+		console.log(copies)
 		renderedCopies = copies.map((copy) => {
 			return <BookCopy key={copy.id} copy={copy} />;
 		});

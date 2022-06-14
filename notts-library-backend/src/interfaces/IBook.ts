@@ -7,9 +7,9 @@ export default interface IBook {
 	author?: string;
 	description?: string;
 	iban?: string;
-	// copies?: ICopy[];
-	// type?: string;
-	// category?: string;
-	// cover_photo?: any;
-	// tags?: ITag[];
+	copies?: ICopy[];
+	type?: string;
+	category?: string;
+	cover_photo?: any;
+	tags?: ITag[];
 }

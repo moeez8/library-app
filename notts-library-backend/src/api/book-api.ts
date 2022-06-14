@@ -2,7 +2,7 @@ const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-//import IBook from "../../../notts-library-frontend/src/interfaces/IBook"
+import IBook from "../interfaces/IBook"
 
 import NewBookService from "../service/book-service";
 
@@ -29,11 +29,13 @@ const bookApi = () => {
 	};
 
 	const createNewBook = async (req: Request, res: Response) => {
-		const { title, iban, author, type, category, cover_photo, description, tags } = req.body;
-		//const book: IBook = req.body;
+		//const { title, iban, author, type, category, cover_photo, description, tags } = req.body;
+
+		const book: IBook = req.body;
 
 		res.json(await NewBookService()
-			.createNewBook(title, iban, author, type, category, cover_photo, description, tags));
+			.createNewBook(book)
+		);
 
 		// models.book
 		// 	.create({
