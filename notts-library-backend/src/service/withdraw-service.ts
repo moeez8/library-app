@@ -1,3 +1,5 @@
+import sequelize from "../config/database";
+
 const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 
@@ -17,17 +19,20 @@ const NewWithdrawService = () => {
 	};
 
 	const CreateNewWithdraw = async (copy_id: any, user_name: any): Promise<any> => {
-		const result = await models.withdraw.create({
-			copy_id,
-			date_out: new Date(),
-			user_name,
+		let result: any;
+		await sequelize.transaction(async () => {
+			result = await models.withdraw.create({
+				copy_id,
+				date_out: new Date(),
+				user_name,
+			});
 		});
+
 		return result;
 	};
 
 	const GetWithdrawByID = async (id: any): Promise<any> => {
-		const result = models.withdraw.findByPk(parseInt(id));
-		return result;
+		return await models.withdraw.findByPk(parseInt(id));
 	};
 
 	return { GetAllWithdraws, CreateNewWithdraw, GetWithdrawByID };
