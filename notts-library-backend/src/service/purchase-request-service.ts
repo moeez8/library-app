@@ -8,28 +8,30 @@ import ITag from "../interfaces/ITag";
 const NewPurchaseRequestService = () => {
 	const CreateNewRequest = async (book: IBook): Promise<any> => {
 		// Create new book
-		const bk = await models.book.findOrCreate({
-			title: book.title,
-			iban: book.iban,
-			author: book.author,
-			type: book.type,
-			category: book.category,
-			cover_photo: book.cover_photo,
-			description: book.description,
-		});
+		return await sequelize.transaction(async () => {
+			const bk = await models.book.findOrCreate({
+				title: book.title,
+				iban: book.iban,
+				author: book.author,
+				type: book.type,
+				category: book.category,
+				cover_photo: book.cover_photo,
+				description: book.description,
+			});
 
-		let tags;
-		if (book.tags) {
-			tags = await createTags(bk.id, book.tags);
-		}
+			let tags;
+			if (book.tags) {
+				tags = await createTags(bk.id, book.tags);
+			}
 
-		// Create new request for book
-		const request = await models.request.create({
-			book_id: bk.id,
-			request_date: Date.now(),
-			requestedBy: "TestUser",
+			// Create new request for book
+			const request = await models.request.create({
+				book_id: bk.id,
+				request_date: Date.now(),
+				requestedBy: "TestUser",
+			});
+			return { book, request };
 		});
-		return { book, request };
 	};
 
 	// Pulled out from create new book function (should this be here? duplicate code)
@@ -66,7 +68,6 @@ const NewPurchaseRequestService = () => {
 	};
 
 	const SearchRequests = async (term: any): Promise<any> => {
-
 		let result = await models.book.findAll({
 			include: [{ model: models.request, as: "requests" }],
 		});
@@ -76,41 +77,11 @@ const NewPurchaseRequestService = () => {
 		});
 
 		return result;
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// const result = await models.request.findAll({
-		// 	include: [
-		// 		{
-		// 			model: models.book, as: "book",
-		// 			where: {
-		// 				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } },
-		// 				{ author: { [Op.like]: "%" + term + "%" } },
-		// 				{ iban: { [Op.like]: "%" + term + "%" } },
-		// 				{ category: { [Op.like]: "%" + term + "%" } },
-		// 				{ type: { [Op.like]: "%" + term + "%" } }],
-		// 			}
-		// 		},
-		// 	],
-		// });
-		// return result;
 	};
 
 	const GetRequestByID = async (id: any): Promise<any> => {
 		const request = await models.request.findByPk(id, {
-			include: [
-				{ model: models.book, as: "book" },
-			],
+			include: [{ model: models.book, as: "book" }],
 		});
 
 		if (request == null) {
@@ -119,33 +90,36 @@ const NewPurchaseRequestService = () => {
 		return request;
 	};
 
-
 	const UpdateRequestByID = async (id: any, fulfill_date: any): Promise<any> => {
-		const request = await models.request.findByPk(id)
+		return await sequelize.transaction(async () => {
+			const request = await models.request.findByPk(id);
 
-		if (request == null) {
-			throw new Error("Unable To Find Request With ID");
-		};
+			if (request == null) {
+				throw new Error("Unable To Find Request With ID");
+			}
 
-		const updatedRequest = await request.update({
-			fulfill_date: fulfill_date
-		})
+			const updatedRequest = await request.update({
+				fulfill_date: fulfill_date,
+			});
 
-		return updatedRequest;
+			return updatedRequest;
+		});
 	};
 
 	const DeleteRequestByID = async (id: any) => {
-		const request = await models.request.findByPk(id);
+		return await sequelize.transaction(async () => {
+			const request = await models.request.findByPk(id);
 
-		if (request == null) {
-			throw new Error("Unable To Find Request With ID");
-		}
+			if (request == null) {
+				throw new Error("Unable To Find Request With ID");
+			}
 
-		await sequelize.transaction(async () => {
-			request.destroy();
+			await sequelize.transaction(async () => {
+				request.destroy();
+			});
+
+			return request;
 		});
-
-		return request;
 	};
 
 	return {
