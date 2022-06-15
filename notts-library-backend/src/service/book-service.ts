@@ -66,8 +66,6 @@ const NewBookService = () => {
 		if (book.tags) {
 			tags = await createTags(bk.id, book.tags);
 		}
-		console.log("HIIIIIIIIIIIII");
-		console.log(tags);
 
 		const copy = await createCopy(bk.id);
 
@@ -99,10 +97,6 @@ const NewBookService = () => {
 				book_id: id,
 				tag_id: createdTag[0].id,
 			});
-
-			// console.log("HELLLOOOO")
-			// console.log(createdTag[0])
-			// console.log(association)
 
 			createdTags.push(createdTag[0]);
 			associations.push(association);
@@ -180,7 +174,16 @@ const NewBookService = () => {
 		}
 	};
 
-	return { GetAllBooks, SearchBooks, GetBookByID, createNewBook, updateBookByID, getCopiesByBookID, getTagsByBookID, deleteBookByID };
+	return {
+		GetAllBooks,
+		SearchBooks,
+		GetBookByID,
+		createNewBook,
+		updateBookByID,
+		getCopiesByBookID,
+		getTagsByBookID,
+		deleteBookByID
+	};
 };
 
 export default NewBookService;

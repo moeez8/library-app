@@ -1,100 +1,125 @@
 const { models } = require("../config/database");
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+
 import NewPurchaseRequestService from "../service/purchase-request-service";
 
+import IBook from "../interfaces/IBook";
+import ApiError from "../middleware/api-error";
+
 const purchaseRequestApi = () => {
-	const getAllRequests = async (req: Request, res: Response) => {
-		res.json(await NewPurchaseRequestService().GetAllPurchaseRequests());
+
+	const addRequest = async (req: Request, res: Response, next: NextFunction) => {
+		const book: IBook = req.body;
+
+		const errors = [];
+
+		if (book.title == null) errors.push("Please Provide Body Param title");
+		if (book.iban == null) errors.push("Please Provide Body Param iban");
+		if (book.author == null) errors.push("Please Provide Body Param author");
+		// if (book.type == null) errors.push("Please Provide Body Param type");
+		// if (book.category == null) errors.push("Please Provide Body Param category");
+		if (book.description == null) errors.push("Please Provide Body Param description");
+
+		if (errors.length > 0) {
+			next(ApiError.BadRequest(errors));
+			return;
+		}
+
+		try {
+			res.json(await NewPurchaseRequestService().CreateNewRequest(book));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
 	};
 
-	const addRequest = (req: Request, res: Response) => {
-		const { title, iban, author, type, category, cover_photo, description, tags, user } = req.body;
+	// const getAllRequests = async (req: Request, res: Response) => {
+	// 	res.json(await NewPurchaseRequestService().GetAllPurchaseRequests());
+	// };
 
-		models.book
-			.create({
-				title,
-				iban,
-				author,
-				type,
-				category,
-				cover_photo,
-				description,
-			})
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.sendStatus(400);
-			})
-			.then((book: any) => {
-				tags.map((tagObj: any) => {
-					return models.tag
-						.findOrCreate({
-							where: {
-								name: tagObj.tag_name,
-							},
-						})
-						.then((foundTag: any) => {
-							models.books_tag
-								.create({
-									book_id: book.id,
-									tag_id: foundTag[0].id,
-								})
-								.catch((err: any) => {
-									console.log("Error: " + err);
-									res.sendStatus(400);
-								});
-						});
-				});
+	const searchForRequest = async (req: Request, res: Response, next: NextFunction) => {
+		const { term } = req.query;
 
-				models.request
-					.create({
-						book_id: book.id,
-						requestedBy: "Moeez",
-						request_date: new Date(),
-					})
-					.catch((err: any) => {
-						console.log("Error: " + err);
-						res.sendStatus(400);
-					});
-			})
-
-			.then(() => res.send("OK"))
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.sendStatus(400);
-			});
+		if (term != null) {
+			try {
+				res.json(await NewPurchaseRequestService().SearchRequests(term));
+				return;
+			} catch (error: any) {
+				next(ApiError.Internal(error.toString()));
+				return;
+			}
+		} else {
+			try {
+				res.json(await NewPurchaseRequestService().GetAllPurchaseRequests());
+				return;
+			} catch (error: any) {
+				next(ApiError.Internal(error.toString()));
+				return;
+			}
+		}
 	};
 
-	const updateRequest = (req: Request, res: Response) => {
-		models.request
-			.findByPk(parseInt(req.params.id))
-			.then((request: any) => {
-				if (request) {
-					request.update({
-						fulfill_date: new Date(),
-					});
+	const getRequestByID = async (req: Request, res: Response, next: NextFunction) => {
+		const id: number = parseInt(req.params.id);
 
-					models.copy
-						.create({
-							book_id: request.book_id,
-							owner: "BJSS",
-						})
-						.then(() => res.sendStatus(200))
-						.catch((err: any) => {
-							console.log("Error: " + err);
-							res.status(400).send("Could Not Add A Copy");
-						});
-				}
-			})
-			.catch((err: any) => {
-				console.log("Error: " + err);
-				res.sendStatus(400);
-			});
+		if (id == null) {
+			next(ApiError.BadRequest("Please Fill URL Param id"));
+			return;
+		}
+
+		try {
+			res.json(await NewPurchaseRequestService().GetRequestByID(id));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
+	};
+
+	const updateRequestByID = async (req: Request, res: Response, next: NextFunction) => {
+		const { fulfill_date } = req.body;
+
+		const id: number = parseInt(req.params.id);
+
+		if (id == null) {
+			next(ApiError.BadRequest("Please Fill URL Param id"));
+			return;
+		}
+
+		try {
+			res.json(await NewPurchaseRequestService().UpdateRequestByID(id, fulfill_date));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
+	};
+
+	const deleteRequestByID = async (req: Request, res: Response, next: NextFunction) => {
+		const id: number = parseInt(req.params.id);
+
+		if (id == null) {
+			next(ApiError.BadRequest("Please Fill URL Param id"));
+			return;
+		}
+
+		try {
+			res.json(await NewPurchaseRequestService().DeleteRequestByID(id));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
 	};
 
 	return {
-		getAllRequests,
 		addRequest,
-		updateRequest,
+		searchForRequest,
+		//getAllRequests,
+		getRequestByID,
+		updateRequestByID,
+		deleteRequestByID
 	};
 };
 
