@@ -4,20 +4,18 @@ const Op = Sequelize.Op;
 
 const CopyService = () => {
 	const AddNewCopy = async (id: any, owner: string): Promise<any> => {
-		const copy = await models.copy.create({
+		return await models.copy.create({
 			book_id: id,
 			owner: owner,
 		});
-		return copy;
 	};
 
 	const GetAllCopies = async (): Promise<any> => {
-		const copies = await models.copy.findAll();
-		return copies;
+		return await models.copy.findAll();
 	};
 
 	const GetCopyByID = async (id: any): Promise<any> => {
-		const result = models.copy.findByPk(id);
+		const result = await models.copy.findByPk(id);
 
 		if (result == null) {
 			throw new Error("Unable To Find Withdraw With ID");
@@ -27,7 +25,7 @@ const CopyService = () => {
 	};
 
 	const GetCopyWithdrawsByID = async (id: any): Promise<any> => {
-		const result = models.copy.findByPk(id, {
+		const result = await models.copy.findByPk(id, {
 			include: [{ model: models.withdraw, as: "withdraws" }],
 		});
 
@@ -35,7 +33,7 @@ const CopyService = () => {
 			throw new Error("Unable To Find Withdraw With ID");
 		}
 
-		return result;
+		return result.withdraws;
 	};
 
 	const CheckinCopyByID = async (id: any): Promise<any> => {
@@ -61,10 +59,10 @@ const CopyService = () => {
 				//If date_in Is Null Then Book Has Not Been Checked In
 				if (lastWithdraw.date_in == null) {
 					//Find The Withdraw By ID
-					const result = models.withdraw.findByPk(lastWithdraw.id);
+					const result = await models.withdraw.findByPk(lastWithdraw.id);
 
 					//Set The Date Param To Now
-					result.update({ date_in: new Date() });
+					await result.update({ date_in: new Date() });
 
 					return result;
 				} else {
@@ -108,7 +106,7 @@ const CopyService = () => {
 					throw new Error("Copy Was Not Checked In");
 				}
 			} else {
-				const result = models.withdraw.create({
+				const result = await models.withdraw.create({
 					copy_id: id,
 					date_out: new Date(),
 					user_name: "Dave",
@@ -142,8 +140,9 @@ const CopyService = () => {
 					return { status: true };
 				}
 			}
+		} else {
+			throw new Error("Unable To Find Copy With ID");
 		}
-		return copy;
 	};
 
 	return { AddNewCopy, GetAllCopies, GetCopyByID, GetCopyWithdrawsByID, CheckinCopyByID, CheckoutCopyByID, CheckCopyStatus };
