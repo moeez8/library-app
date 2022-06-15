@@ -4,14 +4,13 @@ const Sequelize = require("sequelize");
 
 const NewTagService = () => {
 	const GetAllTags = async (): Promise<any> => {
-		const result = models.tag.findAll();
-		return result;
+		return await models.tag.findAll();
 	};
 
 	const CreateNewTag = async (name: any): Promise<any> => {
 		let result: any;
 		await sequelize.transaction(async () => {
-			result = models.tag.create({
+			result = await models.tag.create({
 				name,
 			});
 		});

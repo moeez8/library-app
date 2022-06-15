@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import BookDetails from "../components/bookDetails/BookDetails";
 import BookTagList from "../components/bookDetails/BookTagList";
 import BookCopyList from "../components/bookDetails/BookCopyList";
+import BookAdminControls from "../components/bookDetails/BookAdminControls";
 
 const Book = () => {
 	const params = useParams();
@@ -28,6 +29,7 @@ const Book = () => {
 					<BookDetails book={book} />
 					<BookTagList book={book} />
 					<BookCopyList book={book} />
+					<BookAdminControls book={book} />
 				</>
 			) : (
 				<div className="card bg-red-200 border-2 border-red-400 ">

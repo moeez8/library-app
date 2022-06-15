@@ -95,7 +95,6 @@ const NewBookService = () => {
 			createdTags.push(createdTag[0]);
 			associations.push(association);
 		});
-		console.log(associations);
 
 		return { createdTags, associations };
 	};
@@ -105,7 +104,7 @@ const NewBookService = () => {
 
 		if (result != null) {
 			await sequelize.transaction(async () => {
-				result.update({
+				await result.update({
 					title: title || result.title,
 					iban: iban || result.iban,
 					author: author || result.author,

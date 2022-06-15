@@ -6,7 +6,6 @@ import IBook from "../interfaces/IBook";
 import ITag from "../interfaces/ITag";
 
 const NewPurchaseRequestService = () => {
-
 	const CreateNewRequest = async (book: IBook): Promise<any> => {
 		// Create new book
 		const bk = await models.book.create({
@@ -28,8 +27,8 @@ const NewPurchaseRequestService = () => {
 		const request = await models.request.create({
 			book_id: bk.id,
 			request_date: Date.now(),
-			requestedBy: "TestUser"
-		})
+			requestedBy: "TestUser",
+		});
 		return { book, request };
 	};
 
@@ -61,9 +60,7 @@ const NewPurchaseRequestService = () => {
 
 	const GetAllPurchaseRequests = async (): Promise<any> => {
 		const result = models.request.findAll({
-			include: [
-				{ model: models.book, as: "book" },
-			],
+			include: [{ model: models.book, as: "book" }],
 		});
 		return result;
 	};
@@ -135,7 +132,7 @@ const NewPurchaseRequestService = () => {
 		SearchRequests,
 		GetRequestByID,
 		UpdateRequestByID,
-		DeleteRequestByID
+		DeleteRequestByID,
 	};
 };
 

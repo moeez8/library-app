@@ -10,6 +10,7 @@ const NewBooksTagApi = () => {
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
+			return;
 		}
 	};
 
