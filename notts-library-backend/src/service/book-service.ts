@@ -17,7 +17,8 @@ const NewBookService = () => {
 
 	const GetAllBooks = async (): Promise<any> => {
 		let result = await models.book.findAll({
-			include: [{ model: models.request, as: "requests" }],
+			include: [{ model: models.request, as: "requests" },
+			{ model: models.copy, as: "copies" }]
 		});
 
 		result = result.filter((book: any) => {
