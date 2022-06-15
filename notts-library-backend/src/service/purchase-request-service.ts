@@ -8,7 +8,7 @@ import ITag from "../interfaces/ITag";
 const NewPurchaseRequestService = () => {
 	const CreateNewRequest = async (book: IBook): Promise<any> => {
 		// Create new book
-		const bk = await models.book.create({
+		const bk = await models.book.findOrCreate({
 			title: book.title,
 			iban: book.iban,
 			author: book.author,
@@ -67,21 +67,43 @@ const NewPurchaseRequestService = () => {
 
 	const SearchRequests = async (term: any): Promise<any> => {
 
-		const result = await models.request.findAll({
-			include: [
-				{
-					model: models.book, as: "book",
-					where: {
-						[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } },
-						{ author: { [Op.like]: "%" + term + "%" } },
-						{ iban: { [Op.like]: "%" + term + "%" } },
-						{ category: { [Op.like]: "%" + term + "%" } },
-						{ type: { [Op.like]: "%" + term + "%" } }],
-					}
-				},
-			],
+		let result = await models.book.findAll({
+			include: [{ model: models.request, as: "requests" }],
 		});
+
+		result = result.filter((book: any) => {
+			return book.requests.length > 0;
+		});
+
 		return result;
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// const result = await models.request.findAll({
+		// 	include: [
+		// 		{
+		// 			model: models.book, as: "book",
+		// 			where: {
+		// 				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } },
+		// 				{ author: { [Op.like]: "%" + term + "%" } },
+		// 				{ iban: { [Op.like]: "%" + term + "%" } },
+		// 				{ category: { [Op.like]: "%" + term + "%" } },
+		// 				{ type: { [Op.like]: "%" + term + "%" } }],
+		// 			}
+		// 		},
+		// 	],
+		// });
+		// return result;
 	};
 
 	const GetRequestByID = async (id: any): Promise<any> => {
