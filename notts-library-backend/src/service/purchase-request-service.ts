@@ -66,18 +66,18 @@ const NewPurchaseRequestService = () => {
 	};
 
 	const SearchRequests = async (term: any): Promise<any> => {
+
 		const result = await models.request.findAll({
-			where: {
-				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
-			},
 			include: [
-				{ model: models.book, as: "books" },
 				{
-					model: models.tag,
-					as: "tags",
-					through: {
-						attributes: ["tag_id", "book_id"],
-					},
+					model: models.book, as: "book",
+					where: {
+						[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } },
+						{ author: { [Op.like]: "%" + term + "%" } },
+						{ iban: { [Op.like]: "%" + term + "%" } },
+						{ category: { [Op.like]: "%" + term + "%" } },
+						{ type: { [Op.like]: "%" + term + "%" } }],
+					}
 				},
 			],
 		});
@@ -85,40 +85,45 @@ const NewPurchaseRequestService = () => {
 	};
 
 	const GetRequestByID = async (id: any): Promise<any> => {
-		const result = await models.request.findByPk(id, {
-			include: [{ model: models.book, as: "book" }],
+		const request = await models.request.findByPk(id, {
+			include: [
+				{ model: models.book, as: "book" },
+			],
 		});
 
-		if (result == null) {
+		if (request == null) {
 			throw new Error("Unable To Find Request With ID");
 		}
-		return result;
+		return request;
 	};
 
-	const UpdateRequestByID = async (id: any, fulfill_date: Date): Promise<any> => {
-		const result = models.request.findByPk(id).then((row: any) => {
-			if (row) {
-				row.update({
-					fulfill_date: fulfill_date || row.fulfill_date,
-				});
-			}
-		});
 
-		return result;
+	const UpdateRequestByID = async (id: any, fulfill_date: any): Promise<any> => {
+		const request = await models.request.findByPk(id)
+
+		if (request == null) {
+			throw new Error("Unable To Find Request With ID");
+		};
+
+		const updatedRequest = await request.update({
+			fulfill_date: fulfill_date
+		})
+
+		return updatedRequest;
 	};
 
 	const DeleteRequestByID = async (id: any) => {
-		const result = await models.request.findByPk(id);
+		const request = await models.request.findByPk(id);
 
-		if (result == null) {
+		if (request == null) {
 			throw new Error("Unable To Find Request With ID");
 		}
 
 		await sequelize.transaction(async () => {
-			result.destroy();
+			request.destroy();
 		});
 
-		return result;
+		return request;
 	};
 
 	return {

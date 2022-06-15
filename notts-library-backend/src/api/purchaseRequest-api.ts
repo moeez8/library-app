@@ -78,7 +78,7 @@ const purchaseRequestApi = () => {
 	};
 
 	const updateRequestByID = async (req: Request, res: Response, next: NextFunction) => {
-		const { fulfill_date } = req.body;
+		const fulfill_date = Date.now();
 
 		const id: number = parseInt(req.params.id);
 
