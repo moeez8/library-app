@@ -1,6 +1,4 @@
 const { models } = require("../config/database");
-const Sequelize = require("sequelize");
-const Op = Sequelize.Op;
 
 const CopyService = () => {
 	const AddNewCopy = async (id: any, owner: string): Promise<any> => {

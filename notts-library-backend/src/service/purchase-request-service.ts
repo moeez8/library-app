@@ -1,5 +1,4 @@
 const { models } = require("../config/database");
-const Sequelize = require("sequelize");
 
 const NewPurchaseRequestService = () => {
 	const GetAllPurchaseRequests = async (): Promise<any> => {

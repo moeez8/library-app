@@ -4,7 +4,7 @@ const { models } = require("../config/database");
 
 const NewWithdrawService = () => {
 	const GetAllWithdraws = async (): Promise<any> => {
-		const result = await models.withdraw.findAll({
+		return await models.withdraw.findAll({
 			include: [
 				{
 					model: models.copy,
@@ -13,8 +13,6 @@ const NewWithdrawService = () => {
 				},
 			],
 		});
-
-		return result;
 	};
 
 	const CreateNewWithdraw = async (copy_id: any, user_name: any): Promise<any> => {
