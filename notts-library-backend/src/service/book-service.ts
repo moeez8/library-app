@@ -56,6 +56,7 @@ const NewBookService = () => {
 				description: book.description,
 			});
 
+			let tags;
 			if (book.tags) {
 				tags = await createTags(bk.id, book.tags);
 			}
@@ -168,7 +169,16 @@ const NewBookService = () => {
 		return result;
 	};
 
-	return { GetAllBooks, SearchBooks, GetBookByID, createNewBook, updateBookByID, getCopiesByBookID, getTagsByBookID, deleteBookByID };
+	return {
+		GetAllBooks,
+		SearchBooks,
+		GetBookByID,
+		createNewBook,
+		updateBookByID,
+		getCopiesByBookID,
+		getTagsByBookID,
+		deleteBookByID
+	};
 };
 
 export default NewBookService;
