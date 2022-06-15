@@ -16,18 +16,15 @@ const NewBookService = () => {
 	};
 
 	const GetAllBooks = async (): Promise<any> => {
-		return await models.book.findAll({
-			include: [
-				{ model: models.copy, as: "copies" },
-				{
-					model: models.tag,
-					as: "tags",
-					through: {
-						attributes: ["tag_id", "book_id"],
-					},
-				},
-			],
+		let result = await models.book.findAll({
+			include: [{ model: models.request, as: "requests" }],
 		});
+
+		result = result.filter((book: any) => {
+			return book.requests.length == 0;
+		});
+
+		return result;
 	};
 
 	const GetBookByID = async (id: any): Promise<any> => {
@@ -177,7 +174,7 @@ const NewBookService = () => {
 		updateBookByID,
 		getCopiesByBookID,
 		getTagsByBookID,
-		deleteBookByID
+		deleteBookByID,
 	};
 };
 
