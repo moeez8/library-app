@@ -48,6 +48,7 @@ const AddBookForm = () => {
 
 	const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		addBook();
 		navigate("../", { replace: true });
 	};
 
@@ -145,7 +146,7 @@ const AddBookForm = () => {
 					</div>
 				</div>
 
-				<button className="button-green" type="submit" onClick={addBook}>
+				<button className="button-green" type="submit">
 					Submit
 				</button>
 			</form>
