@@ -8,7 +8,7 @@ import ITag from "../interfaces/ITag";
 const NewPurchaseRequestService = () => {
 	const CreateNewRequest = async (book: IBook): Promise<any> => {
 		// Create new book
-		const bk = await models.book.findOrCreate({
+		const bk = await models.book.create({
 			title: book.title,
 			iban: book.iban,
 			author: book.author,
@@ -76,34 +76,6 @@ const NewPurchaseRequestService = () => {
 		});
 
 		return result;
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// const result = await models.request.findAll({
-		// 	include: [
-		// 		{
-		// 			model: models.book, as: "book",
-		// 			where: {
-		// 				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } },
-		// 				{ author: { [Op.like]: "%" + term + "%" } },
-		// 				{ iban: { [Op.like]: "%" + term + "%" } },
-		// 				{ category: { [Op.like]: "%" + term + "%" } },
-		// 				{ type: { [Op.like]: "%" + term + "%" } }],
-		// 			}
-		// 		},
-		// 	],
-		// });
-		// return result;
 	};
 
 	const GetRequestByID = async (id: any): Promise<any> => {
@@ -127,6 +99,10 @@ const NewPurchaseRequestService = () => {
 			throw new Error("Unable To Find Request With ID");
 		};
 
+		if (request.fulfill_date) {
+			throw new Error("Request Already Fullfilled");
+		}
+
 		const updatedRequest = await request.update({
 			fulfill_date: fulfill_date
 		})
@@ -134,19 +110,42 @@ const NewPurchaseRequestService = () => {
 		return updatedRequest;
 	};
 
-	const DeleteRequestByID = async (id: any) => {
+	const FulfillRequestByID = async (id: any) => {
 		const request = await models.request.findByPk(id);
 
 		if (request == null) {
 			throw new Error("Unable To Find Request With ID");
 		}
 
-		await sequelize.transaction(async () => {
-			request.destroy();
+		if (request.fulfill_date) {
+			throw new Error("Request Already Fullfilled");
+		}
+
+		await models.copy.create({
+			book_id: request.book_id,
+			owner: "BJSS",
 		});
 
-		return request;
+		const updatedRequest = await request.update({
+			fulfill_date: Date.now()
+		})
+
+		return updatedRequest;
 	};
+
+	// const DeleteRequestByID = async (id: any) => {
+	// 	const request = await models.request.findByPk(id);
+
+	// 	if (request == null) {
+	// 		throw new Error("Unable To Find Request With ID");
+	// 	}
+
+	// 	await sequelize.transaction(async () => {
+	// 		request.destroy();
+	// 	});
+
+	// 	return request;
+	// };
 
 	return {
 		CreateNewRequest,
@@ -154,7 +153,7 @@ const NewPurchaseRequestService = () => {
 		SearchRequests,
 		GetRequestByID,
 		UpdateRequestByID,
-		DeleteRequestByID,
+		FulfillRequestByID,
 	};
 };
 

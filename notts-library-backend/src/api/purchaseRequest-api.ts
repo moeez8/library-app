@@ -96,7 +96,7 @@ const purchaseRequestApi = () => {
 		}
 	};
 
-	const deleteRequestByID = async (req: Request, res: Response, next: NextFunction) => {
+	const fulfillRequestByID = async (req: Request, res: Response, next: NextFunction) => {
 		const id: number = parseInt(req.params.id);
 
 		if (id == null) {
@@ -105,7 +105,7 @@ const purchaseRequestApi = () => {
 		}
 
 		try {
-			res.json(await NewPurchaseRequestService().DeleteRequestByID(id));
+			res.json(await NewPurchaseRequestService().FulfillRequestByID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -119,7 +119,7 @@ const purchaseRequestApi = () => {
 		//getAllRequests,
 		getRequestByID,
 		updateRequestByID,
-		deleteRequestByID
+		fulfillRequestByID
 	};
 };
 

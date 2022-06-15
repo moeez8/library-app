@@ -22,7 +22,7 @@ const NewBookService = () => {
 		});
 
 		result = result.filter((book: any) => {
-			return book.requests.length == 0;
+			return book.copies.length > 0;
 		});
 
 		return result;

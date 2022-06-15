@@ -10,8 +10,6 @@ export const RequestListCard = ({ request }: { request: IRequest }) => {
 				{request.book ? (
 					<>
 						<h1 className="text-2xl font-bold">{request.book.title || "Undefined"}</h1>
-						<h1 className="text-lg">{request.book.author ? `Author: ${request.book.author}` : "Author: Undefined"}</h1>
-						<h1 className="text-lg">{request.book.description ? `Description: ${request.book.description}` : "Description: Undefined"}</h1>
 						<h1 className="text-lg">{request.book.iban ? `IBAN: ${request.book.iban}` : "IBAN: Undefined"}</h1>
 					</>
 				) : (
@@ -20,14 +18,13 @@ export const RequestListCard = ({ request }: { request: IRequest }) => {
 					</div>
 				)}
 
-				<h1 className="text-lg">Request ID: {request.id || "Undefined"}</h1>
 				<h1 className="text-lg">Requested By: {request.requestedBy || "Undefined"}</h1>
 				<h1 className="text-lg">Requested On: {request.request_date || "Undefined"}</h1>
 				<h1 className="text-lg">Fulfilled On: {request.fulfill_date || "Request Not Yet Fulfilled"}</h1>
 
 			</div>
 			<div className="flex">
-				<Link className="button" to={`/book/${request.book_id}`}>
+				<Link className="button" to={`/request/${request.book_id}`}>
 					<h2>Details</h2>
 				</Link>
 			</div>
