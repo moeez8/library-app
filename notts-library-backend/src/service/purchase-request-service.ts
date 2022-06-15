@@ -1,7 +1,7 @@
 const { models } = require("../config/database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-
+import sequelize from "../config/database";
 import IBook from "../interfaces/IBook";
 import ITag from "../interfaces/ITag";
 
@@ -114,15 +114,18 @@ const NewPurchaseRequestService = () => {
 
 	};
 
-	const DeleteRequestByID = async (book: any) => {
-		if (book !== null) {
-			book.destroy();
-			// res.status(200).json({ msg: "Book Deleted" });
-			return;
-		} else {
-			// res.status(400).json({ error: "Not Able To Find Book With ID" });
-			return;
+	const DeleteRequestByID = async (id: any) => {
+		const result = await models.request.findByPk(id);
+
+		if (result == null) {
+			throw new Error("Unable To Find Request With ID");
 		}
+
+		await sequelize.transaction(async () => {
+			result.destroy();
+		});
+
+		return result;
 	};
 
 	return {

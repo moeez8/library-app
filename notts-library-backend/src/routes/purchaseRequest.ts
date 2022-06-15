@@ -8,8 +8,7 @@ router.post("/", purchaseRequestAPI().addRequest);
 router.get("/", purchaseRequestAPI().searchForRequest);
 router.get("/:id", purchaseRequestAPI().getRequestByID);
 router.put("/:id", purchaseRequestAPI().updateRequestByID);
-
-router.delete("/:id", purchaseRequestAPI().deleteBookById);
+router.delete("/:id", purchaseRequestAPI().deleteRequestByID);
 
 export = router;
 
