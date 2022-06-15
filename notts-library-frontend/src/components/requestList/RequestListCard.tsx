@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import BookDetails from "../bookDetails/BookDetails"
+import BookDetails from "../bookDetails/BookDetails";
 
 import IRequest from "../../interfaces/IRequest";
 
@@ -21,10 +21,9 @@ export const RequestListCard = ({ request }: { request: IRequest }) => {
 				<h1 className="text-lg">Requested By: {request.requestedBy || "Undefined"}</h1>
 				<h1 className="text-lg">Requested On: {request.request_date || "Undefined"}</h1>
 				<h1 className="text-lg">Fulfilled On: {request.fulfill_date || "Request Not Yet Fulfilled"}</h1>
-
 			</div>
 			<div className="flex">
-				<Link className="button" to={`/request/${request.book_id}`}>
+				<Link className="button" to={`/request/${request.id}`}>
 					<h2>Details</h2>
 				</Link>
 			</div>
