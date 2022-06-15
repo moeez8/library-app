@@ -17,6 +17,9 @@ const Header = () => {
 					<Link to={"/AddBook"}>
 						<h2 className="nav-button">Add A Book</h2>
 					</Link>
+					<Link to={"/Requests"}>
+						<h2 className="nav-button">Book Requests</h2>
+					</Link>
 				</nav>
 			</div>
 		</header>
