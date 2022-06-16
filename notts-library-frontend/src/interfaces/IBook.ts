@@ -7,6 +7,7 @@ export default interface IBook {
 	author?: string;
 	description?: string;
 	iban?: string;
+	deletedAt?: string;
 	// copies?: ICopy[];
 	// type?: string;
 	// category?: string;

@@ -8,6 +8,7 @@ import BookDetails from "../components/bookDetails/BookDetails";
 import BookTagList from "../components/bookDetails/BookTagList";
 import BookCopyList from "../components/bookDetails/BookCopyList";
 import BookAdminControls from "../components/bookDetails/BookAdminControls";
+import RecordDeleted from "../components/RecordDeleted";
 
 const Book = () => {
 	const params = useParams();
@@ -26,10 +27,11 @@ const Book = () => {
 			<Header />
 			{book ? (
 				<>
+					{book.deletedAt ? <RecordDeleted /> : null}
 					<BookDetails book={book} />
 					<BookTagList book={book} />
 					<BookCopyList book={book} />
-					<BookAdminControls book={book} />
+					{book.deletedAt ? null : <BookAdminControls book={book} />}
 				</>
 			) : (
 				<div className="card bg-red-200 border-2 border-red-400 ">

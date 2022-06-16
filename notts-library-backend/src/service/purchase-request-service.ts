@@ -30,7 +30,7 @@ const NewPurchaseRequestService = () => {
 			requestedBy: "TestUser",
 		});
 		return { book, request };
-	}
+	};
 
 	// Pulled out from create new book function (should this be here? duplicate code)
 	const createTags = async (id: any, tags: ITag[]): Promise<any> => {
@@ -60,6 +60,7 @@ const NewPurchaseRequestService = () => {
 
 	const GetAllPurchaseRequests = async (): Promise<any> => {
 		const result = models.request.findAll({
+			order: [["request_date", "DESC"]],
 			include: [{ model: models.book, as: "book" }],
 		});
 		return result;
@@ -80,6 +81,7 @@ const NewPurchaseRequestService = () => {
 	const GetRequestByID = async (id: any): Promise<any> => {
 		const request = await models.request.findByPk(id, {
 			include: [{ model: models.book, as: "book" }],
+			paranoid: false,
 		});
 
 		if (request == null) {
@@ -90,7 +92,11 @@ const NewPurchaseRequestService = () => {
 
 	const UpdateRequestByID = async (id: any, fulfill_date: any): Promise<any> => {
 		return await sequelize.transaction(async () => {
-			const request = await models.request.findByPk(id);
+			const request = await models.request.findByPk(id, {
+				where: {
+					fullfill_date: { [Op.is]: null },
+				},
+			});
 
 			if (request == null) {
 				throw new Error("Unable To Find Request With ID");
@@ -101,23 +107,23 @@ const NewPurchaseRequestService = () => {
 			}
 
 			const updatedRequest = await request.update({
-				fulfill_date: fulfill_date
-			})
+				fulfill_date: fulfill_date,
+			});
 
 			return updatedRequest;
 		});
 	};
 
 	const FulfillRequestByID = async (id: any) => {
-		const request = await models.request.findByPk(id);
+		const request = await models.request.findByPk(id, {
+			where: {
+				fullfill_date: { [Op.is]: null },
+			},
+		});
 
-		if (request == null) {
-			throw new Error("Unable To Find Request With ID");
-		}
+		if (request == null) throw new Error("Unable To Find Request With ID");
 
-		if (request.fulfill_date) {
-			throw new Error("Request Already Fullfilled");
-		}
+		if (request.fulfill_date) throw new Error("Request Already Fullfilled");
 
 		await models.copy.create({
 			book_id: request.book_id,
@@ -125,25 +131,21 @@ const NewPurchaseRequestService = () => {
 		});
 
 		const updatedRequest = await request.update({
-			fulfill_date: Date.now()
-		})
+			fulfill_date: Date.now(),
+		});
 
 		return updatedRequest;
 	};
 
-	// const DeleteRequestByID = async (id: any) => {
-	// 	const request = await models.request.findByPk(id);
+	const DeleteRequestByID = async (id: any) => {
+		const request = await models.request.findByPk(id);
 
-	// 	if (request == null) {
-	// 		throw new Error("Unable To Find Request With ID");
-	// 	}
+		await sequelize.transaction(async () => {
+			request.destroy();
+		});
 
-	// 	await sequelize.transaction(async () => {
-	// 		request.destroy();
-	// 	});
-
-	// 	return request;
-	// };
+		return request;
+	};
 
 	return {
 		CreateNewRequest,
@@ -152,6 +154,7 @@ const NewPurchaseRequestService = () => {
 		GetRequestByID,
 		UpdateRequestByID,
 		FulfillRequestByID,
+		DeleteRequestByID,
 	};
 };
 

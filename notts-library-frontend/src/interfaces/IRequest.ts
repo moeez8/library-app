@@ -6,5 +6,6 @@ export default interface IRequest {
 	request_date?: string;
 	fulfill_date?: string;
 	requestedBy?: string;
+	deletedAt?: string;
 	book: IBook;
 }

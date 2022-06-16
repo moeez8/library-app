@@ -59,7 +59,7 @@ const copyApi = () => {
 		}
 
 		try {
-			res.json(await CopyService().GetCopyWithdrawsByID(id));
+			res.json(await CopyService().GetWithdrawsByCopyID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
