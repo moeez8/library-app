@@ -13,11 +13,13 @@ const SearchBookList = ({ searchTerm }: { searchTerm?: string }) => {
 
 	const getBooks = async () => {
 		if (searchTerm) {
-			const result = await fetch(`http://localhost:5000/book/?term=${searchTerm}`).then((response) => response.json());
-			setbooks(result);
+			const res = await fetch(`http://localhost:5000/book/?term=${searchTerm}`);
+			const data = await res.json();
+			setbooks(data);
 		} else {
-			const result = await fetch(`http://localhost:5000/book/`).then((response) => response.json());
-			setbooks(result);
+			const res = await fetch(`http://localhost:5000/book/`);
+			const data = await res.json();
+			setbooks(data);
 		}
 	};
 

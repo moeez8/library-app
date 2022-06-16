@@ -14,17 +14,18 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	}, []);
 
 	const getBook = async () => {
-		const result = await fetch(`http://localhost:5000/copy/${copy.id}/status`).then((response) => response.json());
-		setstatus(result.status);
-		setUser(result.user_name)
+		const res = await fetch(`http://localhost:5000/copy/${copy.id}/status`);
+		const data = await res.json();
+		setstatus(data.status);
+		setUser(data.user_name);
 	};
 
 	const checkOutBook = async () => {
-		let name = await window.prompt("Please Enter Your Name.")
+		let name = await window.prompt("Please Enter Your Name.");
 
 		if (name === null || name === "") {
-			await alert("No name entered")
-			return
+			await alert("No name entered");
+			return;
 		}
 
 		const result = await fetch(`http://localhost:5000/copy/${copy.id}/check-out`, {
@@ -46,18 +47,14 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	};
 
 	const checkInBook = async () => {
-		await fetch(`http://localhost:5000/copy/${copy.id}/check-in`, { method: "PUT" })
-			.then((res) => {
-				if (res.status === 200) {
-					alert("Book Checked In!");
-				} else {
-					alert("Book Could Not Be Checked In!");
-				}
-				getBook();
-			})
-			.catch((err) => {
-				getBook();
-			});
+		const res = await fetch(`http://localhost:5000/copy/${copy.id}/check-in`, { method: "PUT" });
+
+		if (res.status == 200) {
+			alert("Book Checked In!");
+		} else {
+			alert("Book Could Not Be Checked In!");
+		}
+		getBook();
 	};
 
 	return (
@@ -67,7 +64,6 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 				<h1 className="text-lg">{`Owner: ${copy.owner}`}</h1>
 				<h1 className="text-lg">{status ? "Status: Avaliable" : "Status: Not Avaliable"}</h1>
 				<h1 className="text-lg">{status ? "Current Holder: None" : `Current Holder: ${user}`}</h1>
-
 			</div>
 			<div className="flex flex-col justify-around">
 				{status ? (

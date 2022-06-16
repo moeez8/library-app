@@ -9,8 +9,9 @@ const BookList = () => {
 	}, []);
 
 	const getBooks = async () => {
-		const result = await fetch(`http://localhost:5000/book`).then((response) => response.json());
-		setbooks(result);
+		const res = await fetch(`http://localhost:5000/book`);
+		const data = await res.json();
+		setbooks(data);
 	};
 
 	const renderedItems = books.map((book) => {

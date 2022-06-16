@@ -51,7 +51,7 @@ const AddBookForm = () => {
 			const form: any = e.target.form;
 			const index = [...form].indexOf(e.target);
 			if (e.target.type == "textarea" && e.shiftKey) {
-				return
+				return;
 			} else {
 				form.elements[index + 1].focus();
 				e.preventDefault();
@@ -85,11 +85,7 @@ const AddBookForm = () => {
 					iban: iban,
 					tags: tags,
 				}),
-			})
-				.then((res) => res.json())
-				.catch((err) => {
-					console.log(err);
-				});
+			});
 		} else {
 			await fetch("http://localhost:5000/request", {
 				method: "POST",
@@ -103,11 +99,7 @@ const AddBookForm = () => {
 					iban: iban,
 					tags: tags,
 				}),
-			})
-				.then((res) => res.json())
-				.catch((err) => {
-					console.log(err);
-				});
+			});
 		}
 	};
 

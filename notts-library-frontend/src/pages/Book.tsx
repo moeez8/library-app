@@ -18,8 +18,9 @@ const Book = () => {
 	}, []);
 
 	const getBook = async () => {
-		const result = await fetch(`http://localhost:5000/book/${params.id}`).then((response) => response.json());
-		setbook(result);
+		const res = await fetch(`http://localhost:5000/book/${params.id}`);
+		const data = await res.json();
+		setbook(data);
 	};
 
 	return (

@@ -9,8 +9,9 @@ const RequestList = () => {
 	}, []);
 
 	const getRequests = async () => {
-		const result = await fetch(`http://localhost:5000/request`).then((response) => response.json());
-		setRequests(result);
+		const res = await fetch(`http://localhost:5000/request`);
+		const data = await res.json();
+		setRequests(data);
 	};
 
 	const renderedItems = requests.map((request) => {
