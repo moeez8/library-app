@@ -1,6 +1,5 @@
 import RequestListCard from "./RequestListCard";
 import IRequest from "../../interfaces/IRequest";
-import IBook from "../../interfaces/IBook";
 import { useState, useEffect } from "react";
 
 const RequestList = () => {
@@ -20,7 +19,7 @@ const RequestList = () => {
 
 	return (
 		<div className="card">
-			<h1 className="text-xl font-bold m-1">{`Total Books: ${renderedItems.length}`}</h1>
+			<h1 className="text-xl font-bold m-1">{`Total Requests: ${renderedItems.length}`}</h1>
 			{renderedItems}
 		</div>
 	);
