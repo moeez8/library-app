@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createReturn } from "typescript";
 import ICopy from "../../interfaces/ICopy";
 
 const BookCopy = ({ copy }: { copy: ICopy }) => {
@@ -7,15 +8,24 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 		getBook();
 	}, []);
 
+	const [user, setUser] = useState<boolean>();
+	useEffect(() => {
+		getBook();
+	}, []);
+
 	const getBook = async () => {
 		const result = await fetch(`http://localhost:5000/copy/${copy.id}/status`).then((response) => response.json());
 		setstatus(result.status);
+		setUser(result.user_name)
 	};
 
 	const checkOutBook = async () => {
-		const name = await window.prompt("Please Enter Your Name.");
+		let name = await window.prompt("Please Enter Your Name.")
 
-		if (name === null) return;
+		if (name === null || name === "") {
+			await alert("No name entered")
+			return
+		}
 
 		const result = await fetch(`http://localhost:5000/copy/${copy.id}/check-out`, {
 			method: "PUT",
@@ -56,6 +66,8 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 				{/* <h1>{`Copy ID: ${copy.id}`}</h1> */}
 				<h1 className="text-lg">{`Owner: ${copy.owner}`}</h1>
 				<h1 className="text-lg">{status ? "Status: Avaliable" : "Status: Not Avaliable"}</h1>
+				<h1 className="text-lg">{status ? "Current Holder: None" : `Current Holder: ${user}`}</h1>
+
 			</div>
 			<div className="flex flex-col justify-around">
 				{status ? (

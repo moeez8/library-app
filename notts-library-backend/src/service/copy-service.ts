@@ -146,7 +146,10 @@ const CopyService = () => {
 				});
 
 				if (withdraws[0].date_in === null) {
-					return { status: false };
+					return {
+						status: false,
+						user_name: withdraws[0].user_name
+					};
 				} else {
 					return { status: true };
 				}
