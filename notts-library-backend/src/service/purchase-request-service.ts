@@ -62,6 +62,9 @@ const NewPurchaseRequestService = () => {
 		const result = models.request.findAll({
 			order: [["request_date", "DESC"]],
 			include: [{ model: models.book, as: "book" }],
+			where: {
+				fulfill_date: { [Op.is]: null },
+			}
 		});
 		return result;
 	};
@@ -94,7 +97,7 @@ const NewPurchaseRequestService = () => {
 		return await sequelize.transaction(async () => {
 			const request = await models.request.findByPk(id, {
 				where: {
-					fullfill_date: { [Op.is]: null },
+					fulfill_date: { [Op.is]: null },
 				},
 			});
 
@@ -117,7 +120,7 @@ const NewPurchaseRequestService = () => {
 	const FulfillRequestByID = async (id: any) => {
 		const request = await models.request.findByPk(id, {
 			where: {
-				fullfill_date: { [Op.is]: null },
+				fulfill_date: { [Op.is]: null },
 			},
 		});
 
