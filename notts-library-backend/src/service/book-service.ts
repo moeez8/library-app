@@ -17,8 +17,10 @@ const NewBookService = () => {
 
 	const GetAllBooks = async (): Promise<any> => {
 		let result = await models.book.findAll({
-			include: [{ model: models.request, as: "requests" },
-			{ model: models.copy, as: "copies" }]
+			include: [
+				{ model: models.request, as: "requests" },
+				{ model: models.copy, as: "copies" },
+			],
 		});
 
 		result = result.filter((book: any) => {
@@ -29,7 +31,7 @@ const NewBookService = () => {
 	};
 
 	const GetBookByID = async (id: any): Promise<any> => {
-		const result = await models.book.findByPk(id);
+		const result = await models.book.findByPk(id, { paranoid: false });
 
 		if (result == null) {
 			throw new Error("Unable To Find Book With ID");

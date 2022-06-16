@@ -74,7 +74,7 @@ const CopyService = () => {
 		}
 	};
 
-	const CheckoutCopyByID = async (id: any): Promise<any> => {
+	const CheckoutCopyByID = async (id: any, name: any): Promise<any> => {
 		const copy = await models.copy.findByPk(id, {
 			include: [{ model: models.withdraw, as: "withdraws" }],
 		});
@@ -97,7 +97,7 @@ const CopyService = () => {
 					const result = await models.withdraw.create({
 						copy_id: id,
 						date_out: new Date(),
-						user_name: "Dave",
+						user_name: name,
 					});
 					return result;
 				} else {
@@ -107,7 +107,7 @@ const CopyService = () => {
 				const result = await models.withdraw.create({
 					copy_id: id,
 					date_out: new Date(),
-					user_name: "Dave",
+					user_name: name,
 				});
 				return result;
 			}

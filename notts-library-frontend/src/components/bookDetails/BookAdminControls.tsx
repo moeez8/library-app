@@ -21,7 +21,7 @@ const BookAdminControls = ({ book }: { book: IBook }) => {
 	return (
 		<div className="card">
 			<button onClick={deleteBook} className="button-red">
-				<h1>Delete Book</h1>
+				<h1>Archive Book</h1>
 			</button>
 		</div>
 	);

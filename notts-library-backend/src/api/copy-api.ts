@@ -92,8 +92,18 @@ const copyApi = () => {
 			return;
 		}
 
+		const { name } = req.body;
+
+		const errors = [];
+		if (name == null) errors.push("Please Provide Body Param name");
+
+		if (errors.length > 0) {
+			next(ApiError.BadRequest(errors));
+			return;
+		}
+
 		try {
-			res.json(await CopyService().CheckoutCopyByID(id));
+			res.json(await CopyService().CheckoutCopyByID(id, name));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));

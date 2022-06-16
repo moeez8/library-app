@@ -28,7 +28,7 @@ export = (sequelize: any) => {
 		},
 		{
 			tableName: "books",
-			timestamps: false,
+			paranoid: true,
 		}
 	);
 };
