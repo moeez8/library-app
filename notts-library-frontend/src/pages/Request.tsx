@@ -18,7 +18,9 @@ const Request = () => {
 
 	const getRequest = async () => {
 		const result = await fetch(`http://localhost:5000/request/${params.id}`);
-		if (result.status === 200) setRequest(await result.json());
+		if (result.status == 200) {
+			setRequest(await result.json());
+		}
 	};
 
 	return (

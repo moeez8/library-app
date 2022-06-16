@@ -15,12 +15,9 @@ const BookTagsList = ({ book }: { book: IBook }) => {
 		setTags(data.tags);
 	};
 
-	let renderedCopies;
-	if (tags) {
-		renderedCopies = tags.map((tag) => {
-			return <Tag key={tag.id} tag={tag.name} />;
-		});
-	}
+	const renderedCopies = tags?.map((tag) => {
+		return <Tag key={tag.id} tag={tag.name} />;
+	});
 
 	return (
 		<div className="card">

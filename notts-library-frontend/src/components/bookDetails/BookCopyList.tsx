@@ -16,13 +16,9 @@ const BookCopyList = ({ book }: { book: IBook }) => {
 		setCopies(data.copies);
 	};
 
-	let renderedCopies;
-	if (copies) {
-		console.log(copies);
-		renderedCopies = copies.map((copy) => {
-			return <BookCopy key={copy.id} copy={copy} />;
-		});
-	}
+	const renderedCopies = copies?.map((copy) => {
+		return <BookCopy key={copy.id} copy={copy} />;
+	});
 
 	return (
 		<div className="card">

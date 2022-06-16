@@ -70,8 +70,6 @@ const AddBookForm = () => {
 	};
 
 	const addBook = async () => {
-		console.log(option);
-
 		if (option === "addBook") {
 			await fetch("http://localhost:5000/book", {
 				method: "POST",

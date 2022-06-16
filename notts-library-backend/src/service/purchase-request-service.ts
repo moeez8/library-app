@@ -51,9 +51,7 @@ const NewPurchaseRequestService = () => {
 
 			createdTags.push(createdTag[0]);
 			associations.push(association);
-			//console.log(associations)
 		});
-		console.log(associations);
 
 		return { createdTags, associations };
 	};
@@ -64,7 +62,7 @@ const NewPurchaseRequestService = () => {
 			include: [{ model: models.book, as: "book" }],
 			where: {
 				fulfill_date: { [Op.is]: null },
-			}
+			},
 		});
 		return result;
 	};

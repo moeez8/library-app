@@ -8,9 +8,4 @@ export default interface IBook {
 	description?: string;
 	iban?: string;
 	deletedAt?: string;
-	// copies?: ICopy[];
-	// type?: string;
-	// category?: string;
-	// cover_photo?: any;
-	// tags?: ITag[];
 }
