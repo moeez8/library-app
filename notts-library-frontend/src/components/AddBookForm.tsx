@@ -69,11 +69,11 @@ const AddBookForm = () => {
 		}
 	};
 
-	const addBook = () => {
+	const addBook = async () => {
 		console.log(option);
 
 		if (option === "addBook") {
-			fetch("http://localhost:5000/book", {
+			await fetch("http://localhost:5000/book", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -91,7 +91,7 @@ const AddBookForm = () => {
 					console.log(err);
 				});
 		} else {
-			fetch("http://localhost:5000/request", {
+			await fetch("http://localhost:5000/request", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",

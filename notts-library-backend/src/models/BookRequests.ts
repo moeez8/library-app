@@ -22,7 +22,7 @@ export = (sequelize: any) => {
 		},
 		{
 			tableName: "requests",
-			timestamps: false,
+			paranoid: true,
 		}
 	);
 };

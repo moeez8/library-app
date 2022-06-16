@@ -1,4 +1,5 @@
 const { models } = require("../config/database");
+import { Op } from "sequelize";
 
 const CopyService = () => {
 	const AddNewCopy = async (id: any, owner: string): Promise<any> => {
@@ -22,21 +23,33 @@ const CopyService = () => {
 		return result;
 	};
 
-	const GetCopyWithdrawsByID = async (id: any): Promise<any> => {
-		const result = await models.copy.findByPk(id, {
-			include: [{ model: models.withdraw, as: "withdraws" }],
+	const GetWithdrawsByCopyID = async (id: any): Promise<any> => {
+		const result = await models.withdraw.findAll({
+			order: [["date_out", "DESC"]],
+			where: {
+				copy_id: { [Op.eq]: id },
+			},
 		});
 
 		if (result == null) {
 			throw new Error("Unable To Find Withdraw With ID");
 		}
 
-		return result.withdraws;
+		return result;
 	};
 
 	const CheckinCopyByID = async (id: any): Promise<any> => {
 		const copy = await models.copy.findByPk(id, {
-			include: [{ model: models.withdraw, as: "withdraws" }],
+			include: [
+				{
+					model: models.withdraw,
+					as: "withdraws",
+					where: {
+						date_in: { [Op.is]: null },
+					},
+					order: [["date_out", "DESC"]],
+				},
+			],
 		});
 
 		//Does Copy Exist?
@@ -74,7 +87,7 @@ const CopyService = () => {
 		}
 	};
 
-	const CheckoutCopyByID = async (id: any): Promise<any> => {
+	const CheckoutCopyByID = async (id: any, name: any): Promise<any> => {
 		const copy = await models.copy.findByPk(id, {
 			include: [{ model: models.withdraw, as: "withdraws" }],
 		});
@@ -97,7 +110,7 @@ const CopyService = () => {
 					const result = await models.withdraw.create({
 						copy_id: id,
 						date_out: new Date(),
-						user_name: "Dave",
+						user_name: name,
 					});
 					return result;
 				} else {
@@ -107,7 +120,7 @@ const CopyService = () => {
 				const result = await models.withdraw.create({
 					copy_id: id,
 					date_out: new Date(),
-					user_name: "Dave",
+					user_name: name,
 				});
 				return result;
 			}
@@ -143,7 +156,7 @@ const CopyService = () => {
 		}
 	};
 
-	return { AddNewCopy, GetAllCopies, GetCopyByID, GetCopyWithdrawsByID, CheckinCopyByID, CheckoutCopyByID, CheckCopyStatus };
+	return { AddNewCopy, GetAllCopies, GetCopyByID, GetWithdrawsByCopyID, CheckinCopyByID, CheckoutCopyByID, CheckCopyStatus };
 };
 
 export default CopyService;

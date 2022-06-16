@@ -1,17 +1,19 @@
 import sequelize from "../config/database";
+import { Op } from "sequelize";
 
 const { models } = require("../config/database");
 
 const NewWithdrawService = () => {
 	const GetAllWithdraws = async (): Promise<any> => {
 		return await models.withdraw.findAll({
-			include: [
-				{
-					model: models.copy,
-					as: "copy",
-					include: [{ model: models.book, as: "book" }],
-				},
-			],
+			order: [["date_out", "DESC"]],
+			// include: [
+			// 	{
+			// 		model: models.copy,
+			// 		as: "copy",
+			// 		include: [{ model: models.book, as: "book" }],
+			// 	},
+			// ],
 		});
 	};
 

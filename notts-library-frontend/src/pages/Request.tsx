@@ -6,6 +6,7 @@ import IRequest from "../interfaces/IRequest";
 import RequestDetails from "../components/requestDetails/requestDetails";
 import BookDetails from "../components/bookDetails/BookDetails";
 import RequestAdminControls from "../components/requestDetails/RequestAdminControls";
+import RecordDeleted from "../components/RecordDeleted";
 
 const Request = () => {
 	const params = useParams();
@@ -25,9 +26,10 @@ const Request = () => {
 			<Header />
 			{request ? (
 				<>
+					{request.deletedAt ? <RecordDeleted /> : null}
 					<RequestDetails request={request} />
 					<BookDetails book={request.book} />
-					<RequestAdminControls request={request} />
+					{request.deletedAt ? null : <RequestAdminControls request={request} />}
 				</>
 			) : (
 				<div className="card bg-red-200 border-2 border-red-400 ">

@@ -22,7 +22,7 @@ export = (sequelize: any) => {
 		},
 		{
 			tableName: "withdraws",
-			timestamps: false,
+			paranoid: true,
 		}
 	);
 };

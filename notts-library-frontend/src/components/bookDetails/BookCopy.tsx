@@ -13,22 +13,30 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	};
 
 	const checkOutBook = async () => {
-		await fetch(`http://localhost:5000/copy/${copy.id}/check-out`)
-			.then((res) => {
-				if (res.status === 200) {
-					alert("Book Checked Out!");
-				} else {
-					alert("Book Could Not Be Checked Out!");
-				}
-				getBook();
-			})
-			.catch((err) => {
-				getBook();
-			});
+		const name = await window.prompt("Please Enter Your Name.");
+
+		if (name === null) return;
+
+		const result = await fetch(`http://localhost:5000/copy/${copy.id}/check-out`, {
+			method: "PUT",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify({
+				name: name,
+			}),
+		});
+
+		if (result.status === 200) {
+			alert("Book Checked Out!");
+		} else {
+			alert("Book Could Not Be Checked Out!");
+		}
+		getBook();
 	};
 
 	const checkInBook = async () => {
-		await fetch(`http://localhost:5000/copy/${copy.id}/check-in`)
+		await fetch(`http://localhost:5000/copy/${copy.id}/check-in`, { method: "PUT" })
 			.then((res) => {
 				if (res.status === 200) {
 					alert("Book Checked In!");

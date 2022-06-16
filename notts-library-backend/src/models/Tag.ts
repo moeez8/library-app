@@ -11,7 +11,7 @@ export = (sequelize: any) => {
 		},
 		{
 			tableName: "tags",
-			timestamps: false,
+			paranoid: true,
 		}
 	);
 };

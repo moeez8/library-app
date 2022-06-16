@@ -15,7 +15,7 @@ export = (sequelize: any) => {
 		},
 		{
 			tableName: "copies",
-			timestamps: false,
+			paranoid: true,
 		}
 	);
 };

@@ -6,8 +6,8 @@ router.get("/", copyAPI().getAllCopies);
 router.post("/add", copyAPI().addNewCopy);
 router.get("/:id", copyAPI().getCopyByID);
 router.get("/:id/withdraws", copyAPI().getCopyWithdrawsByID);
-router.get("/:id/check-in", copyAPI().checkinCopyByID);
-router.get("/:id/check-out", copyAPI().checkoutCopyByID);
+router.put("/:id/check-in", copyAPI().checkinCopyByID);
+router.put("/:id/check-out", copyAPI().checkoutCopyByID);
 router.get("/:id/status", copyAPI().checkCopyStatus);
 
 export = router;

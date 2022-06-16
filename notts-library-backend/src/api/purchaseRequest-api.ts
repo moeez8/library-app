@@ -7,7 +7,6 @@ import IBook from "../interfaces/IBook";
 import ApiError from "../middleware/api-error";
 
 const purchaseRequestApi = () => {
-
 	const addRequest = async (req: Request, res: Response, next: NextFunction) => {
 		const book: IBook = req.body;
 
@@ -113,13 +112,31 @@ const purchaseRequestApi = () => {
 		}
 	};
 
+	const DeleteRequestByID = async (req: Request, res: Response, next: NextFunction) => {
+		const id: number = parseInt(req.params.id);
+
+		if (id == null) {
+			next(ApiError.BadRequest("Please Fill URL Param id"));
+			return;
+		}
+
+		try {
+			res.json(await NewPurchaseRequestService().DeleteRequestByID(id));
+			return;
+		} catch (error: any) {
+			next(ApiError.Internal(error.toString()));
+			return;
+		}
+	};
+
 	return {
 		addRequest,
 		searchForRequest,
 		//getAllRequests,
 		getRequestByID,
 		updateRequestByID,
-		fulfillRequestByID
+		fulfillRequestByID,
+		DeleteRequestByID,
 	};
 };
 

@@ -6,8 +6,8 @@ const RequestAdminControls = ({ request }: { request: IRequest }) => {
 
 	const closeRequest = async () => {
 		if (window.confirm("Are you sure?")) {
-			const res = await fetch(`http://localhost:5000/request/${request.id}/close`, {
-				method: "PUT",
+			const res = await fetch(`http://localhost:5000/request/${request.id}`, {
+				method: "DELETE",
 			});
 			if (res.status == 200) {
 				alert("Request Closed");
