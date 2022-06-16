@@ -6,10 +6,10 @@ import IRequest from "../../interfaces/IRequest";
 export const RequestListCard = ({ request }: { request: IRequest }) => {
 	return (
 		<div className="card">
-			<div className="m-1">
+			<div className="m-1 break-words">
 				{request.book ? (
 					<>
-						<h1 className="text-2xl font-bold">{request.book.title || "Undefined"}</h1>
+						<h1 className="text-2xl font-bold ">{request.book.title || "Undefined"}</h1>
 						<h1 className="text-lg">{request.book.iban ? `IBAN: ${request.book.iban}` : "IBAN: Undefined"}</h1>
 					</>
 				) : (

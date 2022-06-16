@@ -46,10 +46,27 @@ const AddBookForm = () => {
 		setOption(e.target.value);
 	};
 
-	const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleEnter = (e: any) => {
+		if (e.key === "Enter" && e.target.form) {
+			const form: any = e.target.form;
+			const index = [...form].indexOf(e.target);
+			if (e.target.type == "textarea" && e.shiftKey) {
+				return
+			} else {
+				form.elements[index + 1].focus();
+				e.preventDefault();
+			}
+		}
+	};
+
+	const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		addBook();
-		navigate("../", { replace: true });
+		await addBook();
+		if (option === "addBook") {
+			navigate("../", { replace: true });
+		} else {
+			navigate("../Requests", { replace: true });
+		}
 	};
 
 	const addBook = () => {
@@ -98,10 +115,10 @@ const AddBookForm = () => {
 		<div className="card">
 			<h1 className="text-xl font-bold m-1">Add Book</h1>
 			<form onSubmit={handleOnSubmit}>
-				<input className="form-input" name="title" placeholder="Book Title" value={title} onChange={handleTitleChange} required />
-				<input className="form-input" name="author" placeholder="Book Author" value={author} onChange={handleAuthorChange} required />
-				<textarea className="form-input" name="content" placeholder="Book Description" onChange={handleDescChange} value={description} required />
-				<input className="form-input" name="iban" placeholder="Book IBAN" value={iban} onChange={handleIbanChange} required />
+				<input className="form-input" name="title" placeholder="Book Title" value={title} onChange={handleTitleChange} onKeyDown={handleEnter} required />
+				<input className="form-input" name="author" placeholder="Book Author" value={author} onChange={handleAuthorChange} onKeyDown={handleEnter} required />
+				<textarea className="form-input" name="content" placeholder="Book Description" onChange={handleDescChange} value={description} onKeyDown={handleEnter} required />
+				<input className="form-input" name="iban" placeholder="Book IBAN" value={iban} onChange={handleIbanChange} onKeyDown={handleEnter} required />
 				<div className="card">
 					<h1 className="text-lg font-bold">Tags</h1>
 
