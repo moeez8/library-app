@@ -11,7 +11,7 @@ const BookCopyList = ({ book }: { book: IBook }) => {
 	}, []);
 
 	const getBook = async () => {
-		const res = await fetch(`http://localhost:5000/book/${book.id}/copies`, { method: "GET" });
+		const res = await fetch(process.env.REACT_APP_BASE_URL + "/book/${book.id}/copies", { method: "GET" });
 		const data = await res.json();
 		setCopies(data.copies);
 	};
