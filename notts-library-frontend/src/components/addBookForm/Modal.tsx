@@ -20,9 +20,10 @@ const Modal = (props: any) => {
     }, []);
 
     const getBook = async () => {
-        const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${props.bookIBAN}&jscmd=details&format=json`);
-        if (res.status == (200)) {
-            const data = await res.json();
+        const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${props.bookIBAN}&jscmd=details&format=json`)
+        const data = await res.json();
+        if (res.status == (200) && data != null) {
+
             setbook({
                 title: data[`ISBN:${props.bookIBAN}`].details.title,
                 description: data[`ISBN:${props.bookIBAN}`].details.description,
@@ -76,7 +77,7 @@ const Modal = (props: any) => {
                     <div className="card mx-auto ">
                         <span className="float-right" onClick={handleClose}>&times;    </span>
                         <h1 className="text-2xl font-bold" > Book could not be found, please enter manually</h1 >
-                        <button className="button-green" type="button" onClick={handleClose}>
+                        <button className="button-green" name="ok" type="button" onClick={handleClose}>
                             Ok
                         </button>
                     </div>
