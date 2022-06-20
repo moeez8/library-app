@@ -10,17 +10,14 @@ const BookTagsList = ({ book }: { book: IBook }) => {
 	}, []);
 
 	const getBook = async () => {
-		const res = await fetch(`http://localhost:5000/book/${book.id}/tags`);
+		const res = await fetch(process.env.REACT_APP_BASE_URL + "/book/${book.id}/tags");
 		const data = await res.json();
 		setTags(data.tags);
 	};
 
-	let renderedCopies;
-	if (tags) {
-		renderedCopies = tags.map((tag) => {
-			return <Tag key={tag.id} tag={tag.name} />;
-		});
-	}
+	const renderedCopies = tags?.map((tag) => {
+		return <Tag key={tag.id} tag={tag.name} />;
+	});
 
 	return (
 		<div className="card">

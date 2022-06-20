@@ -6,7 +6,7 @@ const RequestAdminControls = ({ request }: { request: IRequest }) => {
 
 	const closeRequest = async () => {
 		if (window.confirm("Are you sure?")) {
-			const res = await fetch(`http://localhost:5000/request/${request.id}`, {
+			const res = await fetch(process.env.REACT_APP_BASE_URL + `/request/${request.id}`, {
 				method: "DELETE",
 			});
 			if (res.status == 200) {
@@ -20,7 +20,7 @@ const RequestAdminControls = ({ request }: { request: IRequest }) => {
 
 	const fulFillRequest = async () => {
 		if (window.confirm("Are you sure? This will create a new copy of this book")) {
-			const res = await fetch(`http://localhost:5000/request/${request.id}/fulfill`, {
+			const res = await fetch(process.env.REACT_APP_BASE_URL + `/request/${request.id}/fulfill`, {
 				method: "PUT",
 			});
 			if (res.status == 200) {

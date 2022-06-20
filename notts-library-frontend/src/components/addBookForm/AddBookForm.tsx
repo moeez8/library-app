@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import IBook from "../interfaces/IBook";
 import Modal from "./Modal";
+import FormBookTag from "./FormBookTag";
 
 const AddBookForm = () => {
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [description, setDescription] = useState("");
@@ -61,7 +62,7 @@ const AddBookForm = () => {
 	};
 
 	const removeTag = (removedTag: any) => {
-		const newTags = tags.filter((tag) => tag !== removedTag);
+		const newTags = tags.filter((tag) => tag.tag_name !== removedTag);
 		setTags(newTags);
 	};
 
@@ -93,10 +94,8 @@ const AddBookForm = () => {
 	};
 
 	const addBook = async () => {
-		console.log(option);
-
 		if (option === "addBook") {
-			await fetch("http://localhost:5000/book", {
+			await fetch(process.env.REACT_APP_BASE_URL + "/book", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -110,7 +109,7 @@ const AddBookForm = () => {
 				}),
 			});
 		} else {
-			await fetch("http://localhost:5000/request", {
+			await fetch(process.env.REACT_APP_BASE_URL + "/request", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -143,19 +142,7 @@ const AddBookForm = () => {
 
 					<div className="flex flex-wrap">
 						{tags.map((tag, index) => {
-							return (
-								<span key={index} className="tag">
-									{" "}
-									{tag.tag_name}{" "}
-									<span
-										className=" w-5 h-5 border-red-100 bg-red-400 inline-flex items-center justify-center text-white rounded-full transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
-										onClick={() => removeTag(tag)}
-									>
-										{" "}
-										x{" "}
-									</span>
-								</span>
-							);
+							return <FormBookTag tag={tag.tag_name} key={index} removeTagFunc={removeTag} />;
 						})}
 					</div>
 				</div>

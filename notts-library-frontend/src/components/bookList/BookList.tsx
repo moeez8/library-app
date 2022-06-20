@@ -9,7 +9,7 @@ const BookList = () => {
 	}, []);
 
 	const getBooks = async () => {
-		const res = await fetch(`http://localhost:5000/book`);
+		const res = await fetch(process.env.REACT_APP_BASE_URL + "/book");
 		const data = await res.json();
 		setbooks(data);
 	};

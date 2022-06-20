@@ -1,7 +1,7 @@
-const Tag = (tag: { tag: string | undefined }) => {
+const Tag = ({ tag }: { tag: string | undefined | null }) => {
 	return (
 		<div className="tag">
-			<h1>{tag.tag}</h1>
+			<h1>{tag}</h1>
 		</div>
 	);
 };

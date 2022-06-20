@@ -17,8 +17,10 @@ const Request = () => {
 	}, []);
 
 	const getRequest = async () => {
-		const result = await fetch(`http://localhost:5000/request/${params.id}`);
-		if (result.status === 200) setRequest(await result.json());
+		const result = await fetch(process.env.REACT_APP_BASE_URL + `/request/${params.id}`);
+		if (result.status == 200) {
+			setRequest(await result.json());
+		}
 	};
 
 	return (

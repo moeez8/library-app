@@ -14,7 +14,7 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	}, []);
 
 	const getBook = async () => {
-		const res = await fetch(`http://localhost:5000/copy/${copy.id}/status`);
+		const res = await fetch(process.env.REACT_APP_BASE_URL + "/copy/${copy.id}/status");
 		const data = await res.json();
 		setstatus(data.status);
 		setUser(data.user_name);
@@ -28,7 +28,7 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 			return;
 		}
 
-		const result = await fetch(`http://localhost:5000/copy/${copy.id}/check-out`, {
+		const result = await fetch(process.env.REACT_APP_BASE_URL + "/copy/${copy.id}/check-out", {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",
@@ -47,7 +47,7 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	};
 
 	const checkInBook = async () => {
-		const res = await fetch(`http://localhost:5000/copy/${copy.id}/check-in`, { method: "PUT" });
+		const res = await fetch(process.env.REACT_APP_BASE_URL + "/copy/${copy.id}/check-in", { method: "PUT" });
 
 		if (res.status == 200) {
 			alert("Book Checked In!");
@@ -60,7 +60,6 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	return (
 		<div className="card flex justify-between">
 			<div className="flex flex-col justify-around">
-				{/* <h1>{`Copy ID: ${copy.id}`}</h1> */}
 				<h1 className="text-lg">{`Owner: ${copy.owner}`}</h1>
 				<h1 className="text-lg">{status ? "Status: Avaliable" : "Status: Not Avaliable"}</h1>
 				<h1 className="text-lg">{status ? "Current Holder: None" : `Current Holder: ${user}`}</h1>

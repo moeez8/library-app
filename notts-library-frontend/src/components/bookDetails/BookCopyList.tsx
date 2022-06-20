@@ -11,18 +11,14 @@ const BookCopyList = ({ book }: { book: IBook }) => {
 	}, []);
 
 	const getBook = async () => {
-		const res = await fetch(`http://localhost:5000/book/${book.id}/copies`, { method: "GET" });
+		const res = await fetch(process.env.REACT_APP_BASE_URL + "/book/${book.id}/copies", { method: "GET" });
 		const data = await res.json();
 		setCopies(data.copies);
 	};
 
-	let renderedCopies;
-	if (copies) {
-		console.log(copies);
-		renderedCopies = copies.map((copy) => {
-			return <BookCopy key={copy.id} copy={copy} />;
-		});
-	}
+	const renderedCopies = copies?.map((copy) => {
+		return <BookCopy key={copy.id} copy={copy} />;
+	});
 
 	return (
 		<div className="card">

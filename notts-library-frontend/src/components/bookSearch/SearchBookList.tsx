@@ -13,11 +13,11 @@ const SearchBookList = ({ searchTerm }: { searchTerm?: string }) => {
 
 	const getBooks = async () => {
 		if (searchTerm) {
-			const res = await fetch(`http://localhost:5000/book/?term=${searchTerm}`);
+			const res = await fetch(process.env.REACT_APP_BASE_URL + `/book/?term=${searchTerm}`);
 			const data = await res.json();
 			setbooks(data);
 		} else {
-			const res = await fetch(`http://localhost:5000/book/`);
+			const res = await fetch(process.env.REACT_APP_BASE_URL + "/book/");
 			const data = await res.json();
 			setbooks(data);
 		}

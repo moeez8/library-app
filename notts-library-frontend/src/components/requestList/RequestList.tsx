@@ -9,7 +9,7 @@ const RequestList = () => {
 	}, []);
 
 	const getRequests = async () => {
-		const res = await fetch(`http://localhost:5000/request`);
+		const res = await fetch(process.env.REACT_APP_BASE_URL + "/request");
 		const data = await res.json();
 		setRequests(data);
 	};

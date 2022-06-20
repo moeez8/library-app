@@ -18,9 +18,10 @@ const Book = () => {
 	}, []);
 
 	const getBook = async () => {
-		const res = await fetch(`http://localhost:5000/book/${params.id}`);
-		const data = await res.json();
-		setbook(data);
+		const res = await fetch(process.env.REACT_APP_BASE_URL + `/book/${params.id}`);
+		if (res.status == 200) {
+			setbook(await res.json());
+		}
 	};
 
 	return (
