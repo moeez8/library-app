@@ -8,6 +8,7 @@ export default interface IBook {
 	description?: string;
 	iban?: string;
 	deletedAt?: string;
+	imgURL?: string
 	// copies?: ICopy[];
 	// type?: string;
 	// category?: string;
