@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import IBook from "../interfaces/IBook";
+import IBook from "../../interfaces/IBook";
 import Modal from "./Modal";
 import FormBookTag from "./FormBookTag";
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import IBook from "../interfaces/IBook";
+import IBook from "../../interfaces/IBook";
 
 
 const Modal = (props: any) => {
@@ -39,14 +39,8 @@ const Modal = (props: any) => {
             <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
                 <div className="flex justify-around">
                     <div className="card mx-auto ">
-
-
-
                         <span className="float-right" onClick={handleClose}>&times;    </span>
                         <h1 className="text-2xl font-bold m-1">Is this the book you're looking for?</h1>
-
-
-
                         <div className="flex">
                             <div className="m-1 break-words">
                                 <h1 className="text-xl font-bold" > {book.title || "Undefined"}</h1 >
@@ -66,8 +60,6 @@ const Modal = (props: any) => {
                         <button className="button-red" type="button" onClick={handleClose}>
                             No - Enter Details Manually
                         </button>
-
-
                     </div>
                 </div>
             </div>
