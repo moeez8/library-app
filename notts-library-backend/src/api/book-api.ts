@@ -38,7 +38,7 @@ const newBookApi = (bookService: IBookService) => {
 			res.json(await bookService.getBookByID(id));
 			return;
 		} catch (error: any) {
-			next(ApiError.Internal(error.toString()));
+			next(ApiError.BadRequest(error.toString()));
 			return;
 		}
 	};
@@ -83,7 +83,7 @@ const newBookApi = (bookService: IBookService) => {
 			res.json(await bookService.updateBookByID(id, title, iban, author, type, category, cover_photo, description, tags));
 			return;
 		} catch (error: any) {
-			next(ApiError.Internal(error.toString()));
+			next(ApiError.BadRequest(error.toString()));
 			return;
 		}
 	};
@@ -134,7 +134,7 @@ const newBookApi = (bookService: IBookService) => {
 			res.json(await bookService.deleteBookByID(id));
 			return;
 		} catch (error: any) {
-			next(ApiError.Internal(error.toString()));
+			next(ApiError.BadRequest(error.toString()));
 			return;
 		}
 	};

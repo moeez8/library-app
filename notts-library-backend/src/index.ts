@@ -1,4 +1,5 @@
-import app from "./app";
+import makeApp from "./app";
+import newBookService from "./service/book-service";
 
 // Database
 const db = require("./config/database");
@@ -14,5 +15,7 @@ db.sync({ force: false })
 	.catch((err: any) => console.log("Error:" + err));
 
 const PORT = process.env.PORT || 5000;
+
+const app = makeApp(newBookService());
 
 app.listen(PORT, () => console.log(`Server Started On PORT: ${PORT}`));

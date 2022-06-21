@@ -16,6 +16,8 @@ const copyApi = () => {
 			return;
 		}
 
+		//Find Book Model
+
 		try {
 			res.json(await CopyService().AddNewCopy(book_id, owner));
 		} catch (error: any) {
