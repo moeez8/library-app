@@ -1,9 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const NewWithdrawsApi = require("../api/withdraws-api");
+import express from "express";
+import newWithdrawsApi from "../api/withdraws-api";
 
-router.get("/", NewWithdrawsApi().GetAllWithdraws);
-router.post("/add", NewWithdrawsApi().CreateNewWithdraw);
-router.get("/:id", NewWithdrawsApi().GetWithdrawById);
+const withdrawsRouter = () => {
+	const router = express.Router();
+	const withdrawsApi = newWithdrawsApi();
 
-export = router;
+	router.get("/", withdrawsApi.GetAllWithdraws);
+	router.post("/add", withdrawsApi.CreateNewWithdraw);
+	router.get("/:id", withdrawsApi.GetWithdrawById);
+
+	return router;
+};
+
+export default withdrawsRouter;

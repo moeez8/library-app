@@ -1,8 +1,14 @@
-const express = require("express");
-const router = express.Router();
-const tagApi = require("../api/tag-api");
+import express from "express";
+import newTagApi from "../api/tag-api";
 
-router.get("/", tagApi().getAllTags);
-router.post("/", tagApi().createNewTag);
+const tagRouter = () => {
+	const router = express.Router();
+	const tagApi = newTagApi();
 
-export = router;
+	router.get("/", tagApi.getAllTags);
+	router.post("/", tagApi.createNewTag);
+
+	return router;
+};
+
+export default tagRouter;

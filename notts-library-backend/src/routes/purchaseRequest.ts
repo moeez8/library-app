@@ -1,12 +1,18 @@
-const express = require("express");
-const router = express.Router();
-const purchaseRequestAPI = require("../api/purchaseRequest-api");
+import express from "express";
+import newPurchaseRequestAPI from "../api/purchaseRequest-api";
 
-router.post("/", purchaseRequestAPI().addRequest);
-router.get("/", purchaseRequestAPI().searchForRequest);
-router.get("/:id", purchaseRequestAPI().getRequestByID);
-router.put("/:id/close", purchaseRequestAPI().updateRequestByID);
-router.put("/:id/fulfill", purchaseRequestAPI().fulfillRequestByID);
-router.delete("/:id", purchaseRequestAPI().DeleteRequestByID);
+const purchaseRequestRouter = () => {
+	const router = express.Router();
+	const purchaseRequestApi = newPurchaseRequestAPI();
 
-export = router;
+	router.post("/", purchaseRequestApi.addRequest);
+	router.get("/", purchaseRequestApi.searchForRequest);
+	router.get("/:id", purchaseRequestApi.getRequestByID);
+	router.put("/:id/close", purchaseRequestApi.updateRequestByID);
+	router.put("/:id/fulfill", purchaseRequestApi.fulfillRequestByID);
+	router.delete("/:id", purchaseRequestApi.DeleteRequestByID);
+
+	return router;
+};
+
+export default purchaseRequestRouter;

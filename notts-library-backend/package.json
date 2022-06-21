@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "ts-node --respawn ./src/index.ts",
 		"dev": "nodemon ./src/index.ts",
-		"test": "jest",
+		"test": "jest --verbose --detectOpenHandles",
 		"test:coverage": "jest --coverage"
 	},
 	"keywords": [],

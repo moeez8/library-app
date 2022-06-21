@@ -3,6 +3,15 @@ const cors = require("cors");
 
 import ApiErrorHandler from "./middleware/api-error-handler";
 
+import newBookRouter from "./routes/book";
+import newCopyRouter from "./routes/copy";
+import newBooksTagRouter from "./routes/books_tag";
+import newWithdrawsRouter from "./routes/widthdraw";
+import newTagRouter from "./routes/tag";
+import newPurchaseRequestRouter from "./routes/purchaseRequest";
+
+import newBookService from "./service/book-service";
+
 //Create Express App
 const app = express();
 
@@ -17,12 +26,12 @@ app.use(
 );
 
 // Express Routes
-app.use("/book", require("./routes/book"));
-app.use("/copy", require("./routes/copy"));
-app.use("/withdraw", require("./routes/widthdraw"));
-app.use("/tag", require("./routes/tag"));
-app.use("/books_tag", require("./routes/books_tag"));
-app.use("/request", require("./routes/purchaseRequest"));
+app.use("/book", newBookRouter(newBookService()));
+app.use("/copy", newCopyRouter());
+app.use("/withdraw", newWithdrawsRouter());
+app.use("/tag", newTagRouter());
+app.use("/books_tag", newBooksTagRouter());
+app.use("/request", newPurchaseRequestRouter());
 
 //Error Handle Middleware
 app.use(ApiErrorHandler);

@@ -23,7 +23,12 @@ describe("GET /book", () => {
 describe("POST /book", () => {
 	describe("given required data for a new book", () => {
 		test("should respond with a 200 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post("/book").send({
+				title: "",
+				author: "",
+				description: "",
+				iban: "",
+			});
 
 			expect(res.statusCode).toBe(200);
 		});
@@ -51,20 +56,20 @@ describe("POST /book", () => {
 describe("GET /book:id", () => {
 	describe("given valid id", () => {
 		test("should respond with a 200 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 
 			expect(res.statusCode).toBe(200);
 		});
 
 		test("should specify json in the content type header", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
 	});
 
 	describe("given invalid id", () => {
 		test("should respond with a 400 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 
 			expect(res.statusCode).toBe(400);
 		});
@@ -74,20 +79,20 @@ describe("GET /book:id", () => {
 describe("PUT /book:id", () => {
 	describe("given valid id", () => {
 		test("should respond with a 200 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 
 			expect(res.statusCode).toBe(200);
 		});
 
 		test("should specify json in the content type header", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
 	});
 
 	describe("given invalid id", () => {
 		test("should respond with a 400 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 
 			expect(res.statusCode).toBe(400);
 		});
@@ -97,20 +102,20 @@ describe("PUT /book:id", () => {
 describe("DELETE /book:id", () => {
 	describe("given valid id", () => {
 		test("should respond with a 200 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 
 			expect(res.statusCode).toBe(200);
 		});
 
 		test("should specify json in the content type header", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
 	});
 
 	describe("given invalid id", () => {
 		test("should respond with a 400 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post(`/book/${2}`).send();
 
 			expect(res.statusCode).toBe(400);
 		});
