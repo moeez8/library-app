@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import IBook from "../../interfaces/IBook";
+import Modal from "./Modal";
 import FormBookTag from "./FormBookTag";
 
 const AddBookForm = () => {
@@ -11,6 +13,27 @@ const AddBookForm = () => {
 	const [tags, setTags] = useState<{ tag_name: string }[]>([]);
 
 	const [option, setOption] = useState<String>();
+
+	const [modal, setModal] = useState(false)
+
+	const toggleModal = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setModal(!modal);
+	};
+
+	const hideModal = (event: React.FocusEvent<HTMLInputElement>) => {
+		if (modal) {
+			setModal(!modal);
+		}
+	};
+
+	const populateForm = (book: IBook) => {
+		setTitle(book.title || "")
+		setAuthor(book.author || "")
+		setDescription(book.description || "")
+		setIban(iban)
+
+	}
+
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setTitle(event.target.value);
@@ -106,10 +129,10 @@ const AddBookForm = () => {
 		<div className="card">
 			<h1 className="text-xl font-bold m-1">Add Book</h1>
 			<form onSubmit={handleOnSubmit}>
+				<input className="form-input" name="isbn" placeholder="Please enter 10 or 13 digit ISBN" value={iban} onChange={handleIbanChange} onKeyDown={handleEnter} onBlur={toggleModal} onFocus={hideModal} required />
 				<input className="form-input" name="title" placeholder="Book Title" value={title} onChange={handleTitleChange} onKeyDown={handleEnter} required />
 				<input className="form-input" name="author" placeholder="Book Author" value={author} onChange={handleAuthorChange} onKeyDown={handleEnter} required />
 				<textarea className="form-input" name="content" placeholder="Book Description" onChange={handleDescChange} value={description} onKeyDown={handleEnter} required />
-				<input className="form-input" name="iban" placeholder="Book IBAN" value={iban} onChange={handleIbanChange} onKeyDown={handleEnter} required />
 				<div className="card">
 					<h1 className="text-lg font-bold">Tags</h1>
 
@@ -146,6 +169,10 @@ const AddBookForm = () => {
 					Submit
 				</button>
 			</form>
+
+
+			{modal ? <Modal className="z-10 float-right" toggle={toggleModal} bookIBAN={iban} addToForm={populateForm} /> : null}
+
 		</div>
 	);
 };

@@ -4,17 +4,17 @@ import request from "supertest";
 describe("GET /book", () => {
 	describe("on request", () => {
 		test("should respond with a 200 status code", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).get("/book").send();
 			expect(res.statusCode).toBe(200);
 		});
 
 		test("should specify json in the content type header", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).get("/book").send();
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
 
 		test("response should contain array of books", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).get("/book").send();
 			expect(res.body.books).toBeDefined();
 		});
 	});
