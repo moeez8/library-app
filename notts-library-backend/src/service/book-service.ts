@@ -6,8 +6,10 @@ const Op = Sequelize.Op;
 import IBook from "../interfaces/IBook";
 import ITag from "../interfaces/ITag";
 
-const NewBookService = () => {
-	const SearchBooks = async (term: any): Promise<any> => {
+import IBookService from "./interfaces/IBook-Service";
+
+const newBookService = (): IBookService => {
+	const searchBooks = async (term: any): Promise<any> => {
 		return await models.book.findAll({
 			where: {
 				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
@@ -15,7 +17,7 @@ const NewBookService = () => {
 		});
 	};
 
-	const GetAllBooks = async (): Promise<any> => {
+	const getAllBooks = async (): Promise<any> => {
 		let result = await models.book.findAll({
 			include: [
 				{ model: models.request, as: "requests" },
@@ -30,7 +32,7 @@ const NewBookService = () => {
 		return result;
 	};
 
-	const GetBookByID = async (id: any): Promise<any> => {
+	const getBookByID = async (id: any): Promise<any> => {
 		const result = await models.book.findByPk(id, { paranoid: false });
 
 		if (result == null) {
@@ -99,7 +101,7 @@ const NewBookService = () => {
 		return { createdTags, associations };
 	};
 
-	const updateBookByID = async (id: any, title: any, iban: any, author: any, type: any, category: any, cover_photo: any, description: any, tags: any) => {
+	const updateBookByID = async (id: number, title: string, iban: string, author: string, type: string, category: string, cover_photo: string, description: string, tags: any) => {
 		const result = models.book.findByPk(id);
 
 		if (result != null) {
@@ -170,9 +172,9 @@ const NewBookService = () => {
 	};
 
 	return {
-		GetAllBooks,
-		SearchBooks,
-		GetBookByID,
+		getAllBooks,
+		searchBooks,
+		getBookByID,
 		createNewBook,
 		updateBookByID,
 		getCopiesByBookID,
@@ -181,4 +183,4 @@ const NewBookService = () => {
 	};
 };
 
-export default NewBookService;
+export default newBookService;

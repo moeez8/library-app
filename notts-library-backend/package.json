@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "ts-node --respawn ./src/index.ts",
 		"dev": "nodemon ./src/index.ts",
-		"test": "jest",
+		"test": "jest --verbose --detectOpenHandles",
 		"test:coverage": "jest --coverage"
 	},
 	"keywords": [],
@@ -23,6 +23,7 @@
 		"@types/express": "^4.17.13",
 		"@types/jest": "^28.1.2",
 		"@types/node": "^17.0.42",
+		"@types/sequelize": "^4.28.13",
 		"@types/supertest": "^2.0.12",
 		"jest": "^28.1.1",
 		"nodemon": "^2.0.16",

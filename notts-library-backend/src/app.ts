@@ -3,28 +3,41 @@ const cors = require("cors");
 
 import ApiErrorHandler from "./middleware/api-error-handler";
 
-//Create Express App
-const app = express();
+import newBookRouter from "./routes/book";
+import newCopyRouter from "./routes/copy";
+import newBooksTagRouter from "./routes/books_tag";
+import newWithdrawsRouter from "./routes/widthdraw";
+import newTagRouter from "./routes/tag";
+import newPurchaseRequestRouter from "./routes/purchaseRequest";
 
-//Using JSON body parser middleware to recive body data
-app.use(express.json());
+import IBookService from "./service/interfaces/IBook-Service";
 
-//CORS Middleware
-app.use(
-	cors({
-		origin: "*",
-	})
-);
+const makeApp = (bookService: IBookService) => {
+	//Create Express App
+	const app = express();
 
-// Express Routes
-app.use("/book", require("./routes/book"));
-app.use("/copy", require("./routes/copy"));
-app.use("/withdraw", require("./routes/widthdraw"));
-app.use("/tag", require("./routes/tag"));
-app.use("/books_tag", require("./routes/books_tag"));
-app.use("/request", require("./routes/purchaseRequest"));
+	//Using JSON body parser middleware to recive body data
+	app.use(express.json());
 
-//Error Handle Middleware
-app.use(ApiErrorHandler);
+	//CORS Middleware
+	app.use(
+		cors({
+			origin: "*",
+		})
+	);
 
-export default app;
+	// Express Routes
+	app.use("/book", newBookRouter(bookService));
+	app.use("/copy", newCopyRouter());
+	app.use("/withdraw", newWithdrawsRouter());
+	app.use("/tag", newTagRouter());
+	app.use("/books_tag", newBooksTagRouter());
+	app.use("/request", newPurchaseRequestRouter());
+
+	//Error Handle Middleware
+	app.use(ApiErrorHandler);
+
+	return app;
+};
+
+export default makeApp;

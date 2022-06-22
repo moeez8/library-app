@@ -6,7 +6,7 @@ const BookAdminControls = ({ book }: { book: IBook }) => {
 
 	const deleteBook = async () => {
 		if (window.confirm("Are you sure?")) {
-			const res = await fetch(process.env.REACT_APP_BASE_URL + "/book/${book.id}", {
+			const res = await fetch(process.env.REACT_APP_BASE_URL + `/book/${book.id}`, {
 				method: "DELETE",
 			});
 			if (res.status == 200) {

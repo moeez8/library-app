@@ -1,16 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-
 import IBook from "../interfaces/IBook";
-import NewBookService from "../service/book-service";
 import ApiError from "../middleware/api-error";
+import IBookService from "../service/interfaces/IBook-Service";
 
-const bookApi = () => {
+const newBookApi = (bookService: IBookService) => {
 	const searchForBook = async (req: Request, res: Response, next: NextFunction) => {
 		const { term } = req.query;
 
 		if (term != null) {
 			try {
-				res.json(await NewBookService().SearchBooks(term));
+				res.json(await bookService.searchBooks(term as string));
 				return;
 			} catch (error: any) {
 				next(ApiError.Internal(error.toString()));
@@ -18,7 +17,7 @@ const bookApi = () => {
 			}
 		} else {
 			try {
-				res.json(await NewBookService().GetAllBooks());
+				res.json(await bookService.getAllBooks());
 				return;
 			} catch (error: any) {
 				next(ApiError.Internal(error.toString()));
@@ -36,10 +35,10 @@ const bookApi = () => {
 		}
 
 		try {
-			res.json(await NewBookService().GetBookByID(id));
+			res.json(await bookService.getBookByID(id));
 			return;
 		} catch (error: any) {
-			next(ApiError.Internal(error.toString()));
+			next(ApiError.BadRequest(error.toString()));
 			return;
 		}
 	};
@@ -62,7 +61,7 @@ const bookApi = () => {
 		}
 
 		try {
-			res.json(await NewBookService().createNewBook(book));
+			res.json(await bookService.createNewBook(book));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -81,10 +80,10 @@ const bookApi = () => {
 		}
 
 		try {
-			res.json(await NewBookService().updateBookByID(id, title, iban, author, type, category, cover_photo, description, tags));
+			res.json(await bookService.updateBookByID(id, title, iban, author, type, category, cover_photo, description, tags));
 			return;
 		} catch (error: any) {
-			next(ApiError.Internal(error.toString()));
+			next(ApiError.BadRequest(error.toString()));
 			return;
 		}
 	};
@@ -98,7 +97,7 @@ const bookApi = () => {
 		}
 
 		try {
-			res.json(await NewBookService().getCopiesByBookID(id));
+			res.json(await bookService.getCopiesByBookID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -115,7 +114,7 @@ const bookApi = () => {
 		}
 
 		try {
-			res.json(await NewBookService().getTagsByBookID(id));
+			res.json(await bookService.getTagsByBookID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -132,10 +131,10 @@ const bookApi = () => {
 		}
 
 		try {
-			res.json(await NewBookService().deleteBookByID(id));
+			res.json(await bookService.deleteBookByID(id));
 			return;
 		} catch (error: any) {
-			next(ApiError.Internal(error.toString()));
+			next(ApiError.BadRequest(error.toString()));
 			return;
 		}
 	};
@@ -151,4 +150,4 @@ const bookApi = () => {
 	};
 };
 
-export = bookApi;
+export = newBookApi;

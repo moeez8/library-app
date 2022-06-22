@@ -14,7 +14,7 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	}, []);
 
 	const getBook = async () => {
-		const res = await fetch(process.env.REACT_APP_BASE_URL + "/copy/${copy.id}/status");
+		const res = await fetch(process.env.REACT_APP_BASE_URL + `/copy/${copy.id}/status`);
 		const data = await res.json();
 		setstatus(data.status);
 		setUser(data.user_name);
@@ -28,7 +28,7 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 			return;
 		}
 
-		const result = await fetch(process.env.REACT_APP_BASE_URL + "/copy/${copy.id}/check-out", {
+		const result = await fetch(process.env.REACT_APP_BASE_URL + `/copy/${copy.id}/check-out`, {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",
@@ -47,14 +47,16 @@ const BookCopy = ({ copy }: { copy: ICopy }) => {
 	};
 
 	const checkInBook = async () => {
-		const res = await fetch(process.env.REACT_APP_BASE_URL + "/copy/${copy.id}/check-in", { method: "PUT" });
+		const res = await fetch(process.env.REACT_APP_BASE_URL + `/copy/${copy.id}/check-in`, { method: "PUT" });
 
-		if (res.status == 200) {
-			alert("Book Checked In!");
-		} else {
-			alert("Book Could Not Be Checked In!");
+		if (window.confirm("Are you sure you want to check in this book?")) {
+			if (res.status == 200) {
+				alert("Book Checked In!");
+			} else {
+				alert("Book Could Not Be Checked In!");
+			}
+			getBook();
 		}
-		getBook();
 	};
 
 	return (

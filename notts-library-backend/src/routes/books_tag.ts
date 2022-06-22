@@ -1,8 +1,14 @@
-const express = require("express");
-const router = express.Router();
-const NewBooksTagApi = require("../api/books-tag-api");
+import express from "express";
+import NewBooksTagApi from "../api/books-tag-api";
 
-router.get("/", NewBooksTagApi().GetAllBooksTags);
-router.post("/", NewBooksTagApi().CreateNewBooksTag);
+const booksTagRouter = () => {
+	const router = express.Router();
+	const booksTagApi = NewBooksTagApi();
 
-export = router;
+	router.get("/", booksTagApi.GetAllBooksTags);
+	router.post("/", booksTagApi.CreateNewBooksTag);
+
+	return router;
+};
+
+export default booksTagRouter;

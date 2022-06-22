@@ -14,7 +14,7 @@ const AddBookForm = () => {
 
 	const [option, setOption] = useState<String>();
 
-	const [modal, setModal] = useState(false)
+	const [modal, setModal] = useState(false);
 
 	const toggleModal = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setModal(!modal);
@@ -163,9 +163,7 @@ const AddBookForm = () => {
 				</button>
 			</form>
 
-
 			{modal ? <Modal className="z-10 float-right" toggle={toggleModal} bookIBAN={iban} addToForm={populateForm} /> : null}
-
 		</div>
 	);
 };
