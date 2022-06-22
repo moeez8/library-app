@@ -20,12 +20,6 @@ const AddBookForm = () => {
 		setModal(!modal);
 	};
 
-	const hideModal = (event: React.FocusEvent<HTMLInputElement>) => {
-		if (modal) {
-			setModal(!modal);
-		}
-	};
-
 	const populateForm = (book: IBook) => {
 		setTitle(book.title || "")
 		setAuthor(book.author || "")
@@ -33,7 +27,6 @@ const AddBookForm = () => {
 		setIban(iban)
 
 	}
-
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setTitle(event.target.value);
@@ -129,7 +122,7 @@ const AddBookForm = () => {
 		<div className="card">
 			<h1 className="text-xl font-bold m-1">Add Book</h1>
 			<form onSubmit={handleOnSubmit}>
-				<input className="form-input" name="isbn" placeholder="Please enter 10 or 13 digit ISBN" value={iban} onChange={handleIbanChange} onKeyDown={handleEnter} onBlur={toggleModal} onFocus={hideModal} required />
+				<input className="form-input" name="isbn" placeholder="Please enter 10 or 13 digit ISBN" value={iban} onChange={handleIbanChange} onKeyDown={handleEnter} onBlur={toggleModal} required />
 				<input className="form-input" name="title" placeholder="Book Title" value={title} onChange={handleTitleChange} onKeyDown={handleEnter} required />
 				<input className="form-input" name="author" placeholder="Book Author" value={author} onChange={handleAuthorChange} onKeyDown={handleEnter} required />
 				<textarea className="form-input" name="content" placeholder="Book Description" onChange={handleDescChange} value={description} onKeyDown={handleEnter} required />

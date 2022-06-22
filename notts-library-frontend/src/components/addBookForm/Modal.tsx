@@ -16,21 +16,27 @@ const Modal = (props: any) => {
     const [book, setbook] = useState<IBook>();
 
     useEffect(() => {
-        getBook();
+        getBookData();
     }, []);
 
-    const getBook = async () => {
-        const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${props.bookIBAN}&jscmd=details&format=json`)
-        const data = await res.json();
-        if (res.status == (200) && data != null) {
+    const getBookData = async () => {
+        const bookData = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${props.bookIBAN}&jscmd=data&format=json`)
+        const data = await bookData.json();
 
+        if (bookData.status == 200 && Object.keys(data).length !== 0) {
             setbook({
-                title: data[`ISBN:${props.bookIBAN}`].details.title,
-                description: data[`ISBN:${props.bookIBAN}`].details.description,
-                author: data[`ISBN:${props.bookIBAN}`].details.authors[0].name,
-                imgURL: data[`ISBN:${props.bookIBAN}`].thumbnail_url
+                title: data[`ISBN:${props.bookIBAN}`].title,
+                //description: data[`ISBN:${props.bookIBAN}`].details.description,
+                author: data[`ISBN:${props.bookIBAN}`].authors[0].name,
+                imgURL: data[`ISBN:${props.bookIBAN}`].cover.medium
             });
         }
+
+        const openLibraryID = data[`ISBN:${props.bookIBAN}`].identifiers.openlibrary
+        const OLWork = await fetch(`https://openlibrary.org/works/${openLibraryID}.json`, {})
+        const workData = await OLWork.json();
+        console.log(workData)
+
     };
 
     if (book) {
@@ -70,21 +76,7 @@ const Modal = (props: any) => {
     }
 
     else {
-
-        return (
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-                <div className="flex justify-around">
-                    <div className="card mx-auto ">
-                        <span className="float-right" onClick={handleClose}>&times;    </span>
-                        <h1 className="text-2xl font-bold" > Book could not be found, please enter manually</h1 >
-                        <button className="button-green" name="ok" type="button" onClick={handleClose}>
-                            Ok
-                        </button>
-                    </div>
-                </div>
-            </div>
-        )
-
+        return null
     }
 }
 
