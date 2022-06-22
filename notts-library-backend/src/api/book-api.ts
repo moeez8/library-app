@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import IBook from "../interfaces/IBook";
 import ApiError from "../middleware/api-error";
-import IBookService from "../service/interfaces/IBook-Service";
 
-const newBookApi = (bookService: IBookService) => {
+import newBookService from "../service/book-service";
+
+const newBookApi = () => {
+	const bookService = newBookService();
+
 	const searchForBook = async (req: Request, res: Response, next: NextFunction) => {
 		const { term } = req.query;
 

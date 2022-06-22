@@ -10,7 +10,7 @@ const purchaseRequestRouter = () => {
 	router.get("/:id", purchaseRequestApi.getRequestByID);
 	router.put("/:id/close", purchaseRequestApi.updateRequestByID);
 	router.put("/:id/fulfill", purchaseRequestApi.fulfillRequestByID);
-	router.delete("/:id", purchaseRequestApi.DeleteRequestByID);
+	router.delete("/:id", purchaseRequestApi.deleteRequestByID);
 
 	return router;
 };

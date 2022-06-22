@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 
-import NewTagService from "../service/tag-service";
+import newTagService from "../service/tag-service";
 import ApiError from "../middleware/api-error";
 
-const NewTagApi = () => {
+const newTagApi = () => {
+	const tagService = newTagService();
+
 	const getAllTags = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			res.json(await NewTagService().GetAllTags());
+			res.json(await tagService.getAllTags());
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -21,7 +23,7 @@ const NewTagApi = () => {
 		}
 
 		try {
-			res.json(await NewTagService().CreateNewTag(tag));
+			res.json(await tagService.createNewTag(tag));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -31,4 +33,4 @@ const NewTagApi = () => {
 	return { getAllTags, createNewTag };
 };
 
-export = NewTagApi;
+export = newTagApi;

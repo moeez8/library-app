@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 
 import ApiError from "../middleware/api-error";
-import NewBooksTagService from "../service/books-tag-service";
+import newBooksTagService from "../service/books-tag-service";
 
-const NewBooksTagApi = () => {
-	const GetAllBooksTags = async (req: Request, res: Response, next: NextFunction) => {
+const newBooksTagApi = () => {
+	const booksTagService = newBooksTagService();
+
+	const getAllBooksTags = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			res.json(await NewBooksTagService().GetAllBookTags());
+			res.json(await booksTagService.getAllBookTags());
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -14,7 +16,7 @@ const NewBooksTagApi = () => {
 		}
 	};
 
-	const CreateNewBooksTag = async (req: Request, res: Response, next: NextFunction) => {
+	const createNewBooksTag = async (req: Request, res: Response, next: NextFunction) => {
 		const { book_id, tag_id } = req.body;
 
 		if (book_id == null) {
@@ -25,7 +27,7 @@ const NewBooksTagApi = () => {
 		}
 
 		try {
-			res.json(await NewBooksTagService().CreateNewBooksTag(book_id, tag_id));
+			res.json(await booksTagService.createNewBooksTag(book_id, tag_id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -34,9 +36,8 @@ const NewBooksTagApi = () => {
 	};
 
 	return {
-		GetAllBooksTags,
-		CreateNewBooksTag,
+		getAllBooksTags,
+		createNewBooksTag,
 	};
 };
-
-export = NewBooksTagApi;
+export = newBooksTagApi;

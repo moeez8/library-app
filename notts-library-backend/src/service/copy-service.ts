@@ -1,19 +1,20 @@
-const { models } = require("../config/database");
+const { models } = require("../database/database");
+
 import { Op } from "sequelize";
 
-const CopyService = () => {
-	const AddNewCopy = async (id: any, owner: string): Promise<any> => {
+const copyService = () => {
+	const addNewCopy = async (id: any, owner: string): Promise<any> => {
 		return await models.copy.create({
 			book_id: id,
 			owner: owner,
 		});
 	};
 
-	const GetAllCopies = async (): Promise<any> => {
+	const getAllCopies = async (): Promise<any> => {
 		return await models.copy.findAll();
 	};
 
-	const GetCopyByID = async (id: any): Promise<any> => {
+	const getCopyByID = async (id: any): Promise<any> => {
 		const result = await models.copy.findByPk(id);
 
 		if (result == null) {
@@ -23,7 +24,7 @@ const CopyService = () => {
 		return result;
 	};
 
-	const GetWithdrawsByCopyID = async (id: any): Promise<any> => {
+	const getWithdrawsByCopyID = async (id: any): Promise<any> => {
 		const result = await models.withdraw.findAll({
 			order: [["date_out", "DESC"]],
 			where: {
@@ -38,7 +39,7 @@ const CopyService = () => {
 		return result;
 	};
 
-	const CheckinCopyByID = async (id: any): Promise<any> => {
+	const checkinCopyByID = async (id: any): Promise<any> => {
 		const copy = await models.copy.findByPk(id, {
 			include: [
 				{
@@ -87,7 +88,7 @@ const CopyService = () => {
 		}
 	};
 
-	const CheckoutCopyByID = async (id: any, name: any): Promise<any> => {
+	const checkoutCopyByID = async (id: any, name: any): Promise<any> => {
 		const copy = await models.copy.findByPk(id, {
 			include: [{ model: models.withdraw, as: "withdraws" }],
 		});
@@ -129,7 +130,7 @@ const CopyService = () => {
 		}
 	};
 
-	const CheckCopyStatus = async (id: any): Promise<any> => {
+	const checkCopyStatus = async (id: any): Promise<any> => {
 		const copy = await models.copy.findByPk(id, {
 			include: [{ model: models.withdraw, as: "withdraws" }],
 		});
@@ -148,7 +149,7 @@ const CopyService = () => {
 				if (withdraws[0].date_in === null) {
 					return {
 						status: false,
-						user_name: withdraws[0].user_name
+						user_name: withdraws[0].user_name,
 					};
 				} else {
 					return { status: true };
@@ -159,7 +160,7 @@ const CopyService = () => {
 		}
 	};
 
-	return { AddNewCopy, GetAllCopies, GetCopyByID, GetWithdrawsByCopyID, CheckinCopyByID, CheckoutCopyByID, CheckCopyStatus };
+	return { addNewCopy, getAllCopies, getCopyByID, getWithdrawsByCopyID, checkinCopyByID, checkoutCopyByID, checkCopyStatus };
 };
 
-export default CopyService;
+export default copyService;

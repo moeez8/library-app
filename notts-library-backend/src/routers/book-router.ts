@@ -1,10 +1,9 @@
 import express from "express";
 import newBookApi from "../api/book-api";
-import IBookService from "../service/interfaces/IBook-Service";
 
-const bookRouter = (bookService: IBookService) => {
+const bookRouter = () => {
 	const router = express.Router();
-	const bookApi = newBookApi(bookService);
+	const bookApi = newBookApi();
 
 	router.get("/", bookApi.searchForBook);
 	router.post("/", bookApi.createNewBook);

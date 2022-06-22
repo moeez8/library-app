@@ -1,9 +1,10 @@
-const { models } = require("../config/database");
 import { NextFunction, Request, Response } from "express";
 import ApiError from "../middleware/api-error";
-import CopyService from "../service/copy-service";
+import newCopyService from "../service/copy-service";
 
 const copyApi = () => {
+	const copyService = newCopyService();
+
 	const addNewCopy = async (req: Request, res: Response, next: NextFunction) => {
 		const { book_id, owner } = req.body;
 
@@ -19,7 +20,7 @@ const copyApi = () => {
 		//Find Book Model
 
 		try {
-			res.json(await CopyService().AddNewCopy(book_id, owner));
+			res.json(await copyService.addNewCopy(book_id, owner));
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
 			return;
@@ -28,7 +29,7 @@ const copyApi = () => {
 
 	const getAllCopies = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			res.json(await CopyService().GetAllCopies());
+			res.json(await copyService.getAllCopies());
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
 			return;
@@ -44,7 +45,7 @@ const copyApi = () => {
 		}
 
 		try {
-			res.json(await CopyService().GetCopyByID(id));
+			res.json(await copyService.getCopyByID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -61,7 +62,7 @@ const copyApi = () => {
 		}
 
 		try {
-			res.json(await CopyService().GetWithdrawsByCopyID(id));
+			res.json(await copyService.getWithdrawsByCopyID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -78,7 +79,7 @@ const copyApi = () => {
 		}
 
 		try {
-			res.json(await CopyService().CheckinCopyByID(id));
+			res.json(await copyService.checkinCopyByID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -105,7 +106,7 @@ const copyApi = () => {
 		}
 
 		try {
-			res.json(await CopyService().CheckoutCopyByID(id, name));
+			res.json(await copyService.checkoutCopyByID(id, name));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -122,7 +123,7 @@ const copyApi = () => {
 		}
 
 		try {
-			res.json(await CopyService().CheckCopyStatus(id));
+			res.json(await copyService.checkCopyStatus(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
