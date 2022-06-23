@@ -8,9 +8,9 @@ export default interface IBook {
 	description?: string;
 	ISBN?: string;
 	copies?: ICopy[];
-	type?: string;
-	category?: string;
-	cover_photo?: any;
+	// type?: string;
+	// category?: string;
+	// cover_photo?: any;
 	tags?: ITag[];
 	user: string
 }

@@ -10,7 +10,7 @@ const newBookService = () => {
 	const searchBooks = async (term: any): Promise<any> => {
 		return await models.book.findAll({
 			where: {
-				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { ISBN: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
+				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { ISBN: { [Op.like]: "%" + term + "%" } }],
 			},
 		});
 	};
@@ -46,17 +46,16 @@ const newBookService = () => {
 		let copy: any;
 
 		await sequelize.transaction(async () => {
-			bk = await models.book.create({
+			const [bk, created] = await models.book.findOrCreate({
+				where: {
+					ISBN: book.ISBN,
+				},
 				title: book.title,
 				ISBN: book.ISBN,
 				author: book.author,
-				type: book.type,
-				category: book.category,
-				cover_photo: book.cover_photo,
 				description: book.description,
 			});
 
-			let tags;
 			if (book.tags) {
 				tags = await createTags(bk.id, book.tags);
 			}

@@ -13,9 +13,6 @@ const newPurchaseRequestService = () => {
 			title: book.title,
 			ISBN: book.ISBN,
 			author: book.author,
-			type: book.type,
-			category: book.category,
-			cover_photo: book.cover_photo,
 			description: book.description,
 		});
 

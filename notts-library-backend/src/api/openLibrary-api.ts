@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import IBook from "../interfaces/IBook";
 import ApiError from "../middleware/api-error";
 import fetch from "node-fetch"
 
