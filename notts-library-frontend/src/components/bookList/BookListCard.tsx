@@ -12,7 +12,7 @@ export const BookListCard = ({ book }: { book: IBook }) => {
 			<div className="m-1 break-words">
 				<h1 className="text-2xl font-bold">{book.title || "Undefined"}</h1>
 				<h1 className="text-lg ">{book.author ? `${book.author}` : "Author: Undefined"}</h1> <br />
-				<h1 className="text-lg  ">{book.description ? `${truncate(book.description)}` : "Description: Undefined"}</h1> <br />
+				<h1 className="text-lg  ">{book.description ? `${truncate(book.description)}...` : "Description: Undefined"}</h1> <br />
 				<h1 className="text-lg ">{book.ISBN ? `ISBN: ${book.ISBN}` : "ISBN: Undefined"}</h1>
 			</div>
 			<div className="flex">
