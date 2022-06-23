@@ -45,7 +45,7 @@ db.authenticate()
 	.catch((err: any) => console.log("Error:" + err));
 
 // Create DB Tables
-db.sync({ force: true })
+db.sync({ force: false })
 	.then()
 	.catch((err: any) => console.log("Error:" + err));
 
