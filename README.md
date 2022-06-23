@@ -19,7 +19,8 @@ The Bookworm App is comprised of 3 main components...
 
 ### Backend Node Express HTTP Server
 
-- To run the backend server first navigate to the **"notts-library-backend"** directory, and then run **"npm run start"** in your terminal, if its your first time running the app, then you will need to run **"npm install** first, to install the node modules.
+- To run the backend server first navigate to the **"notts-library-backend"** directory, and then run **"npm run start"** in your terminal, if its your first time running the app, then you will need to run **"npm install"** first, to install the node modules.
+- The API can then be accessed via "**localhost:*5000*" in your browser or a HTTP / API client.
 
 ### React Frontend UI
 
