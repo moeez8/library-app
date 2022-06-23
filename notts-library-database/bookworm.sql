@@ -6,7 +6,7 @@ CREATE TABLE books
 (
 	id serial NOT NULL PRIMARY KEY,
 	title varchar,
-	iban varchar,
+	ISBN varchar,
 	author varchar,
 	type varchar,
 	category varchar,

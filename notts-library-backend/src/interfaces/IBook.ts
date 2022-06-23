@@ -6,10 +6,11 @@ export default interface IBook {
 	title?: string;
 	author?: string;
 	description?: string;
-	iban?: string;
+	ISBN?: string;
 	copies?: ICopy[];
 	type?: string;
 	category?: string;
 	cover_photo?: any;
 	tags?: ITag[];
+	owner: string
 }

@@ -10,7 +10,7 @@ const newBookService = () => {
 	const searchBooks = async (term: any): Promise<any> => {
 		return await models.book.findAll({
 			where: {
-				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { iban: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
+				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { ISBN: { [Op.like]: "%" + term + "%" } }, { category: { [Op.like]: "%" + term + "%" } }, { type: { [Op.like]: "%" + term + "%" } }],
 			},
 		});
 	};
@@ -48,7 +48,7 @@ const newBookService = () => {
 		await sequelize.transaction(async () => {
 			bk = await models.book.create({
 				title: book.title,
-				iban: book.iban,
+				ISBN: book.ISBN,
 				author: book.author,
 				type: book.type,
 				category: book.category,
@@ -61,17 +61,17 @@ const newBookService = () => {
 				tags = await createTags(bk.id, book.tags);
 			}
 
-			copy = await createCopy(bk.id);
+			copy = await createCopy(bk.id, book.owner);
 		});
 
 		return { bk, tags, copy };
 	};
 
 	// Pulled out from create new book function
-	const createCopy = async (id: any): Promise<any> => {
+	const createCopy = async (id: any, owner: String): Promise<any> => {
 		return await models.copy.create({
 			book_id: id,
-			owner: "BJSSTest",
+			owner: owner,
 		});
 	};
 
@@ -99,14 +99,14 @@ const newBookService = () => {
 		return { createdTags, associations };
 	};
 
-	const updateBookByID = async (id: number, title: string, iban: string, author: string, type: string, category: string, cover_photo: string, description: string, tags: any) => {
+	const updateBookByID = async (id: number, title: string, ISBN: string, author: string, type: string, category: string, cover_photo: string, description: string, tags: any) => {
 		const result = models.book.findByPk(id);
 
 		if (result != null) {
 			await sequelize.transaction(async () => {
 				await result.update({
 					title: title || result.title,
-					iban: iban || result.iban,
+					ISBN: ISBN || result.ISBN,
 					author: author || result.author,
 					type: type || result.type,
 					category: category || result.category,

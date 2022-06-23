@@ -10,7 +10,7 @@ export const RequestListCard = ({ request }: { request: IRequest }) => {
 				{request.book ? (
 					<>
 						<h1 className="text-2xl font-bold ">{request.book.title || "Undefined"}</h1>
-						<h1 className="text-lg">{request.book.iban ? `IBAN: ${request.book.iban}` : "IBAN: Undefined"}</h1>
+						<h1 className="text-lg">{request.book.ISBN ? `ISBN: ${request.book.ISBN}` : "ISBN: Undefined"}</h1>
 					</>
 				) : (
 					<div className="card bg-red-200 border-2 border-red-400 ">

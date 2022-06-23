@@ -9,12 +9,11 @@ const AddBookForm = () => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [description, setDescription] = useState("");
-	const [isbn, setIsbn] = useState("");
+	const [ISBN, setISBN] = useState("");
 	const [name, setName] = useState("");
 	const [nameHidden, setNameHidden] = useState("hidden");
 	const [namePlaceholder, setNamePlaceholder] = useState("");
 	const [tags, setTags] = useState<{ tag_name: string }[]>([]);
-
 	const [option, setOption] = useState<String>();
 
 	const [modal, setModal] = useState(false);
@@ -27,9 +26,8 @@ const AddBookForm = () => {
 		setTitle(book.title || "")
 		setAuthor(book.author || "")
 		setDescription(book.description || "")
-		setIsbn(isbn)
-
-	}
+		setISBN(ISBN)
+	};
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setTitle(event.target.value);
@@ -43,8 +41,8 @@ const AddBookForm = () => {
 		setDescription(event.target.value);
 	};
 
-	const handleIsbnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setIsbn(event.target.value);
+	const handleISBNChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setISBN(event.target.value);
 	};
 
 	const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,9 +64,9 @@ const AddBookForm = () => {
 		setTags(newTags);
 	};
 
+	//Reveal the name field if a radio button is checked with the correct placeholder
 	const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNameHidden("")
-
 
 		if (e.target.value == "addBook") {
 			setNamePlaceholder("Please enter name of book owner")
@@ -79,10 +77,13 @@ const AddBookForm = () => {
 		setOption(e.target.value);
 	};
 
+	//Pressing enter will move you onto next field instead of submitting
 	const handleEnter = (e: any) => {
 		if (e.key === "Enter" && e.target.form) {
 			const form: any = e.target.form;
 			const index = [...form].indexOf(e.target);
+
+			//Pressing shift enter on text area for descirption will allow you to write on a new line
 			if (e.target.type == "textarea" && e.shiftKey) {
 				return;
 			} else {
@@ -113,8 +114,9 @@ const AddBookForm = () => {
 					title: title,
 					description: description,
 					author: author,
-					iban: isbn,
+					ISBN: ISBN,
 					tags: tags,
+					owner: name
 				}),
 			});
 		} else {
@@ -127,7 +129,7 @@ const AddBookForm = () => {
 					title: title,
 					description: description,
 					author: author,
-					iban: isbn,
+					ISBN: ISBN,
 					tags: tags,
 				}),
 			});
@@ -138,7 +140,7 @@ const AddBookForm = () => {
 		<div className="card">
 			<h1 className="text-xl font-bold m-1">Add Book</h1>
 			<form onSubmit={handleOnSubmit}>
-				<input className="form-input" name="isbn" placeholder="Please enter 10 or 13 digit ISBN" value={isbn} onChange={handleIsbnChange} onKeyDown={handleEnter} onBlur={toggleModal} required />
+				<input className="form-input" name="ISBN" placeholder="Please enter 10 or 13 digit ISBN" value={ISBN} onChange={handleISBNChange} onKeyDown={handleEnter} onBlur={toggleModal} required />
 				<input className="form-input" name="title" placeholder="Book Title" value={title} onChange={handleTitleChange} onKeyDown={handleEnter} required />
 				<input className="form-input" name="author" placeholder="Book Author" value={author} onChange={handleAuthorChange} onKeyDown={handleEnter} required />
 				<textarea className="form-input" name="content" placeholder="Book Description" onChange={handleDescChange} value={description} onKeyDown={handleEnter} required />
@@ -182,7 +184,7 @@ const AddBookForm = () => {
 				</button>
 			</form>
 
-			{modal ? <Modal className="z-10 float-right" toggle={toggleModal} bookIBAN={isbn} addToForm={populateForm} /> : null}
+			{modal ? <Modal className="z-10 float-right" toggle={toggleModal} bookISBN={ISBN} addToForm={populateForm} /> : null}
 		</div>
 	);
 };

@@ -7,7 +7,7 @@ export = (sequelize: any) => {
 			title: {
 				type: Sequelize.STRING,
 			},
-			iban: {
+			ISBN: {
 				type: Sequelize.STRING,
 			},
 			author: {

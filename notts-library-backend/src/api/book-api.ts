@@ -53,7 +53,7 @@ const newBookApi = () => {
 		const errors = [];
 
 		if (book.title == null) errors.push("Please Provide Body Param title");
-		if (book.iban == null) errors.push("Please Provide Body Param iban");
+		if (book.ISBN == null) errors.push("Please Provide Body Param ISBN");
 		if (book.author == null) errors.push("Please Provide Body Param author");
 		// if (book.type == null) errors.push("Please Provide Body Param type");
 		// if (book.category == null) errors.push("Please Provide Body Param category");
@@ -74,7 +74,7 @@ const newBookApi = () => {
 	};
 
 	const updateBookById = async (req: Request, res: Response, next: NextFunction) => {
-		const { title, iban, author, type, category, cover_photo, description, tags } = req.body;
+		const { title, ISBN, author, type, category, cover_photo, description, tags } = req.body;
 
 		const id: number = parseInt(req.params.id);
 
@@ -84,7 +84,7 @@ const newBookApi = () => {
 		}
 
 		try {
-			res.json(await bookService.updateBookByID(id, title, iban, author, type, category, cover_photo, description, tags));
+			res.json(await bookService.updateBookByID(id, title, ISBN, author, type, category, cover_photo, description, tags));
 			return;
 		} catch (error: any) {
 			next(ApiError.BadRequest(error.toString()));

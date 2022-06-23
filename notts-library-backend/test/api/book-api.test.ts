@@ -38,7 +38,7 @@ describe("POST /book", () => {
 				title: "",
 				author: "",
 				description: "",
-				iban: "",
+				ISBN: "",
 			});
 
 			expect(mockBookService.createNewBook.mock.calls.length).toBe(1);

@@ -14,7 +14,7 @@ const purchaseRequestApi = () => {
 		const errors = [];
 
 		if (book.title == null) errors.push("Please Provide Body Param title");
-		if (book.iban == null) errors.push("Please Provide Body Param iban");
+		if (book.ISBN == null) errors.push("Please Provide Body Param ISBN");
 		if (book.author == null) errors.push("Please Provide Body Param author");
 		if (book.description == null) errors.push("Please Provide Body Param description");
 

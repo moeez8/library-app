@@ -11,7 +11,7 @@ const newPurchaseRequestService = () => {
 		// Create new book
 		const bk = await models.book.create({
 			title: book.title,
-			iban: book.iban,
+			ISBN: book.ISBN,
 			author: book.author,
 			type: book.type,
 			category: book.category,

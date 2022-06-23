@@ -26,13 +26,13 @@ const Modal = (props: any) => {
     const getBookData = async () => {
 
         //Getting book data from Open Library 'details' api 
-        const bookDetails = await fetch(process.env.REACT_APP_BASE_URL + `/ol/${props.bookIBAN}`)
+        const bookDetails = await fetch(process.env.REACT_APP_BASE_URL + `/ol/${props.bookISBN}`)
         const details = await bookDetails.json();
 
         if (bookDetails.status == 200 && Object.keys(details).length !== 0) {
 
             //If book data is retrieved then get the 'works' data from the Open Library 'works' api using the 'works id'
-            const OLWorkSubDirectory: String = details[`ISBN:${props.bookIBAN}`].details.works[0].key
+            const OLWorkSubDirectory: String = details[`ISBN:${props.bookISBN}`].details.works[0].key
             const OLWorkID = OLWorkSubDirectory.replaceAll('/', '').replaceAll('works', '');
 
             const OLWork = await fetch(process.env.REACT_APP_BASE_URL + `/ol/works/${OLWorkID}`, {
@@ -41,9 +41,9 @@ const Modal = (props: any) => {
             //console.log(workData.description)
 
             setBook({
-                title: details[`ISBN:${props.bookIBAN}`].details.title,
+                title: details[`ISBN:${props.bookISBN}`].details.title,
                 description: workData.description.value || workData.description,
-                author: details[`ISBN:${props.bookIBAN}`].details.authors[0].name,
+                author: details[`ISBN:${props.bookISBN}`].details.authors[0].name,
             });
         }
 
@@ -62,11 +62,11 @@ const Modal = (props: any) => {
                                 <h1 className="text-xl font-bold" > {book.title || "Undefined"}</h1 >
                                 <h1 className="text-lg">{book.author ? `Author: ${book.author}` : "Author: Undefined"}</h1><br />
                                 <h1 className="text-lg">{book.description ? `Description: ${book.description.split(" ").splice(0, 50).join(" ")}` : "Description: No description found"}</h1> <br />
-                                <h1 className="text-lg">{`ISBN: ${props.bookIBAN}`}</h1> <br />
+                                <h1 className="text-lg">{`ISBN: ${props.bookISBN}`}</h1> <br />
                             </div >
                             <div className="flex-none self-center">
                                 {/* No image will be displayed if API does not have image, could potentially have a placeholder */}
-                                <img src={`https://covers.openlibrary.org/b/isbn/${props.bookIBAN}-M.jpg`} />
+                                <img src={`https://covers.openlibrary.org/b/ISBN/${props.bookISBN}-M.jpg`} />
                             </div>
                         </div>
 

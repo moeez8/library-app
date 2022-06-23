@@ -6,15 +6,15 @@ import fetch from "node-fetch"
 const newOpenLibraryAPI = () => {
 
     const getBookDetails = async (req: Request, res: Response, next: NextFunction) => {
-        const isbn: string = req.params.isbn;
+        const ISBN: string = req.params.ISBN;
 
-        if (isbn == null) {
+        if (ISBN == null) {
             next(ApiError.BadRequest("Please Fill URL Param id"));
             return;
         }
 
         try {
-            const bookDetails = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=details&format=json`)
+            const bookDetails = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${ISBN}&jscmd=details&format=json`)
             const details = await bookDetails.json();
             res.json(details);
             return;
