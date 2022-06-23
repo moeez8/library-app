@@ -1,4 +1,3 @@
-import ICopy from "./ICopy";
 import ITag from "./ITag";
 
 export default interface IBook {
@@ -7,10 +6,6 @@ export default interface IBook {
 	author?: string;
 	description?: string;
 	ISBN?: string;
-	copies?: ICopy[];
-	// type?: string;
-	// category?: string;
-	// cover_photo?: any;
 	tags?: ITag[];
 	user: string
 }

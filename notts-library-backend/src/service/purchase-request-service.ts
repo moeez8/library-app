@@ -9,12 +9,17 @@ import ITag from "../interfaces/ITag";
 const newPurchaseRequestService = () => {
 	const createNewRequest = async (book: IBook): Promise<any> => {
 		// Create new book
-		const bk = await models.book.create({
-			title: book.title,
-			ISBN: book.ISBN,
-			author: book.author,
-			description: book.description,
-		});
+		const [bk, created] = await models.book.findOrCreate(
+			{
+				where: {
+					ISBN: book.ISBN,
+				},
+
+				title: book.title,
+				ISBN: book.ISBN,
+				author: book.author,
+				description: book.description,
+			});
 
 		let tags;
 		if (book.tags) {
@@ -27,7 +32,7 @@ const newPurchaseRequestService = () => {
 			request_date: Date.now(),
 			requestedBy: book.user,
 		});
-		return { book, request };
+		return { bk, request };
 	};
 
 	// Pulled out from create new book function (should this be here? duplicate code)

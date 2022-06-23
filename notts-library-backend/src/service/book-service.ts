@@ -10,7 +10,11 @@ const newBookService = () => {
 	const searchBooks = async (term: any): Promise<any> => {
 		return await models.book.findAll({
 			where: {
-				[Op.or]: [{ title: { [Op.like]: "%" + term + "%" } }, { author: { [Op.like]: "%" + term + "%" } }, { ISBN: { [Op.like]: "%" + term + "%" } }],
+				[Op.or]: [
+					{ title: { [Op.like]: "%" + term + "%" } },
+					{ author: { [Op.like]: "%" + term + "%" } },
+					{ ISBN: { [Op.like]: "%" + term + "%" } }
+				],
 			},
 		});
 	};
@@ -98,7 +102,7 @@ const newBookService = () => {
 		return { createdTags, associations };
 	};
 
-	const updateBookByID = async (id: number, title: string, ISBN: string, author: string, type: string, category: string, cover_photo: string, description: string, tags: any) => {
+	const updateBookByID = async (id: number, title: string, ISBN: string, author: string, description: string, tags: any) => {
 		const result = models.book.findByPk(id);
 
 		if (result != null) {
@@ -107,9 +111,6 @@ const newBookService = () => {
 					title: title || result.title,
 					ISBN: ISBN || result.ISBN,
 					author: author || result.author,
-					type: type || result.type,
-					category: category || result.category,
-					cover_photo: cover_photo || result.cover_photo,
 					description: description || result.description,
 				});
 			});
