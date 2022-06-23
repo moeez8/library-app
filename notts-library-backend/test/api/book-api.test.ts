@@ -1,4 +1,4 @@
-import makeApp from "../../src/app";
+import app from "../../src/app";
 import request from "supertest";
 
 const mockBookService = {
@@ -11,8 +11,6 @@ const mockBookService = {
 	getTagsByBookID: jest.fn(),
 	deleteBookByID: jest.fn(),
 };
-
-const app = makeApp(mockBookService);
 
 describe("GET /book", () => {
 	describe("on request", () => {
