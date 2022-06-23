@@ -65,7 +65,7 @@ const Modal = (props: any) => {
                                 <h1 className="text-lg">{`ISBN: ${props.bookIBAN}`}</h1> <br />
                             </div >
                             <div className="flex-none self-center">
-
+                                {/* No image will be displayed if API does not have image, could potentially have a placeholder */}
                                 <img src={`https://covers.openlibrary.org/b/isbn/${props.bookIBAN}-M.jpg`} />
                             </div>
                         </div>

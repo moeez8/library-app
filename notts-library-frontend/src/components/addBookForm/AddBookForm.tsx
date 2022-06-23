@@ -9,7 +9,10 @@ const AddBookForm = () => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [description, setDescription] = useState("");
-	const [iban, setIban] = useState("");
+	const [isbn, setIsbn] = useState("");
+	const [name, setName] = useState("");
+	const [nameHidden, setNameHidden] = useState("hidden");
+	const [namePlaceholder, setNamePlaceholder] = useState("");
 	const [tags, setTags] = useState<{ tag_name: string }[]>([]);
 
 	const [option, setOption] = useState<String>();
@@ -24,7 +27,7 @@ const AddBookForm = () => {
 		setTitle(book.title || "")
 		setAuthor(book.author || "")
 		setDescription(book.description || "")
-		setIban(iban)
+		setIsbn(isbn)
 
 	}
 
@@ -40,8 +43,12 @@ const AddBookForm = () => {
 		setDescription(event.target.value);
 	};
 
-	const handleIbanChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setIban(event.target.value);
+	const handleIsbnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setIsbn(event.target.value);
+	};
+
+	const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setName(event.target.value);
 	};
 
 	const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -59,7 +66,16 @@ const AddBookForm = () => {
 		setTags(newTags);
 	};
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setNameHidden("")
+
+
+		if (e.target.value == "addBook") {
+			setNamePlaceholder("Please enter name of book owner")
+		} else {
+			setNamePlaceholder("Please enter name of requester")
+		}
+
 		setOption(e.target.value);
 	};
 
@@ -97,7 +113,7 @@ const AddBookForm = () => {
 					title: title,
 					description: description,
 					author: author,
-					iban: iban,
+					iban: isbn,
 					tags: tags,
 				}),
 			});
@@ -111,7 +127,7 @@ const AddBookForm = () => {
 					title: title,
 					description: description,
 					author: author,
-					iban: iban,
+					iban: isbn,
 					tags: tags,
 				}),
 			});
@@ -122,10 +138,11 @@ const AddBookForm = () => {
 		<div className="card">
 			<h1 className="text-xl font-bold m-1">Add Book</h1>
 			<form onSubmit={handleOnSubmit}>
-				<input className="form-input" name="isbn" placeholder="Please enter 10 or 13 digit ISBN" value={iban} onChange={handleIbanChange} onKeyDown={handleEnter} onBlur={toggleModal} required />
+				<input className="form-input" name="isbn" placeholder="Please enter 10 or 13 digit ISBN" value={isbn} onChange={handleIsbnChange} onKeyDown={handleEnter} onBlur={toggleModal} required />
 				<input className="form-input" name="title" placeholder="Book Title" value={title} onChange={handleTitleChange} onKeyDown={handleEnter} required />
 				<input className="form-input" name="author" placeholder="Book Author" value={author} onChange={handleAuthorChange} onKeyDown={handleEnter} required />
 				<textarea className="form-input" name="content" placeholder="Book Description" onChange={handleDescChange} value={description} onKeyDown={handleEnter} required />
+
 				<div className="card">
 					<h1 className="text-lg font-bold">Tags</h1>
 
@@ -139,23 +156,25 @@ const AddBookForm = () => {
 						})}
 					</div>
 				</div>
+
 				<div className="card ">
 					<h1 className="text-lg font-bold"> Add or Request?</h1>
 					<div className="flex gap-2">
 						<label className="flex">
 							<div className="flex flex-col justify-around">
-								<input className="w-4 h-4 m-1" required name="bookOption" type="radio" value="addBook" onChange={handleChange} />
+								<input className="w-4 h-4 m-1" required name="bookOption" type="radio" value="addBook" onChange={handleRadioChange} />
 							</div>
 							<h1 className="flex flex-col justify-around">Add Book</h1>
 						</label>
 
 						<label className="flex">
 							<div className="flex flex-col justify-around">
-								<input className="w-4 h-4 m-1" required name="bookOption" type="radio" value="requestBook" onChange={handleChange} />
+								<input className="w-4 h-4 m-1" required name="bookOption" type="radio" value="requestBook" onChange={handleRadioChange} />
 							</div>
 							<h1 className="flex flex-col justify-around">Request</h1>
 						</label>
 					</div>
+					<input className="form-input" type={nameHidden} name="name" placeholder={namePlaceholder} value={name} onChange={handleNameChange} onKeyDown={handleEnter} required />
 				</div>
 
 				<button className="button-green" type="submit">
@@ -163,7 +182,7 @@ const AddBookForm = () => {
 				</button>
 			</form>
 
-			{modal ? <Modal className="z-10 float-right" toggle={toggleModal} bookIBAN={iban} addToForm={populateForm} /> : null}
+			{modal ? <Modal className="z-10 float-right" toggle={toggleModal} bookIBAN={isbn} addToForm={populateForm} /> : null}
 		</div>
 	);
 };
