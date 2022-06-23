@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import IBook from "../../interfaces/IBook";
-import BookDescription from "./BookDescription";
-
+import ReadMoreReact from 'read-more-react';
 
 const Modal = (props: any) => {
 
@@ -13,10 +12,6 @@ const Modal = (props: any) => {
         props.addToForm(book);
         props.toggle();
     };
-
-    const truncate = (str: String) => {
-
-    }
 
     const [book, setBook] = useState<IBook>();
 
@@ -62,7 +57,10 @@ const Modal = (props: any) => {
                             <div className="flex-auto m-1 break-words">
                                 <h1 className="text-xl font-bold" > {book.title || "Undefined"}</h1 >
                                 <h1 className="text-lg">{book.author ? `Author: ${book.author}` : "Author: Undefined"}</h1><br />
-                                <BookDescription book={book} /> <br />
+
+                                <h1 className="text-lg"> {book.description ?
+                                    <ReadMoreReact text={book.description} ideal={200} max={300} /> : "Description: Undefined"} </h1> <br />
+
                                 <h1 className="text-lg">{`ISBN: ${props.bookISBN}`}</h1> <br />
                             </div >
                             <div className="flex-none self-center">
