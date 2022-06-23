@@ -13,17 +13,8 @@ export = (sequelize: any) => {
 			author: {
 				type: Sequelize.STRING,
 			},
-			type: {
-				type: Sequelize.STRING,
-			},
-			category: {
-				type: Sequelize.STRING,
-			},
-			cover_photo: {
-				type: Sequelize.STRING,
-			},
 			description: {
-				type: Sequelize.STRING,
+				type: Sequelize.TEXT,
 			},
 		},
 		{
