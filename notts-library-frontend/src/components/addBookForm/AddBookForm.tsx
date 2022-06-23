@@ -116,7 +116,7 @@ const AddBookForm = () => {
 					author: author,
 					ISBN: ISBN,
 					tags: tags,
-					owner: name
+					user: name
 				}),
 			});
 		} else {
@@ -131,6 +131,7 @@ const AddBookForm = () => {
 					author: author,
 					ISBN: ISBN,
 					tags: tags,
+					user: name
 				}),
 			});
 		}

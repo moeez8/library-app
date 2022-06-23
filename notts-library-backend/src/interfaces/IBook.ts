@@ -12,5 +12,5 @@ export default interface IBook {
 	category?: string;
 	cover_photo?: any;
 	tags?: ITag[];
-	owner: string
+	user: string
 }
