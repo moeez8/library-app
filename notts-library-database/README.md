@@ -1,4 +1,4 @@
-### PostgreSQL Database & PG Admin
+# PostgreSQL Database & PG Admin
 
 - To run the database, first navigate to the **"notts-library-database"** directory, and then run **"docker-compose up"** in your terminal.
 - This will start two processes, the first is the database itself, the seccond is a **PGAdmin** instance to access the database via a GUI.
