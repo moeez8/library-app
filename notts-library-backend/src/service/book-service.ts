@@ -61,7 +61,7 @@ const newBookService = () => {
 				tags = await createTags(bk.id, book.tags);
 			}
 
-			copy = await createCopy(bk.id, book.owner);
+			copy = await createCopy(bk.id, book.user);
 		});
 
 		return { bk, tags, copy };

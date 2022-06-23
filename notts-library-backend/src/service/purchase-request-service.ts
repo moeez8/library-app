@@ -28,7 +28,7 @@ const newPurchaseRequestService = () => {
 		const request = await models.request.create({
 			book_id: bk.id,
 			request_date: Date.now(),
-			requestedBy: "TestUser",
+			requestedBy: book.user,
 		});
 		return { book, request };
 	};

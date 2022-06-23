@@ -131,6 +131,7 @@ const AddBookForm = () => {
 					author: author,
 					ISBN: ISBN,
 					tags: tags,
+					user: name
 				}),
 			});
 		}
