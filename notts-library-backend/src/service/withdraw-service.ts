@@ -1,10 +1,8 @@
-import sequelize from "../config/database";
-import { Op } from "sequelize";
+const { models } = require("../database/database");
+import sequelize from "../database/database";
 
-const { models } = require("../config/database");
-
-const NewWithdrawService = () => {
-	const GetAllWithdraws = async (): Promise<any> => {
+const newWithdrawService = () => {
+	const getAllWithdraws = async (): Promise<any> => {
 		return await models.withdraw.findAll({
 			order: [["date_out", "DESC"]],
 			// include: [
@@ -17,7 +15,7 @@ const NewWithdrawService = () => {
 		});
 	};
 
-	const CreateNewWithdraw = async (copy_id: any, user_name: any): Promise<any> => {
+	const createNewWithdraw = async (copy_id: any, user_name: any): Promise<any> => {
 		let result: any;
 		await sequelize.transaction(async () => {
 			result = await models.withdraw.create({
@@ -30,7 +28,7 @@ const NewWithdrawService = () => {
 		return result;
 	};
 
-	const GetWithdrawByID = async (id: any): Promise<any> => {
+	const getWithdrawByID = async (id: any): Promise<any> => {
 		const result = await models.withdraw.findByPk(parseInt(id));
 
 		if (result == null) {
@@ -40,7 +38,7 @@ const NewWithdrawService = () => {
 		return result;
 	};
 
-	return { GetAllWithdraws, CreateNewWithdraw, GetWithdrawByID };
+	return { getAllWithdraws, createNewWithdraw, getWithdrawByID };
 };
 
-export default NewWithdrawService;
+export default newWithdrawService;

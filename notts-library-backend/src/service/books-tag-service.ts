@@ -1,18 +1,18 @@
-const { models } = require("../config/database");
+const { models } = require("../database/database");
 
-const NewBooksTagService = () => {
-	const GetAllBookTags = async (): Promise<any> => {
+const newBooksTagService = () => {
+	const getAllBookTags = async (): Promise<any> => {
 		return await models.books_tag.findAll();
 	};
 
-	const CreateNewBooksTag = async (book_id: any, tag_id: any): Promise<any> => {
+	const createNewBooksTag = async (book_id: any, tag_id: any): Promise<any> => {
 		return await models.books_tag.create({
 			book_id,
 			tag_id,
 		});
 	};
 
-	return { GetAllBookTags, CreateNewBooksTag };
+	return { getAllBookTags, createNewBooksTag };
 };
 
-export default NewBooksTagService;
+export default newBooksTagService;

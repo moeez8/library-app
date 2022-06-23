@@ -1,13 +1,13 @@
-const { models } = require("../config/database");
-import sequelize from "../config/database";
-const Sequelize = require("sequelize");
+const { models } = require("../database/database");
 
-const NewTagService = () => {
-	const GetAllTags = async (): Promise<any> => {
+import sequelize from "../database/database";
+
+const newTagService = () => {
+	const getAllTags = async (): Promise<any> => {
 		return await models.tag.findAll();
 	};
 
-	const CreateNewTag = async (name: any): Promise<any> => {
+	const createNewTag = async (name: any): Promise<any> => {
 		let result: any;
 		await sequelize.transaction(async () => {
 			result = await models.tag.create({
@@ -17,7 +17,7 @@ const NewTagService = () => {
 		return result;
 	};
 
-	return { GetAllTags, CreateNewTag };
+	return { getAllTags, createNewTag };
 };
 
-export default NewTagService;
+export default newTagService;

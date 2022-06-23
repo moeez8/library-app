@@ -1,14 +1,12 @@
-const { models } = require("../config/database");
-import sequelize from "../config/database";
+const { models } = require("../database/database");
+import sequelize from "../database/database";
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 import IBook from "../interfaces/IBook";
 import ITag from "../interfaces/ITag";
 
-import IBookService from "./interfaces/IBook-Service";
-
-const newBookService = (): IBookService => {
+const newBookService = () => {
 	const searchBooks = async (term: any): Promise<any> => {
 		return await models.book.findAll({
 			where: {

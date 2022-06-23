@@ -1,12 +1,13 @@
-const { models } = require("../config/database");
+const { models } = require("../database/database");
+
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-import sequelize from "../config/database";
+import sequelize from "../database/database";
 import IBook from "../interfaces/IBook";
 import ITag from "../interfaces/ITag";
 
-const NewPurchaseRequestService = () => {
-	const CreateNewRequest = async (book: IBook): Promise<any> => {
+const newPurchaseRequestService = () => {
+	const createNewRequest = async (book: IBook): Promise<any> => {
 		// Create new book
 		const bk = await models.book.create({
 			title: book.title,
@@ -56,7 +57,7 @@ const NewPurchaseRequestService = () => {
 		return { createdTags, associations };
 	};
 
-	const GetAllPurchaseRequests = async (): Promise<any> => {
+	const getAllPurchaseRequests = async (): Promise<any> => {
 		const result = models.request.findAll({
 			order: [["request_date", "DESC"]],
 			include: [{ model: models.book, as: "book" }],
@@ -67,7 +68,7 @@ const NewPurchaseRequestService = () => {
 		return result;
 	};
 
-	const SearchRequests = async (term: any): Promise<any> => {
+	const searchRequests = async (term: any): Promise<any> => {
 		let result = await models.book.findAll({
 			include: [{ model: models.request, as: "requests" }],
 		});
@@ -79,7 +80,7 @@ const NewPurchaseRequestService = () => {
 		return result;
 	};
 
-	const GetRequestByID = async (id: any): Promise<any> => {
+	const getRequestByID = async (id: any): Promise<any> => {
 		const request = await models.request.findByPk(id, {
 			include: [{ model: models.book, as: "book" }],
 			paranoid: false,
@@ -91,7 +92,7 @@ const NewPurchaseRequestService = () => {
 		return request;
 	};
 
-	const UpdateRequestByID = async (id: any, fulfill_date: any): Promise<any> => {
+	const updateRequestByID = async (id: any, fulfill_date: any): Promise<any> => {
 		return await sequelize.transaction(async () => {
 			const request = await models.request.findByPk(id, {
 				where: {
@@ -115,7 +116,7 @@ const NewPurchaseRequestService = () => {
 		});
 	};
 
-	const FulfillRequestByID = async (id: any) => {
+	const fulfillRequestByID = async (id: any) => {
 		const request = await models.request.findByPk(id, {
 			where: {
 				fulfill_date: { [Op.is]: null },
@@ -138,7 +139,7 @@ const NewPurchaseRequestService = () => {
 		return updatedRequest;
 	};
 
-	const DeleteRequestByID = async (id: any) => {
+	const deleteRequestByID = async (id: any) => {
 		const request = await models.request.findByPk(id);
 
 		await sequelize.transaction(async () => {
@@ -149,14 +150,14 @@ const NewPurchaseRequestService = () => {
 	};
 
 	return {
-		CreateNewRequest,
-		GetAllPurchaseRequests,
-		SearchRequests,
-		GetRequestByID,
-		UpdateRequestByID,
-		FulfillRequestByID,
-		DeleteRequestByID,
+		createNewRequest,
+		getAllPurchaseRequests,
+		searchRequests,
+		getRequestByID,
+		updateRequestByID,
+		fulfillRequestByID,
+		deleteRequestByID,
 	};
 };
 
-export default NewPurchaseRequestService;
+export default newPurchaseRequestService;

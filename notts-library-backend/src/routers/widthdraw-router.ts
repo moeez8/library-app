@@ -5,9 +5,9 @@ const withdrawsRouter = () => {
 	const router = express.Router();
 	const withdrawsApi = newWithdrawsApi();
 
-	router.get("/", withdrawsApi.GetAllWithdraws);
-	router.post("/add", withdrawsApi.CreateNewWithdraw);
-	router.get("/:id", withdrawsApi.GetWithdrawById);
+	router.get("/", withdrawsApi.getAllWithdraws);
+	router.post("/add", withdrawsApi.createNewWithdraw);
+	router.get("/:id", withdrawsApi.getWithdrawById);
 
 	return router;
 };

@@ -1,12 +1,13 @@
-const { models } = require("../config/database");
 import { NextFunction, Request, Response } from "express";
 
-import NewPurchaseRequestService from "../service/purchase-request-service";
+import newPurchaseRequestService from "../service/purchase-request-service";
 
 import IBook from "../interfaces/IBook";
 import ApiError from "../middleware/api-error";
 
 const purchaseRequestApi = () => {
+	const purchaseRequestService = newPurchaseRequestService();
+
 	const addRequest = async (req: Request, res: Response, next: NextFunction) => {
 		const book: IBook = req.body;
 
@@ -15,8 +16,6 @@ const purchaseRequestApi = () => {
 		if (book.title == null) errors.push("Please Provide Body Param title");
 		if (book.iban == null) errors.push("Please Provide Body Param iban");
 		if (book.author == null) errors.push("Please Provide Body Param author");
-		// if (book.type == null) errors.push("Please Provide Body Param type");
-		// if (book.category == null) errors.push("Please Provide Body Param category");
 		if (book.description == null) errors.push("Please Provide Body Param description");
 
 		if (errors.length > 0) {
@@ -25,7 +24,7 @@ const purchaseRequestApi = () => {
 		}
 
 		try {
-			res.json(await NewPurchaseRequestService().CreateNewRequest(book));
+			res.json(await purchaseRequestService.createNewRequest(book));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -33,16 +32,12 @@ const purchaseRequestApi = () => {
 		}
 	};
 
-	// const getAllRequests = async (req: Request, res: Response) => {
-	// 	res.json(await NewPurchaseRequestService().GetAllPurchaseRequests());
-	// };
-
 	const searchForRequest = async (req: Request, res: Response, next: NextFunction) => {
 		const { term } = req.query;
 
 		if (term != null) {
 			try {
-				res.json(await NewPurchaseRequestService().SearchRequests(term));
+				res.json(await purchaseRequestService.searchRequests(term));
 				return;
 			} catch (error: any) {
 				next(ApiError.Internal(error.toString()));
@@ -50,7 +45,7 @@ const purchaseRequestApi = () => {
 			}
 		} else {
 			try {
-				res.json(await NewPurchaseRequestService().GetAllPurchaseRequests());
+				res.json(await purchaseRequestService.getAllPurchaseRequests());
 				return;
 			} catch (error: any) {
 				next(ApiError.Internal(error.toString()));
@@ -68,7 +63,7 @@ const purchaseRequestApi = () => {
 		}
 
 		try {
-			res.json(await NewPurchaseRequestService().GetRequestByID(id));
+			res.json(await purchaseRequestService.getRequestByID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -87,7 +82,7 @@ const purchaseRequestApi = () => {
 		}
 
 		try {
-			res.json(await NewPurchaseRequestService().UpdateRequestByID(id, fulfill_date));
+			res.json(await purchaseRequestService.updateRequestByID(id, fulfill_date));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -104,7 +99,7 @@ const purchaseRequestApi = () => {
 		}
 
 		try {
-			res.json(await NewPurchaseRequestService().FulfillRequestByID(id));
+			res.json(await purchaseRequestService.fulfillRequestByID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -112,7 +107,7 @@ const purchaseRequestApi = () => {
 		}
 	};
 
-	const DeleteRequestByID = async (req: Request, res: Response, next: NextFunction) => {
+	const deleteRequestByID = async (req: Request, res: Response, next: NextFunction) => {
 		const id: number = parseInt(req.params.id);
 
 		if (id == null) {
@@ -121,7 +116,7 @@ const purchaseRequestApi = () => {
 		}
 
 		try {
-			res.json(await NewPurchaseRequestService().DeleteRequestByID(id));
+			res.json(await purchaseRequestService.deleteRequestByID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -132,11 +127,10 @@ const purchaseRequestApi = () => {
 	return {
 		addRequest,
 		searchForRequest,
-		//getAllRequests,
 		getRequestByID,
 		updateRequestByID,
 		fulfillRequestByID,
-		DeleteRequestByID,
+		deleteRequestByID,
 	};
 };
 

@@ -1,14 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 
-import NewWithdrawService from "../service/withdraw-service";
+import newWithdrawService from "../service/withdraw-service";
 import ApiError from "../middleware/api-error";
 
-const NewWithdrawsApi = () => {
-	const GetAllWithdraws = async (req: Request, res: Response) => {
-		res.json(await NewWithdrawService().GetAllWithdraws());
+const newWithdrawsApi = () => {
+	const withdrawService = newWithdrawService();
+
+	const getAllWithdraws = async (req: Request, res: Response) => {
+		res.json(await newWithdrawService().getAllWithdraws());
 	};
 
-	const CreateNewWithdraw = async (req: Request, res: Response, next: NextFunction) => {
+	const createNewWithdraw = async (req: Request, res: Response, next: NextFunction) => {
 		let { copy_id, user_name } = req.body;
 
 		if (copy_id == null) {
@@ -22,7 +24,7 @@ const NewWithdrawsApi = () => {
 		}
 
 		try {
-			res.json(await NewWithdrawService().CreateNewWithdraw(copy_id, user_name));
+			res.json(await withdrawService.createNewWithdraw(copy_id, user_name));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -30,11 +32,11 @@ const NewWithdrawsApi = () => {
 		}
 	};
 
-	const GetWithdrawById = async (req: Request, res: Response, next: NextFunction) => {
+	const getWithdrawById = async (req: Request, res: Response, next: NextFunction) => {
 		const id = req.params.id;
 
 		try {
-			res.json(await NewWithdrawService().GetWithdrawByID(id));
+			res.json(await withdrawService.getWithdrawByID(id));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));
@@ -42,7 +44,7 @@ const NewWithdrawsApi = () => {
 		}
 	};
 
-	return { GetAllWithdraws, CreateNewWithdraw, GetWithdrawById };
+	return { getAllWithdraws, createNewWithdraw, getWithdrawById };
 };
 
-export = NewWithdrawsApi;
+export = newWithdrawsApi;
