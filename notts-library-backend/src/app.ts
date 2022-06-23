@@ -10,6 +10,8 @@ import newWithdrawsRouter from "./routes/widthdraw";
 import newTagRouter from "./routes/tag";
 import newPurchaseRequestRouter from "./routes/purchaseRequest";
 
+import newOpenLibraryRouter from "./routes/openLibrary"
+
 import IBookService from "./service/interfaces/IBook-Service";
 
 const makeApp = (bookService: IBookService) => {
@@ -33,6 +35,8 @@ const makeApp = (bookService: IBookService) => {
 	app.use("/tag", newTagRouter());
 	app.use("/books_tag", newBooksTagRouter());
 	app.use("/request", newPurchaseRequestRouter());
+
+	app.use("/ol", newOpenLibraryRouter());
 
 	//Error Handle Middleware
 	app.use(ApiErrorHandler);
