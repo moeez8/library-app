@@ -20,33 +20,31 @@ const Modal = (props: any) => {
     }, []);
 
     const getBookData = async () => {
+        //Getting book data from Open Library 'details' api
+        if (props.bookISBN) {
+            const bookDetails = await fetch(process.env.REACT_APP_BASE_URL + `/ol/${props.bookISBN}`)
+            const details = await bookDetails.json();
 
-        //Getting book data from Open Library 'details' api 
-        const bookDetails = await fetch(process.env.REACT_APP_BASE_URL + `/ol/${props.bookISBN}`)
-        const details = await bookDetails.json();
+            if (bookDetails.status == 200 && Object.keys(details).length !== 0) {
 
-        if (bookDetails.status == 200 && Object.keys(details).length !== 0) {
+                //If book data is retrieved then get the 'works' data from the Open Library 'works' api using the 'works id'
+                const OLWorkSubDirectory: String = details[`ISBN:${props.bookISBN}`].details.works[0].key
+                const OLWorkID = OLWorkSubDirectory.replaceAll('/', '').replaceAll('works', '');
 
-            //If book data is retrieved then get the 'works' data from the Open Library 'works' api using the 'works id'
-            const OLWorkSubDirectory: String = details[`ISBN:${props.bookISBN}`].details.works[0].key
-            const OLWorkID = OLWorkSubDirectory.replaceAll('/', '').replaceAll('works', '');
+                const OLWork = await fetch(process.env.REACT_APP_BASE_URL + `/ol/works/${OLWorkID}`, {
+                })
+                const workData = await OLWork.json();
 
-            const OLWork = await fetch(process.env.REACT_APP_BASE_URL + `/ol/works/${OLWorkID}`, {
-            })
-            const workData = await OLWork.json();
-            //console.log(workData.description)
-
-            setBook({
-                title: details[`ISBN:${props.bookISBN}`].details.title,
-                description: workData.description.value || workData.description,
-                author: details[`ISBN:${props.bookISBN}`].details.authors[0].name,
-            });
+                setBook({
+                    title: details[`ISBN:${props.bookISBN}`].details.title,
+                    description: workData.description.value || workData.description,
+                    author: details[`ISBN:${props.bookISBN}`].details.authors[0].name,
+                });
+            }
         }
-
     };
 
     if (book) {
-
         return (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
                 <div className="flex justify-around">
@@ -78,9 +76,7 @@ const Modal = (props: any) => {
                     </div>
                 </div>
             </div>
-
         )
-
     }
 
     else {
