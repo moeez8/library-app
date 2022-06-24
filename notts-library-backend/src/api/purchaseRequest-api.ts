@@ -92,14 +92,20 @@ const purchaseRequestApi = () => {
 
 	const fulfillRequestByID = async (req: Request, res: Response, next: NextFunction) => {
 		const id: number = parseInt(req.params.id);
+		const { owner } = req.body
 
 		if (id == null) {
 			next(ApiError.BadRequest("Please Fill URL Param id"));
 			return;
 		}
 
+		if (owner == null) {
+			next(ApiError.BadRequest("Please provide a name to fulfill this request"));
+			return;
+		}
+
 		try {
-			res.json(await purchaseRequestService.fulfillRequestByID(id));
+			res.json(await purchaseRequestService.fulfillRequestByID(id, owner));
 			return;
 		} catch (error: any) {
 			next(ApiError.Internal(error.toString()));

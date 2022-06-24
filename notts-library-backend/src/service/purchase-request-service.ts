@@ -118,7 +118,7 @@ const newPurchaseRequestService = () => {
 		});
 	};
 
-	const fulfillRequestByID = async (id: any) => {
+	const fulfillRequestByID = async (id: any, name: any) => {
 		const request = await models.request.findByPk(id, {
 			where: {
 				fulfill_date: { [Op.is]: null },
@@ -131,7 +131,7 @@ const newPurchaseRequestService = () => {
 
 		await models.copy.create({
 			book_id: request.book_id,
-			owner: "BJSS",
+			owner: name,
 		});
 
 		const updatedRequest = await request.update({

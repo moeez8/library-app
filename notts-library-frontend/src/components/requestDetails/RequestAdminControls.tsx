@@ -20,8 +20,18 @@ const RequestAdminControls = ({ request }: { request: IRequest }) => {
 
 	const fulFillRequest = async () => {
 		if (window.confirm("Are you sure? This will create a new copy of this book")) {
+			let name = await window.prompt("Please Enter Your Name.");
+
+			if (name === null || name === "") {
+				await alert("No name entered");
+				return;
+			}
 			const res = await fetch(process.env.REACT_APP_BASE_URL + `/request/${request.id}/fulfill`, {
 				method: "PUT",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({
+					owner: name,
+				})
 			});
 			if (res.status == 200) {
 				alert("Request Fulfilled");
