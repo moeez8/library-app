@@ -11,9 +11,19 @@ const newBookService = () => {
 		return await models.book.findAll({
 			where: {
 				[Op.or]: [
-					{ title: { [Op.like]: "%" + term + "%" } },
-					{ author: { [Op.like]: "%" + term + "%" } },
-					{ ISBN: { [Op.like]: "%" + term + "%" } }
+					{
+						title: {
+							[Op.like]: "%" + term + "%",
+						},
+					},
+					{
+						author: {
+							[Op.like]: "%" + term + "%",
+						},
+					},
+					{
+						ISBN: { [Op.like]: "%" + term + "%" },
+					},
 				],
 			},
 		});
@@ -44,33 +54,36 @@ const newBookService = () => {
 		return result;
 	};
 
-	const createNewBook = async (book: IBook): Promise<any> => {
-		let bk: any;
+	const createNewBook = async (newBookDetails: IBook): Promise<any> => {
+		let book: any;
 		let tags: any;
 		let copy: any;
 
 		await sequelize.transaction(async () => {
 			const [bk, created] = await models.book.findOrCreate({
 				where: {
-					ISBN: book.ISBN,
-				}, defaults: {
-					title: book.title,
-					ISBN: book.ISBN,
-					author: book.author,
-					description: book.description
-				}
+					ISBN: newBookDetails.ISBN,
+				},
+				defaults: {
+					title: newBookDetails.title,
+					ISBN: newBookDetails.ISBN,
+					author: newBookDetails.author,
+					description: newBookDetails.description,
+				},
 			});
 
-			console.log(bk)
+			book = bk;
 
-			if (book.tags) {
-				tags = await createTags(bk.id, book.tags);
+			console.log(bk);
+
+			if (newBookDetails.tags) {
+				tags = await createTags(bk.id, newBookDetails.tags);
 			}
 
-			copy = await createCopy(bk.id, book.user);
+			copy = await createCopy(bk.id, newBookDetails.user);
 		});
 
-		return { bk, tags, copy };
+		return { book, tags, copy };
 	};
 
 	// Pulled out from create new book function
@@ -105,10 +118,17 @@ const newBookService = () => {
 		return { createdTags, associations };
 	};
 
-	const updateBookByID = async (id: number, title: string, ISBN: string, author: string, description: string, tags: any) => {
-		const result = models.book.findByPk(id);
+	const updateBookByID = async (
+		id: number,
+		title: string,
+		ISBN: string,
+		author: string,
+		description: string,
+		tags: any
+	) => {
+		const result = await models.book.findByPk(id);
 
-		if (result != null) {
+		if (result !== null) {
 			await sequelize.transaction(async () => {
 				await result.update({
 					title: title || result.title,
@@ -121,19 +141,21 @@ const newBookService = () => {
 			throw new Error("Unable To Find Book With ID");
 		}
 
-		//CURRENTLY DOES NOT DELETE ALREADY EXISTING TAGS
-		tags.map(async (tagObj: any) => {
-			const tag = await models.tag.findOrCreate({
-				where: {
-					name: tagObj.tag_name,
-				},
-			});
+		if (tags !== undefined) {
+			//CURRENTLY DOES NOT DELETE ALREADY EXISTING TAGS
+			tags.map(async (tagObj: any) => {
+				const tag = await models.tag.findOrCreate({
+					where: {
+						name: tagObj.tag_name,
+					},
+				});
 
-			await models.books_tag.create({
-				book_id: id,
-				tag_id: tag[0].id,
+				await models.books_tag.create({
+					book_id: id,
+					tag_id: tag[0].id,
+				});
 			});
-		});
+		}
 
 		return result;
 	};

@@ -1,17 +1,6 @@
 import app from "../../src/app";
 import request from "supertest";
 
-const mockBookService = {
-	searchBooks: jest.fn(),
-	getAllBooks: jest.fn(),
-	getBookByID: jest.fn(),
-	createNewBook: jest.fn(),
-	updateBookByID: jest.fn(),
-	getCopiesByBookID: jest.fn(),
-	getTagsByBookID: jest.fn(),
-	deleteBookByID: jest.fn(),
-};
-
 describe("GET /book", () => {
 	describe("on request", () => {
 		test("should respond with a 200 status code", async () => {
@@ -23,36 +12,34 @@ describe("GET /book", () => {
 			const res = await request(app).get("/book").send();
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
-
-		test("response should contain array of books", async () => {
-			const res = await request(app).get("/book").send();
-			expect(res.body.books).toBeDefined();
-		});
 	});
 });
 
 describe("POST /book", () => {
 	describe("given required data for a new book", () => {
-		test("should respond with a 200 status code", async () => {
-			const res = await request(app).post("/book").send({
-				title: "",
-				author: "",
-				description: "",
-				ISBN: "",
-			});
+		const book = {
+			title: "Test-Book",
+			author: "Test-Author",
+			description: "Test-Description",
+			ISBN: "Test-ISBN",
+			user: "Test-User",
+		};
 
-			expect(mockBookService.createNewBook.mock.calls.length).toBe(1);
+		test("should respond with a 200 status code", async () => {
+			const res = await request(app).post("/book").send(book);
+
 			expect(res.statusCode).toBe(200);
 		});
 
 		test("should specify json in the content type header", async () => {
-			const res = await request(app).post("/book").send();
+			const res = await request(app).post("/book").send(book);
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
 
 		test("response should contain new book id", async () => {
-			const res = await request(app).post("/book").send();
-			expect(res.body.bk).toBeDefined();
+			const res = await request(app).post("/book").send(book);
+			console.log(res.body);
+			expect(res.body.book.id).toBeDefined();
 		});
 	});
 
@@ -95,10 +82,25 @@ describe("GET /book:id", () => {
 });
 
 describe("PUT /book:id", () => {
+	const book = {
+		title: "Test-Book",
+		author: "Test-Author",
+		description: "Test-Description",
+		ISBN: "Test-ISBN",
+		user: "Test-User",
+	};
+
+	beforeEach(async () => {
+		const res = await request(app).post("/book").send(book);
+		id = res.body.book.id;
+	});
+
+	var id = -1;
+
 	describe("given valid id", () => {
 		test("should respond with a 200 status code", async () => {
 			const res = await request(app)
-				.put("/book/" + 2)
+				.put("/book/" + id)
 				.send();
 
 			expect(res.statusCode).toBe(200);
@@ -106,7 +108,7 @@ describe("PUT /book:id", () => {
 
 		test("should specify json in the content type header", async () => {
 			const res = await request(app)
-				.put("/book/" + 2)
+				.put("/book/" + id)
 				.send();
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
@@ -115,7 +117,7 @@ describe("PUT /book:id", () => {
 	describe("given invalid id", () => {
 		test("should respond with a 400 status code", async () => {
 			const res = await request(app)
-				.put("/book/" + 2)
+				.put("/book/" + -1)
 				.send();
 
 			expect(res.statusCode).toBe(400);
@@ -124,10 +126,25 @@ describe("PUT /book:id", () => {
 });
 
 describe("DELETE /book:id", () => {
+	const book = {
+		title: "Test-Book",
+		author: "Test-Author",
+		description: "Test-Description",
+		ISBN: "Test-ISBN",
+		user: "Test-User",
+	};
+
+	beforeEach(async () => {
+		const res = await request(app).post("/book").send(book);
+		id = res.body.book.id;
+	});
+
+	var id = -1;
+
 	describe("given valid id", () => {
 		test("should respond with a 200 status code", async () => {
 			const res = await request(app)
-				.delete("/book/" + 2)
+				.delete("/book/" + id)
 				.send();
 
 			expect(res.statusCode).toBe(200);
@@ -135,7 +152,7 @@ describe("DELETE /book:id", () => {
 
 		test("should specify json in the content type header", async () => {
 			const res = await request(app)
-				.delete("/book/" + 2)
+				.delete("/book/" + id)
 				.send();
 			expect(res.header["content-type"]).toEqual(expect.stringContaining("json"));
 		});
@@ -144,7 +161,7 @@ describe("DELETE /book:id", () => {
 	describe("given an invalid id", () => {
 		test("should respond with a 400 status code", async () => {
 			const res = await request(app)
-				.delete("/book/" + 2)
+				.delete("/book/" + -1)
 				.send();
 
 			expect(res.statusCode).toBe(400);
