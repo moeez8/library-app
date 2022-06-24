@@ -51,7 +51,6 @@ const Modal = (props: any) => {
             <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
                 <div className="flex justify-around">
                     <div className="card mx-auto w-1/2">
-                        <span className="float-right" onClick={handleClose}>&times;    </span>
                         <h1 className="text-2xl font-bold m-1">Is this the book you're looking for?</h1> <br />
                         <div className="flex">
                             <div className="flex-auto m-1 break-words">
