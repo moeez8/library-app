@@ -53,12 +53,15 @@ const newBookService = () => {
 			const [bk, created] = await models.book.findOrCreate({
 				where: {
 					ISBN: book.ISBN,
-				},
-				title: book.title,
-				ISBN: book.ISBN,
-				author: book.author,
-				description: book.description,
+				}, defaults: {
+					title: book.title,
+					ISBN: book.ISBN,
+					author: book.author,
+					description: book.description
+				}
 			});
+
+			console.log(bk)
 
 			if (book.tags) {
 				tags = await createTags(bk.id, book.tags);
