@@ -1,0 +1,549 @@
+{
+	"info": {
+		"_postman_id": "faae4440-ea26-4f84-b9dc-5e5bca43075d",
+		"name": "BookWorm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Get Book By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/book/:id",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["book", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search For Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/book",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["book"],
+							"query": [
+								{
+									"key": "term",
+									"value": "n",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add A Book",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"book\",\r\n    \"author\" : \"book\",\r\n    \"description\": \"book\",\r\n    \"ISBN\" : \"book\",\r\n    \"user\" : \"book\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/book",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["book"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update A Book With ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\" : \"Bob\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/book/:id",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["book", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Book Copies By Book ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/book/:id/copies",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["book", ":id", "copies"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Book Tags By Book ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/book/:id/tags",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["book", ":id", "tags"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Book By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/book/:id",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["book", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "22"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Copies",
+			"item": [
+				{
+					"name": "Add A Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"book_id\" : 1,\r\n    \"owner\": \"BJSS\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/copy/add",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["copy", "add"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Copies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/copy",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["copy"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A Copy By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/copy/:id",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["copy", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "41"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Copy Withdraws By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/copy/:id/withdraws",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["copy", ":id", "withdraws"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Copy Status By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/copy/:id/status",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["copy", ":id", "status"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "44"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check In Copy By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/copy/:id/check-in",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["copy", ":id", "check-in"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Out Copy By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/copy/:id/check-out",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["copy", ":id", "check-out"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Withdraws",
+			"item": [
+				{
+					"name": "Get All Withdraws",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"copy_id\" : 1,\r\n    \"user_name\" : \"John Doe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/withdraw",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["withdraw"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add A Withdraw",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"copy_id\" : 1,\r\n    \"user_name\" : \"John Doe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/withdraw/add",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["withdraw", "add"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A Withdraw By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/withdraw/:id",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["withdraw", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "Get All Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/tag",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["tag"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Tag",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tag\": \"Fiction\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/tag",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["tag"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update A Tag",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books_Tag",
+			"item": [
+				{
+					"name": "Get All Books Tags",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"book_id\" : 1,\r\n    \"tag_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/books_tag",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["books_tag"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Tag To Book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"book_id\" : 1,\r\n    \"tag_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/books_tag",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["books_tag"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Purchase Requests",
+			"item": [
+				{
+					"name": "Create New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\" : \"Book\",\r\n    \"iban\" : \"1234\",\r\n    \"author\" : \"Mo\",\r\n    \"description\" : \"asdasdas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/request",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["request"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Reqeusts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/request",
+							"host": ["localhost"],
+							"port": "5000",
+							"path": ["request"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Request By ID",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
