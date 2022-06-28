@@ -20,25 +20,30 @@ const Modal = (props: any) => {
     }, []);
 
     const getBookData = async () => {
-        //Getting book data from Open Library 'details' api
+        //Getting book details from Open Library 'details' api and data from 'data' api
+        //Both apis return very similar information but due to inconsistencies sometimes either api is missing information such as author etc..
+        //Fetching from both gives us the highest chance of ensuring no null data is returned 
         if (props.bookISBN) {
-            const bookDetails = await fetch(process.env.REACT_APP_BASE_URL + `/ol/${props.bookISBN}`)
+            const bookDetails = await fetch(process.env.REACT_APP_BASE_URL + `/ol/details/${props.bookISBN}`)
             const details = await bookDetails.json();
 
-            if (bookDetails.status == 200 && Object.keys(details).length !== 0) {
+            const bookData = await fetch(process.env.REACT_APP_BASE_URL + `/ol/data/${props.bookISBN}`)
+            const data = await bookData.json();
 
-                //If book data is retrieved then get the 'works' data from the Open Library 'works' api using the 'works id'
+            if (bookDetails.status == 200 && Object.keys(details).length !== 0 && bookData.status == 200 && Object.keys(data).length !== 0) {
+
+                //If book details is retrieved then get the 'works' data from the Open Library 'works' api using the 'works id'
                 const OLWorkSubDirectory: String = details[`ISBN:${props.bookISBN}`].details.works[0].key
                 const OLWorkID = OLWorkSubDirectory.replaceAll('/', '').replaceAll('works', '');
 
-                const OLWork = await fetch(process.env.REACT_APP_BASE_URL + `/ol/works/${OLWorkID}`, {
-                })
+                const OLWork = await fetch(process.env.REACT_APP_BASE_URL + `/ol/works/${OLWorkID}`)
                 const workData = await OLWork.json();
 
                 setBook({
                     title: details[`ISBN:${props.bookISBN}`].details.title,
-                    description: workData.description.value || workData.description,
-                    author: details[`ISBN:${props.bookISBN}`].details.authors[0].name,
+                    description: workData.description ? workData.description.value || workData.description : "",
+                    author: details[`ISBN:${props.bookISBN}`].details.authors ? details[`ISBN:${props.bookISBN}`].details.authors[0].name :
+                        data[`ISBN:${props.bookISBN}`].authors[0].name
                 });
             }
         }

@@ -24,6 +24,26 @@ const newOpenLibraryAPI = () => {
 
     }
 
+    const getBookData = async (req: Request, res: Response, next: NextFunction) => {
+        const ISBN: string = req.params.ISBN;
+
+        if (ISBN == null) {
+            next(ApiError.BadRequest("Please Fill URL Param id"));
+            return;
+        }
+
+        try {
+            const bookDetails = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${ISBN}&jscmd=data&format=json`)
+            const details = await bookDetails.json();
+            res.json(details);
+            return;
+        } catch (error: any) {
+            next(ApiError.BadRequest(error.toString()));
+            return;
+        }
+
+    }
+
     const getWorks = async (req: Request, res: Response, next: NextFunction) => {
         const worksID = req.params.id;
 
@@ -47,7 +67,8 @@ const newOpenLibraryAPI = () => {
 
     return {
         getBookDetails,
-        getWorks,
+        getBookData,
+        getWorks
     };
 
 

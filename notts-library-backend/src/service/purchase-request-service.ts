@@ -7,32 +7,42 @@ import IBook from "../interfaces/IBook";
 import ITag from "../interfaces/ITag";
 
 const newPurchaseRequestService = () => {
-	const createNewRequest = async (book: IBook): Promise<any> => {
-		// Create new book
-		const [bk, created] = await models.book.findOrCreate(
-			{
-				where: {
-					ISBN: book.ISBN,
-				},
+	const createNewRequest = async (newBookDetails: IBook): Promise<any> => {
+		let book: any;
+		let tags: any;
+		let bookRequest: any;
 
-				title: book.title,
-				ISBN: book.ISBN,
-				author: book.author,
-				description: book.description,
+		await sequelize.transaction(async () => {
+			const [bk, created] = await models.book.findOrCreate({
+				where: {
+					ISBN: newBookDetails.ISBN,
+				},
+				defaults: {
+					title: newBookDetails.title,
+					ISBN: newBookDetails.ISBN,
+					author: newBookDetails.author,
+					description: newBookDetails.description,
+				},
 			});
 
-		let tags;
-		if (book.tags) {
-			tags = await createTags(bk.id, book.tags);
-		}
+			book = bk;
 
-		// Create new request for book
-		const request = await models.request.create({
-			book_id: bk.id,
-			request_date: Date.now(),
-			requestedBy: book.user,
+			if (newBookDetails.tags) {
+				tags = await createTags(bk.id, newBookDetails.tags);
+			}
+
+			// Create new request for book
+			const request = await models.request.create({
+				book_id: bk.id,
+				request_date: Date.now(),
+				requestedBy: newBookDetails.user,
+			});
+
+			bookRequest = request
 		});
-		return { bk, request };
+
+
+		return { book, bookRequest };
 	};
 
 	// Pulled out from create new book function (should this be here? duplicate code)
