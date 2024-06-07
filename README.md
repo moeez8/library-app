@@ -1,5 +1,5 @@
 # Bookworm Library App
-
+Detatched Fork of Notts-Library-App for personal development
 The Bookworm App is composed of 3 main components...
 
 - React Frontend UI
